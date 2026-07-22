@@ -12,8 +12,8 @@
     <meta http-equiv="Expires" content="0">
     
     <!-- ⭐ CSS COM VERSÃO (FORÇA ATUALIZAÇÃO) ⭐ -->
-    <link rel="stylesheet" href="style.css?v=20260722b">
-    <link rel="manifest" href="manifest.json?v=20260722b">
+    <link rel="stylesheet" href="style.css?v=20260723">
+    <link rel="manifest" href="manifest.json?v=20260723">
     
     <link rel="icon" href="imagens/favicon.ico" type="image/x-icon">
     <link rel="apple-touch-icon" href="imagens/apple-touch-icon.png">
@@ -68,7 +68,6 @@
         <!-- ========================================== -->
         <section id="inicio-section" class="secao-ativa">
             <h2>🎬 Últimos Vídeos</h2>
-            <!-- ⭐ DIV EXCLUSIVA PARA VÍDEOS ⭐ -->
             <div id="lista-videos">
                 <div style="text-align:center;padding:30px;">
                     <p style="font-size:18px;">🔄 Carregando vídeos...</p>
@@ -82,7 +81,6 @@
         <section id="noticias-section" style="display: none;">
             <h2>📰 Notícias</h2>
             <p style="color: #94A3B8; margin-bottom: 15px;">As últimas notícias sobre carros elétricos e tecnologia:</p>
-            <!-- ⭐ DIV EXCLUSIVA PARA NOTÍCIAS ⭐ -->
             <div id="lista-noticias">
                 <div style="text-align:center;padding:30px;">
                     <p style="font-size:18px;">🔄 Carregando notícias...</p>
@@ -179,130 +177,135 @@
     <!-- ============================================ -->
     
     <!-- ⭐ ARQUIVO DE FUNÇÕES COM VERSÃO ⭐ -->
-    <script src="script.js?v=20260722b"></script>
+    <script src="script.js?v=20260723"></script>
     
-    <!-- ⭐ FUNÇÕES DO MENU E NAVEGAÇÃO (EM LINHA PARA EVITAR CACHE) ⭐ -->
+    <!-- ⭐ FUNÇÕES DO MENU E NAVEGAÇÃO ⭐ -->
     <script>
         // ============================================
         // VERSÃO DO APP
         // ============================================
-        window.versaoApp = '20260722b';
+        window.versaoApp = '20260723';
+        console.log('🚀 App iniciado! Versão:', window.versaoApp);
+        
+        // ============================================
+        // FUNÇÃO PARA ALTERNAR SEÇÕES
+        // ============================================
+        function alternarSecao(secaoId) {
+            console.log('🔄 Alternando para:', secaoId);
+            
+            // Esconde todas as seções
+            const secoes = ['inicio', 'noticias', 'tutoriais', 'produtos', 'contato'];
+            secoes.forEach(id => {
+                const secao = document.getElementById(id + '-section');
+                if (secao) secao.style.display = 'none';
+            });
+            
+            // Mostra a seção selecionada
+            const secaoAlvo = document.getElementById(secaoId + '-section');
+            if (secaoAlvo) {
+                secaoAlvo.style.display = 'block';
+                console.log('✅ Seção exibida:', secaoId);
+            } else {
+                console.log('❌ Seção não encontrada:', secaoId);
+            }
+            
+            // Atualiza o menu
+            document.querySelectorAll('#menu-lateral a[data-secao]').forEach(link => {
+                link.classList.toggle('ativo', link.dataset.secao === secaoId);
+            });
+            
+            // Fecha o menu
+            fecharMenu();
+            
+            // Carrega o conteúdo específico
+            if (secaoId === 'inicio' && typeof window.buscarVideosRSS === 'function') {
+                console.log('📺 Carregando vídeos...');
+                window.buscarVideosRSS();
+            } else if (secaoId === 'noticias' && typeof window.buscarNoticiasRSS === 'function') {
+                console.log('📰 Carregando notícias...');
+                window.buscarNoticiasRSS();
+            }
+        }
         
         // ============================================
         // FUNÇÕES DO MENU
         // ============================================
-        document.addEventListener('DOMContentLoaded', function() {
-            const toggle = document.getElementById('menu-toggle');
+        function fecharMenu() {
             const menu = document.getElementById('menu-lateral');
-            const main = document.querySelector('main');
-            const fecharBtn = document.getElementById('fechar-menu');
-
-            function fecharMenu() {
-                if (menu) menu.classList.remove('aberto');
-                if (toggle) toggle.classList.remove('ativo');
-            }
-
-            function abrirMenu() {
-                if (menu) menu.classList.add('aberto');
-                if (toggle) toggle.classList.add('ativo');
-            }
-
+            const toggle = document.getElementById('menu-toggle');
+            if (menu) menu.classList.remove('aberto');
+            if (toggle) toggle.classList.remove('ativo');
+        }
+        
+        function abrirMenu() {
+            const menu = document.getElementById('menu-lateral');
+            const toggle = document.getElementById('menu-toggle');
+            if (menu) menu.classList.add('aberto');
+            if (toggle) toggle.classList.add('ativo');
+        }
+        
+        // ============================================
+        // EVENTOS DO MENU
+        // ============================================
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('✅ DOM carregado!');
+            
+            // Menu toggle
+            const toggle = document.getElementById('menu-toggle');
             if (toggle) {
                 toggle.addEventListener('click', function(e) {
                     e.stopPropagation();
-                    if (menu.classList.contains('aberto')) {
+                    const menu = document.getElementById('menu-lateral');
+                    if (menu && menu.classList.contains('aberto')) {
                         fecharMenu();
                     } else {
                         abrirMenu();
                     }
                 });
             }
-
+            
+            // Botão fechar
+            const fecharBtn = document.getElementById('fechar-menu');
             if (fecharBtn) {
                 fecharBtn.addEventListener('click', function(e) {
                     e.stopPropagation();
                     fecharMenu();
                 });
             }
-
+            
+            // Fechar ao clicar no main
+            const main = document.querySelector('main');
             if (main) {
                 main.addEventListener('click', function() {
                     fecharMenu();
                 });
             }
-
-            document.addEventListener('click', function(e) {
-                if (menu && menu.classList.contains('aberto')) {
-                    if (!menu.contains(e.target) && !toggle.contains(e.target)) {
-                        fecharMenu();
-                    }
-                }
-            });
-
-            // ============================================
-            // ⭐ NAVEGAÇÃO CORRIGIDA ⭐
-            // ============================================
-            const links = menu.querySelectorAll('a[data-secao]');
-            const secoes = {
-                inicio: document.getElementById('inicio-section'),
-                noticias: document.getElementById('noticias-section'),
-                tutoriais: document.getElementById('tutoriais-section'),
-                produtos: document.getElementById('produtos-section'),
-                contato: document.getElementById('contato-section')
-            };
-
-            links.forEach(link => {
+            
+            // Navegação do menu
+            document.querySelectorAll('#menu-lateral a[data-secao]').forEach(link => {
                 link.addEventListener('click', function(e) {
                     e.preventDefault();
                     const secaoId = this.dataset.secao;
-
-                    Object.values(secoes).forEach(sec => {
-                        if (sec) sec.style.display = 'none';
-                    });
-                    
-                    if (secoes[secaoId]) {
-                        secoes[secaoId].style.display = 'block';
-                    }
-
-                    links.forEach(l => l.classList.remove('ativo'));
-                    this.classList.add('ativo');
-
-                    fecharMenu();
-
-                    // ⭐ CORREÇÃO: ATUALIZA A LISTA CORRETA ⭐
-                    if (secaoId === 'inicio') {
-                        if (typeof buscarVideosRSS === 'function') {
-                            buscarVideosRSS();
-                        }
-                    }
-                    
-                    if (secaoId === 'noticias') {
-                        if (typeof buscarNoticiasRSS === 'function') {
-                            buscarNoticiasRSS();
-                        }
-                    }
+                    console.log('🔗 Menu clicado:', secaoId);
+                    alternarSecao(secaoId);
                 });
             });
-
+            
+            // Inicializa os ícones Lucide
             if (typeof lucide !== 'undefined') {
                 lucide.createIcons();
             }
-        });
-
-        // ⭐ FORÇA A CARGA DOS VÍDEOS AO INICIAR ⭐
-        if (document.readyState === 'complete') {
-            if (typeof buscarVideosRSS === 'function') {
-                setTimeout(buscarVideosRSS, 100);
-            }
-        } else {
-            document.addEventListener('readystatechange', function() {
-                if (document.readyState === 'complete') {
-                    if (typeof buscarVideosRSS === 'function') {
-                        setTimeout(buscarVideosRSS, 100);
-                    }
+            
+            // Carrega os vídeos na inicialização
+            setTimeout(function() {
+                if (typeof window.buscarVideosRSS === 'function') {
+                    console.log('📺 Carregando vídeos iniciais...');
+                    window.buscarVideosRSS();
+                } else {
+                    console.log('❌ Função buscarVideosRSS não encontrada!');
                 }
-            });
-        }
+            }, 300);
+        });
     </script>
 
     <!-- SERVICE WORKER -->
