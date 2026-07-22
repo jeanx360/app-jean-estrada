@@ -1,7 +1,7 @@
 // ============================================
 // VERSÃO DO APP
 // ============================================
-window.versaoApp = '20260726-robusto';
+window.versaoApp = '20260726-rapido';
 console.log('📦 Script.js carregado! Versão:', window.versaoApp);
 
 // ============================================
@@ -21,7 +21,6 @@ window.buscarVideosRSS = async function() {
     
     try {
         const rssUrl = `https://www.youtube.com/feeds/videos.xml?channel_id=${CHANNEL_ID}`;
-        // Usando rss2json para vídeos (funciona bem)
         const proxyUrl = `https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(rssUrl)}`;
         const resposta = await fetch(proxyUrl);
         const dados = await resposta.json();
@@ -57,34 +56,27 @@ window.buscarVideosRSS = async function() {
 };
 
 // ============================================
-// SISTEMA DE PROXY COM FALLBACK PARA NOTÍCIAS
+// PROXY CORS COM FALLBACK RÁPIDO
 // ============================================
 
-// Lista de proxies a serem testados em ordem
+// ⭐ Lista de proxies testados e funcionais
 const PROXY_LIST = [
     {
-        name: 'AllOrigins (GET)',
+        name: 'CORSProxy.io',
         fetch: async (url) => {
-            const response = await fetch(`https://api.allorigins.win/get?url=${encodeURIComponent(url)}`);
-            if (!response.ok) throw new Error(`HTTP ${response.status}`);
-            const data = await response.json();
-            // allorigins.win retorna os dados em 'contents'
-            if (!data.contents) throw new Error('Resposta sem conteúdo');
-            return data.contents;
-        }
-    },
-    {
-        name: 'AllOrigins (Raw)',
-        fetch: async (url) => {
-            const response = await fetch(`https://api.allorigins.win/raw?url=${encodeURIComponent(url)}`);
+            const response = await fetch(`https://corsproxy.io/?${encodeURIComponent(url)}`, {
+                signal: AbortSignal.timeout(5000) // Timeout de 5 segundos
+            });
             if (!response.ok) throw new Error(`HTTP ${response.status}`);
             return await response.text();
         }
     },
     {
-        name: 'CORSProxy.io',
+        name: 'AllOrigins (Raw)',
         fetch: async (url) => {
-            const response = await fetch(`https://corsproxy.io/?${encodeURIComponent(url)}`);
+            const response = await fetch(`https://api.allorigins.win/raw?url=${encodeURIComponent(url)}`, {
+                signal: AbortSignal.timeout(5000)
+            });
             if (!response.ok) throw new Error(`HTTP ${response.status}`);
             return await response.text();
         }
@@ -99,7 +91,8 @@ async function fetchFeedWithProxy(feedUrl) {
             const result = await proxy.fetch(feedUrl);
             
             // Verifica se o resultado parece ser XML válido
-            if (result && result.trim().startsWith('<?xml') || result.trim().startsWith('<rss') || result.trim().startsWith('<feed')) {
+            const trimmed = result.trim();
+            if (trimmed.startsWith('<?xml') || trimmed.startsWith('<rss') || trimmed.startsWith('<feed')) {
                 console.log(`✅ Proxy ${proxy.name} funcionou!`);
                 return result;
             } else {
@@ -113,7 +106,7 @@ async function fetchFeedWithProxy(feedUrl) {
 }
 
 // ============================================
-// FUNÇÃO PARA BUSCAR NOTÍCIAS
+// FUNÇÃO PARA BUSCAR NOTÍCIAS (OTIMIZADA)
 // ============================================
 window.buscarNoticiasRSS = async function() {
     const lista = document.getElementById('lista-noticias');
@@ -123,19 +116,24 @@ window.buscarNoticiasRSS = async function() {
     lista.innerHTML = `<div style="text-align:center;padding:30px;"><p>🔄 Carregando notícias...</p></div>`;
     
     try {
+        // ⭐ FEEDS QUE FUNCIONAM (ADICIONE MAIS SE ENCONTRAR)
         const feeds = [
             { nome: "UOL Tecnologia", url: "https://rss.uol.com.br/feed/tecnologia.xml" },
+            // InsideEVs e Canaltech estão dando 404 no momento, mas mantemos como fallback
             { nome: "InsideEVs Brasil", url: "https://insideevs.com/brasil/feed/" },
             { nome: "Canaltech", url: "https://canaltech.com.br/feed/" }
         ];
         
         let todasNoticias = [];
+        let feedsCarregados = 0;
 
         for (const feed of feeds) {
             try {
                 console.log(`📡 Buscando ${feed.nome}...`);
                 
-                // Usa o sistema de proxy com fallback
+                // Atualiza o status para o usuário
+                lista.innerHTML = `<div style="text-align:center;padding:30px;"><p>🔄 Carregando ${feed.nome}...</p></div>`;
+                
                 const xmlText = await fetchFeedWithProxy(feed.url);
                 
                 // Força a codificação UTF-8
@@ -212,6 +210,8 @@ window.buscarNoticiasRSS = async function() {
                     });
                 });
                 
+                feedsCarregados++;
+                
             } catch (erro) {
                 console.log(`❌ Erro ao buscar ${feed.nome}:`, erro.message);
             }
@@ -257,7 +257,7 @@ window.buscarNoticiasRSS = async function() {
             lista.appendChild(div);
         });
         
-        console.log('✅ Notícias carregadas com sucesso!');
+        console.log(`✅ Notícias carregadas com sucesso! (${feedsCarregados} fontes carregadas)`);
         
     } catch (erro) {
         lista.innerHTML = `<p>❌ Erro ao carregar notícias: ${erro.message}</p>`;
