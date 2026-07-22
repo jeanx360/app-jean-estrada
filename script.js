@@ -1,7 +1,7 @@
 // ============================================
 // VERSÃO DO APP - FORÇA ATUALIZAÇÃO
 // ============================================
-window.versaoApp = '20260724';
+window.versaoApp = '20260725';
 console.log('📦 Script.js carregado! Versão:', window.versaoApp);
 
 // ============================================
