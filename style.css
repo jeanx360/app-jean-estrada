@@ -58,18 +58,18 @@ body {
 }
 
 /* ============================================
-   CABEÇALHO (GLASSMORPHISM)
+   CABEÇALHO (COM BANNER + GLASSMORPHISM)
    ============================================ */
 header {
-    background: rgba(8, 16, 27, 0.85);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
-    border-bottom: 1px solid rgba(0, 184, 255, 0.15);
-    padding: 16px 20px;
+    background: linear-gradient(135deg, rgba(8, 16, 27, 0.88), rgba(8, 16, 27, 0.92)), 
+                url('imagens/banner.png') center/cover no-repeat;
+    color: white;
+    padding: 20px 20px;
     position: sticky;
     top: 0;
     z-index: 100;
     box-shadow: 0 4px 30px rgba(0, 0, 0, 0.5);
+    border-bottom: 1px solid rgba(0, 184, 255, 0.15);
 }
 
 .header-content {
