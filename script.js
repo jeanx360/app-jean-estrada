@@ -1,7 +1,7 @@
 // ============================================
 // VERSÃO DO APP
 // ============================================
-window.versaoApp = '20260726-rapido';
+window.versaoApp = '20260726-definitivo';
 console.log('📦 Script.js carregado! Versão:', window.versaoApp);
 
 // ============================================
@@ -59,13 +59,12 @@ window.buscarVideosRSS = async function() {
 // PROXY CORS COM FALLBACK RÁPIDO
 // ============================================
 
-// ⭐ Lista de proxies testados e funcionais
 const PROXY_LIST = [
     {
         name: 'CORSProxy.io',
         fetch: async (url) => {
             const response = await fetch(`https://corsproxy.io/?${encodeURIComponent(url)}`, {
-                signal: AbortSignal.timeout(5000) // Timeout de 5 segundos
+                signal: AbortSignal.timeout(5000)
             });
             if (!response.ok) throw new Error(`HTTP ${response.status}`);
             return await response.text();
@@ -83,20 +82,15 @@ const PROXY_LIST = [
     }
 ];
 
-// Função que tenta cada proxy até um funcionar
 async function fetchFeedWithProxy(feedUrl) {
     for (const proxy of PROXY_LIST) {
         try {
             console.log(`🔄 Tentando proxy: ${proxy.name}`);
             const result = await proxy.fetch(feedUrl);
-            
-            // Verifica se o resultado parece ser XML válido
             const trimmed = result.trim();
             if (trimmed.startsWith('<?xml') || trimmed.startsWith('<rss') || trimmed.startsWith('<feed')) {
                 console.log(`✅ Proxy ${proxy.name} funcionou!`);
                 return result;
-            } else {
-                console.log(`⚠️ Proxy ${proxy.name} retornou conteúdo inválido.`);
             }
         } catch (e) {
             console.log(`❌ Proxy ${proxy.name} falhou: ${e.message}`);
@@ -106,7 +100,7 @@ async function fetchFeedWithProxy(feedUrl) {
 }
 
 // ============================================
-// FUNÇÃO PARA BUSCAR NOTÍCIAS (OTIMIZADA)
+// FUNÇÃO PARA BUSCAR NOTÍCIAS (FEEDS CONFIÁVEIS)
 // ============================================
 window.buscarNoticiasRSS = async function() {
     const lista = document.getElementById('lista-noticias');
@@ -116,12 +110,12 @@ window.buscarNoticiasRSS = async function() {
     lista.innerHTML = `<div style="text-align:center;padding:30px;"><p>🔄 Carregando notícias...</p></div>`;
     
     try {
-        // ⭐ FEEDS QUE FUNCIONAM (ADICIONE MAIS SE ENCONTRAR)
+        // ⭐ FEEDS CONFIÁVEIS (testados e funcionando)
         const feeds = [
             { nome: "UOL Tecnologia", url: "https://rss.uol.com.br/feed/tecnologia.xml" },
-            // InsideEVs e Canaltech estão dando 404 no momento, mas mantemos como fallback
-            { nome: "InsideEVs Brasil", url: "https://insideevs.com/brasil/feed/" },
-            { nome: "Canaltech", url: "https://canaltech.com.br/feed/" }
+            // ⭐ ADICIONE MAIS FEEDS AQUI CONFORME ENCONTRAR
+            // { nome: "TecMundo", url: "https://www.tecmundo.com.br/feed" },
+            // { nome: "Olhar Digital", url: "https://olhardigital.com.br/feed" },
         ];
         
         let todasNoticias = [];
@@ -130,8 +124,6 @@ window.buscarNoticiasRSS = async function() {
         for (const feed of feeds) {
             try {
                 console.log(`📡 Buscando ${feed.nome}...`);
-                
-                // Atualiza o status para o usuário
                 lista.innerHTML = `<div style="text-align:center;padding:30px;"><p>🔄 Carregando ${feed.nome}...</p></div>`;
                 
                 const xmlText = await fetchFeedWithProxy(feed.url);
@@ -143,7 +135,6 @@ window.buscarNoticiasRSS = async function() {
                 const textoCorrigido = await respostaBlob.text();
                 URL.revokeObjectURL(urlBlob);
                 
-                // Parseia o XML
                 const parser = new DOMParser();
                 const xml = parser.parseFromString(textoCorrigido, 'text/xml');
                 
@@ -173,7 +164,6 @@ window.buscarNoticiasRSS = async function() {
                                      item.querySelector('summary')?.textContent || 
                                      'Sem descrição';
                     
-                    // Extrai imagem
                     let imagem = '';
                     const enclosure = item.querySelector('enclosure');
                     if (enclosure) {
@@ -187,7 +177,6 @@ window.buscarNoticiasRSS = async function() {
                         }
                     }
                     
-                    // Limpa e decodifica os caracteres especiais
                     const descricaoLimpa = description
                         .replace(/<[^>]*>/g, '')
                         .replace(/&nbsp;/g, ' ')
@@ -217,7 +206,6 @@ window.buscarNoticiasRSS = async function() {
             }
         }
         
-        // Ordena por data (mais recentes primeiro)
         todasNoticias.sort((a, b) => new Date(b.pubDate) - new Date(a.pubDate));
         const noticias = todasNoticias.slice(0, 15);
         
