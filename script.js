@@ -1,7 +1,8 @@
 // ============================================
 // VERSÃO DO APP - FORÇA ATUALIZAÇÃO
 // ============================================
-window.versaoApp = '20260722b';
+window.versaoApp = '20260723';
+console.log('📦 Script.js carregado! Versão:', window.versaoApp);
 
 // ============================================
 // APP JEAN NA ESTRADA - BUSCA VIA RSS (SEM API)
@@ -14,11 +15,10 @@ const MAX_VIDEOS = 10;
 // ============================================
 // FUNÇÃO PARA BUSCAR OS VÍDEOS VIA RSS
 // ============================================
-async function buscarVideosRSS() {
-    // ⭐ USA O ELEMENTO EXCLUSIVO DE VÍDEOS ⭐
+window.buscarVideosRSS = async function() {
     const lista = document.getElementById('lista-videos');
     if (!lista) {
-        console.log('Elemento lista-videos não encontrado');
+        console.log('❌ Elemento lista-videos não encontrado');
         return;
     }
 
@@ -82,16 +82,15 @@ async function buscarVideosRSS() {
         lista.innerHTML = `<p>❌ Erro ao carregar vídeos: ${erro.message}</p>`;
         console.log('Erro ao buscar vídeos:', erro);
     }
-}
+};
 
 // ============================================
 // FUNÇÃO PARA BUSCAR NOTÍCIAS
 // ============================================
-async function buscarNoticiasRSS() {
-    // ⭐ USA O ELEMENTO EXCLUSIVO DE NOTÍCIAS ⭐
+window.buscarNoticiasRSS = async function() {
     const lista = document.getElementById('lista-noticias');
     if (!lista) {
-        console.log('Elemento lista-noticias não encontrado');
+        console.log('❌ Elemento lista-noticias não encontrado');
         return;
     }
 
@@ -180,7 +179,7 @@ async function buscarNoticiasRSS() {
         lista.innerHTML = `<div style="text-align:center;padding:30px;"><p>❌ Erro ao carregar notícias: ${erro.message}</p></div>`;
         console.log('Erro ao buscar notícias:', erro);
     }
-}
+};
 
 // ============================================
 // FUNÇÃO PARA O BOTÃO DE CONTATO
@@ -190,21 +189,8 @@ function enviarMensagem() {
 }
 
 // ============================================
-// INICIALIZAÇÃO - CARREGA OS VÍDEOS
+// CARREGA OS VÍDEOS NA INICIALIZAÇÃO
 // ============================================
-console.log('🚀 App Jean na Estrada iniciado! Versão:', window.versaoApp);
-
-// Carrega os vídeos ao iniciar
-setTimeout(function() {
-    if (typeof buscarVideosRSS === 'function') {
-        buscarVideosRSS();
-    }
-}, 200);
-
-// Recarregar ao voltar a ficar online
-document.addEventListener('online', function() {
-    buscarVideosRSS();
-});
-
-// Recarregar a cada 5 minutos
-setInterval(buscarVideosRSS, 300000);
+console.log('✅ Script.js carregado! Funções disponíveis:');
+console.log('  - buscarVideosRSS:', typeof window.buscarVideosRSS);
+console.log('  - buscarNoticiasRSS:', typeof window.buscarNoticiasRSS);
