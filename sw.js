@@ -2,11 +2,10 @@
 // SERVICE WORKER - JEAN NA ESTRADA
 // ============================================
 
-// ⭐ TROQUE ESTE NÚMERO SEMPRE QUE FIZER UMA ATUALIZAÇÃO GRANDE ⭐
-const CACHE_VERSION = 'v3.0.0';
+// ⭐ TROQUE ESTE NÚMERO PARA FORÇAR ATUALIZAÇÃO ⭐
+const CACHE_VERSION = 'v3.0.1';
 const CACHE_NAME = `jean-estrada-${CACHE_VERSION}`;
 
-// Arquivos para cache (com versão para evitar cache antigo)
 const urlsParaCache = [
     '/app-jean-estrada/',
     '/app-jean-estrada/index.html',
@@ -19,7 +18,7 @@ const urlsParaCache = [
     '/app-jean-estrada/imagens/apple-touch-icon.png'
 ];
 
-// INSTALAÇÃO - Guarda os arquivos no cache
+// INSTALAÇÃO
 self.addEventListener('install', event => {
     event.waitUntil(
         caches.open(CACHE_NAME)
@@ -28,13 +27,12 @@ self.addEventListener('install', event => {
                 return cache.addAll(urlsParaCache);
             })
             .then(() => {
-                // ⭐ FORÇA O SERVICE WORKER A ATIVAR IMEDIATAMENTE ⭐
                 return self.skipWaiting();
             })
     );
 });
 
-// ATIVAÇÃO - Remove caches antigos e toma controle
+// ATIVAÇÃO - Remove caches antigos
 self.addEventListener('activate', event => {
     event.waitUntil(
         caches.keys().then(cacheNames => {
@@ -47,13 +45,12 @@ self.addEventListener('activate', event => {
                 })
             );
         }).then(() => {
-            // ⭐ TOMA CONTROLE DAS ABAS ABERTAS IMEDIATAMENTE ⭐
             return self.clients.claim();
         })
     );
 });
 
-// BUSCA - Serve os arquivos do cache quando offline
+// BUSCA
 self.addEventListener('fetch', event => {
     event.respondWith(
         caches.match(event.request, { ignoreSearch: true })
