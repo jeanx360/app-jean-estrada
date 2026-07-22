@@ -189,8 +189,8 @@
     <!-- SCRIPTS -->
     <!-- ============================================ -->
     
-    <!-- ARQUIVO DE FUNÇÕES -->
-    <script src="script.js"></script>
+    <!-- ⭐ ARQUIVO DE FUNÇÕES COM VERSÃO (FORÇA ATUALIZAÇÃO NO IPHONE) ⭐ -->
+    <script src="script.js?v=20260722"></script>
     
     <!-- ⭐ SCRIPT PARA GARANTIR QUE OS VÍDEOS CARREGUEM NO IPHONE ⭐ -->
     <script>
@@ -207,6 +207,19 @@
                     }
                 }
             });
+        }
+    </script>
+
+    <!-- ⭐ FORÇA A ATUALIZAÇÃO NO IPHONE (SE O SCRIPT ESTIVER DESATUALIZADO) ⭐ -->
+    <script>
+        // Verifica se a versão do script está correta
+        if (typeof window.versaoApp === 'undefined' || window.versaoApp !== '20260722') {
+            console.log('🔄 Forçando atualização do script no iPhone...');
+            window.versaoApp = '20260722';
+            // Recarrega o script se estiver desatualizado
+            var script = document.createElement('script');
+            script.src = 'script.js?v=20260722';
+            document.head.appendChild(script);
         }
     </script>
 
@@ -279,9 +292,11 @@
             });
 
             // ============================================
-            // NAVEGAÇÃO PELAS SEÇÕES
+            // ⭐ NAVEGAÇÃO CORRIGIDA PELAS SEÇÕES ⭐
             // ============================================
             const links = menu.querySelectorAll('a[data-secao]');
+            
+            // ⭐ MAPEAMENTO CORRETO DOS IDs DAS SEÇÕES ⭐
             const secoes = {
                 inicio: document.getElementById('inicio-section'),
                 noticias: document.getElementById('noticias-section'),
@@ -293,14 +308,14 @@
             links.forEach(link => {
                 link.addEventListener('click', function(e) {
                     e.preventDefault();
-                    const secaoId = this.dataset.secao;
+                    const secaoId = this.dataset.secao; // 'inicio', 'noticias', etc.
 
-                    // Esconde todas as seções
+                    // Esconde TODAS as seções
                     Object.values(secoes).forEach(sec => {
                         if (sec) sec.style.display = 'none';
                     });
                     
-                    // Mostra a seção clicada
+                    // Mostra APENAS a seção clicada
                     if (secoes[secaoId]) {
                         secoes[secaoId].style.display = 'block';
                     }
@@ -312,12 +327,12 @@
                     // Fecha o menu após clicar
                     fecharMenu();
 
-                    // Se for a seção de início, recarrega os vídeos
+                    // ⭐ SE FOR INÍCIO, RECARREGA OS VÍDEOS ⭐
                     if (secaoId === 'inicio' && typeof buscarVideosRSS === 'function') {
                         buscarVideosRSS();
                     }
                     
-                    // Se for a seção de notícias, carrega as notícias
+                    // ⭐ SE FOR NOTÍCIAS, CARREGA AS NOTÍCIAS ⭐
                     if (secaoId === 'noticias' && typeof buscarNoticiasRSS === 'function') {
                         buscarNoticiasRSS();
                     }
