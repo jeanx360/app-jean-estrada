@@ -11,9 +11,9 @@
     <meta http-equiv="Pragma" content="no-cache">
     <meta http-equiv="Expires" content="0">
     
-    <!-- ⭐ CSS COM VERSÃO (FORÇA ATUALIZAÇÃO) ⭐ -->
-    <link rel="stylesheet" href="style.css?v=20260723">
-    <link rel="manifest" href="manifest.json?v=20260723">
+    <!-- ⭐ CSS COM VERSÃO ⭐ -->
+    <link rel="stylesheet" href="style.css?v=20260724">
+    <link rel="manifest" href="manifest.json?v=20260724">
     
     <link rel="icon" href="imagens/favicon.ico" type="image/x-icon">
     <link rel="apple-touch-icon" href="imagens/apple-touch-icon.png">
@@ -172,19 +172,19 @@
         <p style="font-size: 12px; margin-top: 5px;">App atualizado automaticamente com os últimos vídeos</p>
     </footer>
 
-       <!-- ============================================ -->
+    <!-- ============================================ -->
     <!-- SCRIPTS -->
     <!-- ============================================ -->
     
-    <!-- ⭐ ARQUIVO DE FUNÇÕES COM VERSÃO ⭐ -->
-    <script src="script.js?v=20260723b"></script>
+    <!-- ⭐ ARQUIVO DE FUNÇÕES ⭐ -->
+    <script src="script.js?v=20260724"></script>
     
-    <!-- ⭐ FUNÇÕES DO MENU E NAVEGAÇÃO ⭐ -->
+    <!-- ⭐ NAVEGAÇÃO E MENU ⭐ -->
     <script>
         // ============================================
         // VERSÃO DO APP
         // ============================================
-        window.versaoApp = '20260723b';
+        window.versaoApp = '20260724';
         console.log('🚀 App iniciado! Versão:', window.versaoApp);
         
         // ============================================
@@ -202,6 +202,19 @@
             const toggle = document.getElementById('menu-toggle');
             if (menu) menu.classList.add('aberto');
             if (toggle) toggle.classList.add('ativo');
+        }
+        
+        // ============================================
+        // FUNÇÃO PARA TROCAR DE SEÇÃO (RECARREGA A PÁGINA)
+        // ============================================
+        function trocarSecao(secaoId) {
+            console.log('🔄 Trocando para:', secaoId);
+            
+            // Salva a seção escolhida
+            localStorage.setItem('secaoAtual', secaoId);
+            
+            // Recarrega a página com o parâmetro
+            window.location.href = window.location.pathname + '?secao=' + secaoId;
         }
         
         // ============================================
@@ -241,17 +254,13 @@
                 });
             }
             
-            // ⭐ NAVEGAÇÃO CORRIGIDA - USA A FUNÇÃO GLOBAL ⭐
+            // ⭐ NAVEGAÇÃO - USA RECARGA DA PÁGINA ⭐
             document.querySelectorAll('#menu-lateral a[data-secao]').forEach(link => {
                 link.addEventListener('click', function(e) {
                     e.preventDefault();
                     const secaoId = this.dataset.secao;
                     console.log('🔗 Menu clicado:', secaoId);
-                    if (typeof window.alternarSecao === 'function') {
-                        window.alternarSecao(secaoId);
-                    } else {
-                        console.log('❌ Função alternarSecao não encontrada!');
-                    }
+                    trocarSecao(secaoId);
                 });
             });
             
@@ -260,15 +269,32 @@
                 lucide.createIcons();
             }
             
-            // Carrega os vídeos na inicialização
-            setTimeout(function() {
-                if (typeof window.alternarSecao === 'function') {
-                    console.log('📺 Carregando seção inicial...');
-                    window.alternarSecao('inicio');
-                } else {
-                    console.log('❌ Função alternarSecao não encontrada!');
+            // ⭐ CARREGA A SEÇÃO CORRETA BASEADO NA URL ⭐
+            const urlParams = new URLSearchParams(window.location.search);
+            const secao = urlParams.get('secao') || 'inicio';
+            
+            // Mostra a seção correta
+            const secoes = ['inicio', 'noticias', 'tutoriais', 'produtos', 'contato'];
+            secoes.forEach(id => {
+                const secaoEl = document.getElementById(id + '-section');
+                if (secaoEl) {
+                    secaoEl.style.display = (id === secao) ? 'block' : 'none';
                 }
-            }, 300);
+            });
+            
+            // Atualiza o menu
+            document.querySelectorAll('#menu-lateral a[data-secao]').forEach(link => {
+                link.classList.toggle('ativo', link.dataset.secao === secao);
+            });
+            
+            // Carrega o conteúdo da seção
+            if (secao === 'inicio' && typeof window.buscarVideosRSS === 'function') {
+                console.log('📺 Carregando vídeos...');
+                window.buscarVideosRSS();
+            } else if (secao === 'noticias' && typeof window.buscarNoticiasRSS === 'function') {
+                console.log('📰 Carregando notícias...');
+                window.buscarNoticiasRSS();
+            }
         });
     </script>
 
