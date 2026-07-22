@@ -32,7 +32,6 @@
     <!-- ============================================ -->
     <header>
         <div class="header-content">
-            <!-- Ícone do Menu -->
             <button id="menu-toggle" class="menu-toggle" aria-label="Abrir menu">
                 <span></span>
                 <span></span>
@@ -44,20 +43,19 @@
     </header>
 
     <!-- ============================================ -->
-    <!-- MENU LATERAL (HAMBÚRGUER) -->
+    <!-- MENU LATERAL - NOVA ESTRUTURA -->
     <!-- ============================================ -->
     <nav id="menu-lateral" class="menu-lateral">
-        <!-- ⭐ BOTÃO FECHAR (X) - VISÍVEL E FUNCIONAL ⭐ -->
         <button id="fechar-menu" class="fechar-menu" aria-label="Fechar menu">
             ✕
         </button>
         
         <ul>
-            <li><a href="#" data-secao="videos" class="ativo">📺 Vídeos do Canal</a></li>
+            <li><a href="#" data-secao="inicio" class="ativo">🏠 Início</a></li>
+            <li><a href="#" data-secao="noticias">📰 Notícias</a></li>
             <li><a href="#" data-secao="tutoriais">📖 Tutoriais</a></li>
-            <li><a href="#" data-secao="membros">⭐ Área de Membros</a></li>
-            <li><a href="#" data-secao="arquivos">🔓 Desbloqueio de Mídia</a></li>
-            <li><a href="#" data-secao="contato">💬 Fale com o Jean</a></li>
+            <li><a href="#" data-secao="produtos">🛒 Produtos</a></li>
+            <li><a href="#" data-secao="contato">💬 Fale Comigo</a></li>
         </ul>
         <div class="menu-footer">
             <p>🚐 Jean na Estrada</p>
@@ -69,68 +67,109 @@
     <!-- CONTEÚDO PRINCIPAL -->
     <!-- ============================================ -->
     <main>
-        <!-- SEÇÃO: VÍDEOS DO CANAL -->
-        <section id="videos-section" class="secao-ativa">
+        <!-- ========================================== -->
+        <!-- SEÇÃO: INÍCIO (VÍDEOS DO CANAL) -->
+        <!-- ========================================== -->
+        <section id="inicio-section" class="secao-ativa">
             <h2>🎬 Últimos Vídeos</h2>
             <div id="lista-videos">
                 <!-- Os vídeos serão carregados aqui automaticamente -->
             </div>
         </section>
 
-        <!-- SEÇÃO: TUTORIAIS -->
-        <section id="tutoriais-section" style="display: none;">
-            <h2>📖 Tutoriais</h2>
-            <p style="color: #94A3B8; margin-bottom: 15px;">Aprenda a desbloquear e personalizar seus equipamentos:</p>
-            <ul id="lista-tutoriais" style="list-style: none; padding: 0;">
-                <li style="background: rgba(17,24,39,0.4); padding: 14px 18px; border-radius: 16px; margin-bottom: 10px; border-left: 3px solid #00B8FF;">
-                    <a href="#" style="color: #94A3B8; text-decoration: none; font-weight: 500;">Como desbloquear a multimídia do BYD</a>
-                </li>
-                <li style="background: rgba(17,24,39,0.4); padding: 14px 18px; border-radius: 16px; margin-bottom: 10px; border-left: 3px solid #00B8FF;">
-                    <a href="#" style="color: #94A3B8; text-decoration: none; font-weight: 500;">Passo a passo: Desbloqueio de Geely EX2</a>
-                </li>
-                <li style="background: rgba(17,24,39,0.4); padding: 14px 18px; border-radius: 16px; margin-bottom: 10px; border-left: 3px solid #00B8FF;">
-                    <a href="#" style="color: #94A3B8; text-decoration: none; font-weight: 500;">Guia completo para carros elétricos</a>
-                </li>
-                <li style="background: rgba(17,24,39,0.4); padding: 14px 18px; border-radius: 16px; margin-bottom: 10px; border-left: 3px solid #00B8FF;">
-                    <a href="#" style="color: #94A3B8; text-decoration: none; font-weight: 500;">Dicas de manutenção para sua multimídia</a>
-                </li>
-            </ul>
-        </section>
-
-        <!-- SEÇÃO: ÁREA DE MEMBROS (EM CONSTRUÇÃO) -->
-        <section id="membros-section" style="display: none;">
-            <h2>⭐ Área de Membros</h2>
-            <div style="text-align: center; padding: 40px 0;">
-                <p style="font-size: 48px; margin-bottom: 15px;">🔒</p>
-                <p style="font-size: 20px; font-weight: 700; font-family: 'Raleway', sans-serif;">Em breve!</p>
-                <p style="color: #94A3B8; margin-top: 10px;">Esta área será exclusiva para membros do canal.</p>
-                <p style="color: #94A3B8; margin-top: 5px;">Em desenvolvimento.</p>
+        <!-- ========================================== -->
+        <!-- SEÇÃO: NOTÍCIAS (RSS) -->
+        <!-- ========================================== -->
+        <section id="noticias-section" style="display: none;">
+            <h2>📰 Notícias</h2>
+            <p style="color: #94A3B8; margin-bottom: 15px;">As últimas notícias sobre carros elétricos e tecnologia:</p>
+            <div id="lista-noticias">
+                <!-- As notícias serão carregadas aqui via RSS -->
+                <div style="text-align:center;padding:30px;">
+                    <p style="font-size:18px;">🔄 Carregando notícias...</p>
+                </div>
             </div>
         </section>
 
-        <!-- SEÇÃO: ARQUIVOS DE DESBLOQUEIO -->
-        <section id="arquivos-section" style="display: none;">
-            <h2>🔓 Desbloqueio de Mídia</h2>
-            <p style="color: #94A3B8; margin-bottom: 15px;">Arquivos e tutoriais para desbloqueio de multimídia automotiva:</p>
-            <ul id="lista-arquivos">
-                <li><span class="arquivo-icon">📁</span> <a href="#">Tutorial de Desbloqueio - BYD</a></li>
-                <li><span class="arquivo-icon">📁</span> <a href="#">Arquivos para multimídia VW</a></li>
-                <li><span class="arquivo-icon">📁</span> <a href="#">Desbloqueio de DVD portátil</a></li>
-                <li><span class="arquivo-icon">📁</span> <a href="#">Tutorial completo - Passo a passo</a></li>
+        <!-- ========================================== -->
+        <!-- SEÇÃO: TUTORIAIS + DESBLOQUEIOS -->
+        <!-- ========================================== -->
+        <section id="tutoriais-section" style="display: none;">
+            <h2>📖 Tutoriais</h2>
+            <p style="color: #94A3B8; margin-bottom: 15px;">Tutoriais e desbloqueios de multimídia automotiva:</p>
+            <ul id="lista-tutoriais" style="list-style: none; padding: 0;">
+                <li style="background: rgba(17,24,39,0.4); padding: 14px 18px; border-radius: 16px; margin-bottom: 10px; border-left: 3px solid #00B8FF;">
+                    <a href="#" style="color: #94A3B8; text-decoration: none; font-weight: 500;">🔓 Como desbloquear a multimídia do BYD</a>
+                </li>
+                <li style="background: rgba(17,24,39,0.4); padding: 14px 18px; border-radius: 16px; margin-bottom: 10px; border-left: 3px solid #00B8FF;">
+                    <a href="#" style="color: #94A3B8; text-decoration: none; font-weight: 500;">🔓 Passo a passo: Desbloqueio de Geely EX2</a>
+                </li>
+                <li style="background: rgba(17,24,39,0.4); padding: 14px 18px; border-radius: 16px; margin-bottom: 10px; border-left: 3px solid #00B8FF;">
+                    <a href="#" style="color: #94A3B8; text-decoration: none; font-weight: 500;">📖 Guia completo para carros elétricos</a>
+                </li>
+                <li style="background: rgba(17,24,39,0.4); padding: 14px 18px; border-radius: 16px; margin-bottom: 10px; border-left: 3px solid #00B8FF;">
+                    <a href="#" style="color: #94A3B8; text-decoration: none; font-weight: 500;">🔓 Desbloqueio de multimídia VW</a>
+                </li>
             </ul>
         </section>
 
-        <!-- SEÇÃO: CONTATO -->
+        <!-- ========================================== -->
+        <!-- SEÇÃO: PRODUTOS RECOMENDADOS (AFILIADOS) -->
+        <!-- ========================================== -->
+        <section id="produtos-section" style="display: none;">
+            <h2>🛒 Produtos Recomendados</h2>
+            <p style="color: #94A3B8; margin-bottom: 15px;">Produtos que eu testei e recomendo:</p>
+            <ul id="lista-produtos" style="list-style: none; padding: 0;">
+                <li style="background: rgba(17,24,39,0.4); padding: 14px 18px; border-radius: 16px; margin-bottom: 10px; border-left: 3px solid #00B8FF;">
+                    <a href="#" target="_blank" style="color: #94A3B8; text-decoration: none; font-weight: 500;">🔌 Carregador para carros elétricos</a>
+                </li>
+                <li style="background: rgba(17,24,39,0.4); padding: 14px 18px; border-radius: 16px; margin-bottom: 10px; border-left: 3px solid #00B8FF;">
+                    <a href="#" target="_blank" style="color: #94A3B8; text-decoration: none; font-weight: 500;">📱 Suporte para celular veicular</a>
+                </li>
+                <li style="background: rgba(17,24,39,0.4); padding: 14px 18px; border-radius: 16px; margin-bottom: 10px; border-left: 3px solid #00B8FF;">
+                    <a href="#" target="_blank" style="color: #94A3B8; text-decoration: none; font-weight: 500;">🛠️ Kit de ferramentas para multimídia</a>
+                </li>
+                <li style="background: rgba(17,24,39,0.4); padding: 14px 18px; border-radius: 16px; margin-bottom: 10px; border-left: 3px solid #00B8FF;">
+                    <a href="#" target="_blank" style="color: #94A3B8; text-decoration: none; font-weight: 500;">🔋 Acessórios para BYD Dolphin</a>
+                </li>
+            </ul>
+        </section>
+
+        <!-- ========================================== -->
+        <!-- SEÇÃO: FALE COMIGO (CONTATO + REDES) -->
+        <!-- ========================================== -->
         <section id="contato-section" style="display: none;">
-            <h2>💬 Fale com o Jean</h2>
-            <p style="color: #94A3B8; margin-bottom: 15px;">Deixe sua sugestão, dúvida ou ideia para os próximos vídeos!</p>
-            <div style="display: flex; gap: 10px; flex-wrap: wrap;">
-                <button onclick="window.location.href='mailto:seuemail@gmail.com?subject=Sugestão para o canal'" class="btn-principal">
-                    📝 Enviar Mensagem
-                </button>
-                <button onclick="window.open('https://www.youtube.com/@jeannaestrada', '_blank')" class="btn-secundario">
-                    ▶️ Canal no YouTube
-                </button>
+            <h2>💬 Fale Comigo</h2>
+            <p style="color: #94A3B8; margin-bottom: 15px;">Entre em contato ou me siga nas redes sociais:</p>
+            
+            <!-- EMAIL -->
+            <div style="background: rgba(17,24,39,0.4); padding: 14px 18px; border-radius: 16px; margin-bottom: 12px; border-left: 3px solid #00B8FF; display: flex; align-items: center; gap: 12px;">
+                <span style="font-size: 20px;">📧</span>
+                <a href="mailto:contato.jeannaestrada@gmail.com" style="color: #94A3B8; text-decoration: none; font-weight: 500;">contato.jeannaestrada@gmail.com</a>
+            </div>
+            
+            <!-- REDES SOCIAIS -->
+            <div style="display: flex; flex-direction: column; gap: 10px; margin-top: 15px;">
+                <!-- YouTube -->
+                <a href="https://www.youtube.com/@jeannaestrada" target="_blank" style="display: flex; align-items: center; gap: 12px; background: rgba(17,24,39,0.4); padding: 14px 18px; border-radius: 16px; text-decoration: none; border-left: 3px solid #FF0000; transition: var(--transition-smooth);">
+                    <span style="font-size: 20px;">▶️</span>
+                    <span style="color: #94A3B8; font-weight: 500;">YouTube</span>
+                    <span style="margin-left: auto; color: #FF0000;">@jeannaestrada</span>
+                </a>
+                
+                <!-- TikTok -->
+                <a href="https://www.tiktok.com/@jeannaestrada" target="_blank" style="display: flex; align-items: center; gap: 12px; background: rgba(17,24,39,0.4); padding: 14px 18px; border-radius: 16px; text-decoration: none; border-left: 3px solid #00f2ea; transition: var(--transition-smooth);">
+                    <span style="font-size: 20px;">🎵</span>
+                    <span style="color: #94A3B8; font-weight: 500;">TikTok</span>
+                    <span style="margin-left: auto; color: #00f2ea;">@jeannaestrada</span>
+                </a>
+                
+                <!-- Instagram -->
+                <a href="https://www.instagram.com/jeannaestradaoficial/" target="_blank" style="display: flex; align-items: center; gap: 12px; background: rgba(17,24,39,0.4); padding: 14px 18px; border-radius: 16px; text-decoration: none; border-left: 3px solid #E4405F; transition: var(--transition-smooth);">
+                    <span style="font-size: 20px;">📸</span>
+                    <span style="color: #94A3B8; font-weight: 500;">Instagram</span>
+                    <span style="margin-left: auto; color: #E4405F;">@jeannaestradaoficial</span>
+                </a>
             </div>
         </section>
     </main>
@@ -150,7 +189,7 @@
     <!-- ARQUIVO DE FUNÇÕES -->
     <script src="script.js"></script>
     
-    <!-- FUNÇÕES DO MENU E FECHAR -->
+    <!-- FUNÇÕES DO MENU E NOTÍCIAS -->
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             const toggle = document.getElementById('menu-toggle');
@@ -175,7 +214,7 @@
             }
 
             // ============================================
-            // EVENTO DO ÍCONE HAMBÚRGUER (ABRIR/FECHAR)
+            // EVENTO DO ÍCONE HAMBÚRGUER
             // ============================================
             if (toggle) {
                 toggle.addEventListener('click', function(e) {
@@ -223,10 +262,10 @@
             // ============================================
             const links = menu.querySelectorAll('a[data-secao]');
             const secoes = {
-                videos: document.getElementById('videos-section'),
+                inicio: document.getElementById('inicio-section'),
+                noticias: document.getElementById('noticias-section'),
                 tutoriais: document.getElementById('tutoriais-section'),
-                membros: document.getElementById('membros-section'),
-                arquivos: document.getElementById('arquivos-section'),
+                produtos: document.getElementById('produtos-section'),
                 contato: document.getElementById('contato-section')
             };
 
@@ -252,9 +291,14 @@
                     // Fecha o menu após clicar
                     fecharMenu();
 
-                    // Se for a seção de vídeos, recarrega a lista
-                    if (secaoId === 'videos' && typeof buscarVideosRSS === 'function') {
+                    // Se for a seção de início, recarrega os vídeos
+                    if (secaoId === 'inicio' && typeof buscarVideosRSS === 'function') {
                         buscarVideosRSS();
+                    }
+                    
+                    // Se for a seção de notícias, carrega as notícias
+                    if (secaoId === 'noticias' && typeof buscarNoticiasRSS === 'function') {
+                        buscarNoticiasRSS();
                     }
                 });
             });
@@ -268,7 +312,7 @@
         });
     </script>
 
-    <!-- SERVICE WORKER - PARA INSTALAR NO CELULAR -->
+    <!-- SERVICE WORKER -->
     <script>
         if ('serviceWorker' in navigator) {
             navigator.serviceWorker.register('sw.js')
