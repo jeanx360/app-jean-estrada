@@ -1,7 +1,7 @@
 // ============================================
 // VERSÃO DO APP - FORÇA ATUALIZAÇÃO
 // ============================================
-window.versaoApp = '20260725-fix';
+window.versaoApp = '20260725-fix2';
 console.log('📦 Script.js carregado! Versão:', window.versaoApp);
 
 // ============================================
@@ -30,7 +30,6 @@ window.buscarVideosRSS = async function() {
     `;
     
     try {
-        // Usar o rss2json para vídeos (funciona bem)
         const rssUrl = `https://www.youtube.com/feeds/videos.xml?channel_id=${CHANNEL_ID}`;
         const proxyUrl = `https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(rssUrl)}`;
         
@@ -86,7 +85,7 @@ window.buscarVideosRSS = async function() {
 };
 
 // ============================================
-// FUNÇÃO PARA BUSCAR NOTÍCIAS (COM DOMPARSER E UTF-8)
+// FUNÇÃO PARA BUSCAR NOTÍCIAS (COM DOMPARSER E CORREÇÃO DE ACENTOS)
 // ============================================
 window.buscarNoticiasRSS = async function() {
     console.log('🔍 buscarNoticiasRSS() chamada');
@@ -97,7 +96,6 @@ window.buscarNoticiasRSS = async function() {
     }
     console.log('✅ Elemento #lista-noticias encontrado');
 
-    // Limpa e mostra carregando
     lista.innerHTML = '';
     lista.innerHTML = `
         <div style="text-align:center;padding:30px;">
@@ -106,6 +104,7 @@ window.buscarNoticiasRSS = async function() {
     `;
     
     try {
+        // ⭐ USAR DOMPARSER DIRETAMENTE (SEM PROXY)
         const feedsNoticias = [
             { nome: "InsideEVs Brasil", url: "https://insideevs.com/brasil/feed/" },
             { nome: "Tecnologia - UOL", url: "https://rss.uol.com.br/feed/tecnologia.xml" },
@@ -119,9 +118,21 @@ window.buscarNoticiasRSS = async function() {
             try {
                 console.log(`📡 Buscando ${feed.nome}:`, feed.url);
                 const resposta = await fetch(feed.url);
-                const texto = await resposta.text(); // Pega o texto bruto do XML
                 
-                // ⭐ CORREÇÃO: Força a codificação UTF-8
+                // ⭐ CORREÇÃO: Lê o texto e força UTF-8
+                let texto = await resposta.text();
+                
+                // Detecta se o texto está em ISO-8859-1 e converte
+                try {
+                    // Tenta decodificar como UTF-8
+                    const decoder = new TextDecoder('UTF-8');
+                    const buffer = await resposta.arrayBuffer();
+                    texto = decoder.decode(buffer);
+                } catch (e) {
+                    console.log('⚠️ Usando texto bruto para', feed.nome);
+                }
+                
+                // ⭐ FORÇA A CODIFICAÇÃO UTF-8
                 const blob = new Blob([texto], { type: 'text/xml;charset=UTF-8' });
                 const urlBlob = URL.createObjectURL(blob);
                 const respostaBlob = await fetch(urlBlob);
@@ -132,27 +143,44 @@ window.buscarNoticiasRSS = async function() {
                 const parser = new DOMParser();
                 const xmlDoc = parser.parseFromString(textoCorrigido, 'text/xml');
                 
-                // Verifica se há erro de parsing
+                // Verifica erro de parsing
                 const parseError = xmlDoc.querySelector('parsererror');
                 if (parseError) {
                     console.log(`⚠️ Erro ao parsear ${feed.nome}:`, parseError.textContent);
                     continue;
                 }
                 
-                // Extrai os itens
+                // Extrai itens
                 const items = xmlDoc.querySelectorAll('item');
                 console.log(`📡 ${feed.nome}: ${items.length} itens encontrados`);
                 
-                // Pega os 5 primeiros itens
                 const itensLimitados = Array.from(items).slice(0, 5);
                 
                 itensLimitados.forEach(item => {
-                    const title = item.querySelector('title')?.textContent || 'Sem título';
-                    const link = item.querySelector('link')?.textContent || '#';
-                    const pubDate = item.querySelector('pubDate')?.textContent || new Date().toUTCString();
-                    const description = item.querySelector('description')?.textContent || 'Sem descrição';
+                    // ⭐ FUNÇÃO PARA EXTRAIR TEXTO COM UTF-8
+                    const getText = (element) => {
+                        const el = item.querySelector(element);
+                        if (!el) return '';
+                        return el.textContent;
+                    };
                     
-                    // Extrai a imagem do conteúdo ou do enclosure
+                    const title = getText('title') || 'Sem título';
+                    const link = getText('link') || '#';
+                    const pubDate = getText('pubDate') || new Date().toUTCString();
+                    let description = getText('description') || 'Sem descrição';
+                    
+                    // ⭐ CORREÇÃO DE ACENTOS: Decodifica entidades HTML
+                    const decodeEntities = (text) => {
+                        const txt = document.createElement('textarea');
+                        txt.innerHTML = text;
+                        return txt.value;
+                    };
+                    
+                    const tituloDecodificado = decodeEntities(title);
+                    let descricaoDecodificada = decodeEntities(description);
+                    descricaoDecodificada = descricaoDecodificada.replace(/<[^>]*>/g, '').substring(0, 200);
+                    
+                    // Extrai imagem
                     let imagem = '';
                     const enclosure = item.querySelector('enclosure');
                     if (enclosure) {
@@ -166,14 +194,11 @@ window.buscarNoticiasRSS = async function() {
                         }
                     }
                     
-                    // Limpa a descrição (remove HTML)
-                    const descricaoLimpa = description.replace(/<[^>]*>/g, '').substring(0, 200);
-                    
                     todasNoticias.push({
-                        titulo: title,
+                        titulo: tituloDecodificado,
                         link: link,
                         pubDate: pubDate,
-                        descricao: descricaoLimpa,
+                        descricao: descricaoDecodificada,
                         imagem: imagem,
                         fonte: feed.nome
                     });
@@ -194,7 +219,6 @@ window.buscarNoticiasRSS = async function() {
             return;
         }
         
-        // Limpa e renderiza
         lista.innerHTML = '';
         
         noticias.forEach(item => {
