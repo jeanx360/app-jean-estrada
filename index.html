@@ -11,9 +11,8 @@
     <meta http-equiv="Pragma" content="no-cache">
     <meta http-equiv="Expires" content="0">
     
-    <!-- ⭐ CSS COM VERSÃO ⭐ -->
-    <link rel="stylesheet" href="style.css?v=20260724">
-    <link rel="manifest" href="manifest.json?v=20260724">
+    <link rel="stylesheet" href="style.css?v=20260725">
+    <link rel="manifest" href="manifest.json?v=20260725">
     
     <link rel="icon" href="imagens/favicon.ico" type="image/x-icon">
     <link rel="apple-touch-icon" href="imagens/apple-touch-icon.png">
@@ -47,11 +46,11 @@
     <nav id="menu-lateral" class="menu-lateral">
         <button id="fechar-menu" class="fechar-menu" aria-label="Fechar menu">✕</button>
         <ul>
-            <li><a href="#" data-secao="inicio" class="ativo">🏠 Início</a></li>
-            <li><a href="#" data-secao="noticias">📰 Notícias</a></li>
-            <li><a href="#" data-secao="tutoriais">📖 Tutoriais</a></li>
-            <li><a href="#" data-secao="produtos">🛒 Produtos</a></li>
-            <li><a href="#" data-secao="contato">💬 Fale Comigo</a></li>
+            <li><a href="?secao=inicio" class="ativo">🏠 Início</a></li>
+            <li><a href="?secao=noticias">📰 Notícias</a></li>
+            <li><a href="?secao=tutoriais">📖 Tutoriais</a></li>
+            <li><a href="?secao=produtos">🛒 Produtos</a></li>
+            <li><a href="?secao=contato">💬 Fale Comigo</a></li>
         </ul>
         <div class="menu-footer">
             <p>🚐 Jean na Estrada</p>
@@ -66,7 +65,7 @@
         <!-- ========================================== -->
         <!-- SEÇÃO: INÍCIO (VÍDEOS DO CANAL) -->
         <!-- ========================================== -->
-        <section id="inicio-section" class="secao-ativa">
+        <section id="inicio-section">
             <h2>🎬 Últimos Vídeos</h2>
             <div id="lista-videos">
                 <div style="text-align:center;padding:30px;">
@@ -176,19 +175,17 @@
     <!-- SCRIPTS -->
     <!-- ============================================ -->
     
-    <!-- ⭐ ARQUIVO DE FUNÇÕES ⭐ -->
-    <script src="script.js?v=20260724"></script>
+    <script src="script.js?v=20260725"></script>
     
-    <!-- ⭐ NAVEGAÇÃO E MENU ⭐ -->
     <script>
         // ============================================
         // VERSÃO DO APP
         // ============================================
-        window.versaoApp = '20260724';
+        window.versaoApp = '20260725';
         console.log('🚀 App iniciado! Versão:', window.versaoApp);
         
         // ============================================
-        // FUNÇÕES DO MENU
+        // FUNÇÕES DO MENU (SEM RECARREGAR A PÁGINA)
         // ============================================
         function fecharMenu() {
             const menu = document.getElementById('menu-lateral');
@@ -209,11 +206,6 @@
         // ============================================
         function trocarSecao(secaoId) {
             console.log('🔄 Trocando para:', secaoId);
-            
-            // Salva a seção escolhida
-            localStorage.setItem('secaoAtual', secaoId);
-            
-            // Recarrega a página com o parâmetro
             window.location.href = window.location.pathname + '?secao=' + secaoId;
         }
         
@@ -269,9 +261,12 @@
                 lucide.createIcons();
             }
             
+            // ============================================
             // ⭐ CARREGA A SEÇÃO CORRETA BASEADO NA URL ⭐
+            // ============================================
             const urlParams = new URLSearchParams(window.location.search);
             const secao = urlParams.get('secao') || 'inicio';
+            console.log('📌 Seção atual:', secao);
             
             // Mostra a seção correta
             const secoes = ['inicio', 'noticias', 'tutoriais', 'produtos', 'contato'];
@@ -287,24 +282,23 @@
                 link.classList.toggle('ativo', link.dataset.secao === secao);
             });
             
-            // Carrega o conteúdo da seção
-            if (secao === 'inicio' && typeof window.buscarVideosRSS === 'function') {
-                console.log('📺 Carregando vídeos...');
-                window.buscarVideosRSS();
-            } else if (secao === 'noticias' && typeof window.buscarNoticiasRSS === 'function') {
-                console.log('📰 Carregando notícias...');
-                window.buscarNoticiasRSS();
+            // ⭐ CARREGA O CONTEÚDO DA SEÇÃO ⭐
+            if (secao === 'inicio') {
+                if (typeof window.buscarVideosRSS === 'function') {
+                    console.log('📺 Carregando vídeos...');
+                    window.buscarVideosRSS();
+                } else {
+                    console.log('❌ buscarVideosRSS não encontrada');
+                }
+            } else if (secao === 'noticias') {
+                if (typeof window.buscarNoticiasRSS === 'function') {
+                    console.log('📰 Carregando notícias...');
+                    window.buscarNoticiasRSS();
+                } else {
+                    console.log('❌ buscarNoticiasRSS não encontrada');
+                }
             }
         });
-    </script>
-
-    <!-- SERVICE WORKER -->
-    <script>
-        if ('serviceWorker' in navigator) {
-            navigator.serviceWorker.register('sw.js')
-                .then(() => console.log('Service Worker registrado!'))
-                .catch(err => console.log('Erro no Service Worker:', err));
-        }
     </script>
 </body>
 </html>
