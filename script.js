@@ -1,7 +1,7 @@
 // ============================================
 // VERSÃO DO APP - FORÇA ATUALIZAÇÃO
 // ============================================
-window.versaoApp = '20260723';
+window.versaoApp = '20260724';
 console.log('📦 Script.js carregado! Versão:', window.versaoApp);
 
 // ============================================
@@ -23,15 +23,6 @@ window.buscarVideosRSS = async function() {
     }
 
     console.log('🔄 Buscando vídeos...');
-    
-    // ⭐ LIMPEZA COMPLETA DO ELEMENTO ⭐
-    lista.innerHTML = '';
-    lista.style.display = 'block';
-    
-    // ⭐ FORÇA O NAVEGADOR A RENDERIZAR A LIMPEZA ⭐
-    void lista.offsetHeight;
-    
-    // Mostra carregando
     lista.innerHTML = `
         <div style="text-align:center;padding:30px;">
             <p style="font-size:18px;">🔄 Carregando vídeos...</p>
@@ -50,9 +41,7 @@ window.buscarVideosRSS = async function() {
             return;
         }
         
-        // ⭐ LIMPA NOVAMENTE ANTES DE ADICIONAR OS NOVOS ⭐
         lista.innerHTML = '';
-        
         const videos = dados.items.slice(0, MAX_VIDEOS);
         
         videos.forEach(item => {
@@ -106,15 +95,6 @@ window.buscarNoticiasRSS = async function() {
     }
 
     console.log('🔄 Buscando notícias...');
-    
-    // ⭐ LIMPEZA COMPLETA DO ELEMENTO ⭐
-    lista.innerHTML = '';
-    lista.style.display = 'block';
-    
-    // ⭐ FORÇA O NAVEGADOR A RENDERIZAR A LIMPEZA ⭐
-    void lista.offsetHeight;
-    
-    // Mostra carregando
     lista.innerHTML = `
         <div style="text-align:center;padding:30px;">
             <p style="font-size:18px;">🔄 Carregando notícias...</p>
@@ -159,7 +139,6 @@ window.buscarNoticiasRSS = async function() {
             return;
         }
         
-        // ⭐ LIMPA NOVAMENTE ANTES DE ADICIONAR AS NOVAS ⭐
         lista.innerHTML = '';
         
         noticias.forEach(item => {
@@ -201,70 +180,3 @@ window.buscarNoticiasRSS = async function() {
         console.log('Erro ao buscar notícias:', erro);
     }
 };
-
-// ============================================
-// FUNÇÃO PARA O BOTÃO DE CONTATO
-// ============================================
-function enviarMensagem() {
-    window.open('https://www.youtube.com/@jeannaestrada', '_blank');
-}
-
-// ============================================
-// FUNÇÃO PARA ALTERNAR SEÇÕES (GARANTE LIMPEZA)
-// ============================================
-window.alternarSecao = function(secaoId) {
-    console.log('🔄 Alternando para:', secaoId);
-    
-    // ⭐ GARANTE QUE OS ELEMENTOS ESTEJAM LIMPOS ⭐
-    const videosList = document.getElementById('lista-videos');
-    const noticiasList = document.getElementById('lista-noticias');
-    
-    if (secaoId === 'inicio') {
-        if (noticiasList) noticiasList.innerHTML = '';
-    } else if (secaoId === 'noticias') {
-        if (videosList) videosList.innerHTML = '';
-    }
-    
-    // Esconde todas as seções
-    const secoes = ['inicio', 'noticias', 'tutoriais', 'produtos', 'contato'];
-    secoes.forEach(id => {
-        const secao = document.getElementById(id + '-section');
-        if (secao) secao.style.display = 'none';
-    });
-    
-    // Mostra a seção selecionada
-    const secaoAlvo = document.getElementById(secaoId + '-section');
-    if (secaoAlvo) {
-        secaoAlvo.style.display = 'block';
-        console.log('✅ Seção exibida:', secaoId);
-    } else {
-        console.log('❌ Seção não encontrada:', secaoId);
-    }
-    
-    // Atualiza o menu
-    document.querySelectorAll('#menu-lateral a[data-secao]').forEach(link => {
-        link.classList.toggle('ativo', link.dataset.secao === secaoId);
-    });
-    
-    // Fecha o menu
-    if (typeof fecharMenu === 'function') {
-        fecharMenu();
-    }
-    
-    // Carrega o conteúdo específico
-    if (secaoId === 'inicio' && typeof window.buscarVideosRSS === 'function') {
-        console.log('📺 Carregando vídeos...');
-        window.buscarVideosRSS();
-    } else if (secaoId === 'noticias' && typeof window.buscarNoticiasRSS === 'function') {
-        console.log('📰 Carregando notícias...');
-        window.buscarNoticiasRSS();
-    }
-};
-
-// ============================================
-// CARREGA OS VÍDEOS NA INICIALIZAÇÃO
-// ============================================
-console.log('✅ Script.js carregado! Funções disponíveis:');
-console.log('  - buscarVideosRSS:', typeof window.buscarVideosRSS);
-console.log('  - buscarNoticiasRSS:', typeof window.buscarNoticiasRSS);
-console.log('  - alternarSecao:', typeof window.alternarSecao);
