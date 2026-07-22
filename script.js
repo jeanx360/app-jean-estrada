@@ -16,13 +16,14 @@ const MAX_VIDEOS = 10;
 // FUNÇÃO PARA BUSCAR OS VÍDEOS VIA RSS
 // ============================================
 window.buscarVideosRSS = async function() {
+    console.log('🔍 buscarVideosRSS() chamada');
     const lista = document.getElementById('lista-videos');
     if (!lista) {
-        console.log('❌ Elemento lista-videos não encontrado');
+        console.log('❌ Elemento #lista-videos não encontrado');
         return;
     }
+    console.log('✅ Elemento #lista-videos encontrado');
 
-    console.log('🔄 Buscando vídeos...');
     lista.innerHTML = `
         <div style="text-align:center;padding:30px;">
             <p style="font-size:18px;">🔄 Carregando vídeos...</p>
@@ -32,9 +33,11 @@ window.buscarVideosRSS = async function() {
     try {
         const rssUrl = `https://www.youtube.com/feeds/videos.xml?channel_id=${CHANNEL_ID}`;
         const proxyUrl = `https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(rssUrl)}`;
+        console.log('📡 Buscando RSS:', rssUrl);
         
         const resposta = await fetch(proxyUrl);
         const dados = await resposta.json();
+        console.log('📡 Resposta recebida, status:', dados.status);
         
         if (dados.status !== 'ok' || !dados.items || dados.items.length === 0) {
             lista.innerHTML = '<p>📹 Nenhum vídeo encontrado.</p>';
@@ -43,6 +46,7 @@ window.buscarVideosRSS = async function() {
         
         lista.innerHTML = '';
         const videos = dados.items.slice(0, MAX_VIDEOS);
+        console.log(`📹 ${videos.length} vídeos encontrados`);
         
         videos.forEach(item => {
             const videoUrl = item.link;
@@ -80,7 +84,7 @@ window.buscarVideosRSS = async function() {
         
     } catch (erro) {
         lista.innerHTML = `<p>❌ Erro ao carregar vídeos: ${erro.message}</p>`;
-        console.log('Erro ao buscar vídeos:', erro);
+        console.log('❌ Erro ao buscar vídeos:', erro);
     }
 };
 
@@ -88,13 +92,16 @@ window.buscarVideosRSS = async function() {
 // FUNÇÃO PARA BUSCAR NOTÍCIAS
 // ============================================
 window.buscarNoticiasRSS = async function() {
+    console.log('🔍 buscarNoticiasRSS() chamada');
     const lista = document.getElementById('lista-noticias');
     if (!lista) {
-        console.log('❌ Elemento lista-noticias não encontrado');
+        console.log('❌ Elemento #lista-noticias não encontrado');
         return;
     }
+    console.log('✅ Elemento #lista-noticias encontrado');
 
-    console.log('🔄 Buscando notícias...');
+    // ⭐ LIMPEZA COMPLETA DO ELEMENTO ⭐
+    lista.innerHTML = '';
     lista.innerHTML = `
         <div style="text-align:center;padding:30px;">
             <p style="font-size:18px;">🔄 Carregando notícias...</p>
@@ -109,10 +116,13 @@ window.buscarNoticiasRSS = async function() {
         ];
         
         let todasNoticias = [];
+        console.log('📡 Buscando notícias de', feedsNoticias.length, 'fontes');
         
         for (const feed of feedsNoticias) {
             try {
-                const resposta = await fetch(`https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(feed.url)}`);
+                const proxyUrl = `https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(feed.url)}`;
+                console.log(`📡 Buscando ${feed.nome}:`, feed.url);
+                const resposta = await fetch(proxyUrl);
                 const dados = await resposta.json();
                 
                 if (dados.status === 'ok' && dados.items) {
@@ -125,23 +135,29 @@ window.buscarNoticiasRSS = async function() {
                         fonte: feed.nome
                     }));
                     todasNoticias = todasNoticias.concat(noticiasComFonte);
+                    console.log(`✅ ${feed.nome}: ${noticiasComFonte.length} notícias`);
+                } else {
+                    console.log(`⚠️ ${feed.nome}: resposta inválida`);
                 }
             } catch (erro) {
-                console.log(`Erro ao buscar ${feed.nome}:`, erro);
+                console.log(`❌ Erro ao buscar ${feed.nome}:`, erro);
             }
         }
         
         todasNoticias.sort((a, b) => new Date(b.pubDate) - new Date(a.pubDate));
         const noticias = todasNoticias.slice(0, 15);
+        console.log(`📰 Total de notícias: ${noticias.length}`);
         
         if (noticias.length === 0) {
             lista.innerHTML = `<div style="text-align:center;padding:30px;"><p>📰 Nenhuma notícia encontrada.</p></div>`;
             return;
         }
         
+        // ⭐ LIMPA NOVAMENTE ANTES DE ADICIONAR ⭐
         lista.innerHTML = '';
+        console.log('📰 Renderizando notícias...');
         
-        noticias.forEach(item => {
+        noticias.forEach((item, index) => {
             const div = document.createElement('div');
             div.className = 'video-item';
             
@@ -177,6 +193,6 @@ window.buscarNoticiasRSS = async function() {
         
     } catch (erro) {
         lista.innerHTML = `<div style="text-align:center;padding:30px;"><p>❌ Erro ao carregar notícias: ${erro.message}</p></div>`;
-        console.log('Erro ao buscar notícias:', erro);
+        console.log('❌ Erro ao buscar notícias:', erro);
     }
 };
