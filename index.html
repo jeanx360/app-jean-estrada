@@ -2,55 +2,89 @@
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Jean na Estrada</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+    <title>Jean na Estrada - App Oficial</title>
     <link rel="stylesheet" href="style.css">
     <link rel="manifest" href="manifest.json">
+    
+    <!-- Meta tags para melhorar a aparência no celular -->
+    <meta name="theme-color" content="#ff6b00">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 </head>
 <body>
+    <!-- CABEÇALHO -->
     <header>
-        <h1>🚐 Jean na Estrada</h1>
-        <p>📺 Tutoriais e Vídeos de Viagem</p>
+        <div class="header-content">
+            <h1>🚐 Jean na Estrada</h1>
+            <p>📺 Carros, Tecnologia e Aventuras</p>
+        </div>
     </header>
 
+    <!-- CONTEÚDO PRINCIPAL -->
     <main>
-        <!-- VÍDEOS DO SEU CANAL -->
-        <section id="videos">
+        <!-- SEÇÃO: VÍDEOS DO CANAL -->
+        <section id="videos-section">
             <h2>🎬 Últimos Vídeos</h2>
             <div id="lista-videos">
-                <!-- Os vídeos vão aparecer aqui -->
+                <!-- Os vídeos serão carregados aqui automaticamente -->
             </div>
         </section>
 
-        <!-- ARQUIVOS DE DESBLOQUEIO -->
-        <section id="arquivos">
-            <h2>🔓 Arquivos para Desbloqueio de Mídia</h2>
-            <ul>
-                <li>📁 <a href="#">Desbloqueio de DVD</a></li>
-                <li>📁 <a href="#">Desbloqueio de Blu-ray</a></li>
-                <li>📁 <a href="#">Tutorial completo</a></li>
+        <!-- SEÇÃO: ARQUIVOS DE DESBLOQUEIO -->
+        <section id="arquivos-section">
+            <h2>🔓 Desbloqueio de Mídia</h2>
+            <p style="color: #666; margin-bottom: 15px;">Arquivos e tutoriais para desbloqueio de multimídia automotiva:</p>
+            <ul id="lista-arquivos">
+                <li>
+                    <span class="arquivo-icon">📁</span>
+                    <a href="#">Tutorial de Desbloqueio - BYD</a>
+                </li>
+                <li>
+                    <span class="arquivo-icon">📁</span>
+                    <a href="#">Arquivos para multimídia VW</a>
+                </li>
+                <li>
+                    <span class="arquivo-icon">📁</span>
+                    <a href="#">Desbloqueio de DVD portátil</a>
+                </li>
+                <li>
+                    <span class="arquivo-icon">📁</span>
+                    <a href="#">Tutorial completo - Passo a passo</a>
+                </li>
             </ul>
         </section>
 
-        <!-- CONTATO COM O PÚBLICO -->
-        <section id="contato">
+        <!-- SEÇÃO: CONTATO -->
+        <section id="contato-section">
             <h2>💬 Fale com o Jean</h2>
-            <p>Deixe sua sugestão de vídeo!</p>
-            <button onclick="alert('Em breve você poderá enviar mensagens! 📱')">
-                Enviar sugestão
-            </button>
+            <p style="color: #666; margin-bottom: 15px;">Deixe sua sugestão, dúvida ou ideia para os próximos vídeos!</p>
+            <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+                <button onclick="enviarMensagem()" class="btn-principal">
+                    📝 Enviar Mensagem
+                </button>
+                <button onclick="window.open('https://www.youtube.com/@jeannaestrada', '_blank')" class="btn-secundario">
+                    ▶️ Canal no YouTube
+                </button>
+            </div>
         </section>
     </main>
 
+    <!-- RODAPÉ -->
     <footer>
         <p>🚐 Jean na Estrada - Todos os direitos reservados</p>
+        <p style="font-size: 12px; margin-top: 5px;">App atualizado automaticamente com os últimos vídeos</p>
     </footer>
 
+    <!-- ARQUIVO DE FUNÇÕES -->
     <script src="script.js"></script>
+    
+    <!-- SERVICE WORKER - PARA INSTALAR NO CELULAR -->
     <script>
-        // Instalar app no celular
         if ('serviceWorker' in navigator) {
-            navigator.serviceWorker.register('sw.js');
+            navigator.serviceWorker.register('sw.js')
+                .then(() => console.log('Service Worker registrado!'))
+                .catch(err => console.log('Erro no Service Worker:', err));
         }
     </script>
 </body>
