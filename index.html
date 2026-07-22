@@ -5,12 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
     <title>Jean na Estrada - App Oficial</title>
     
-    <!-- ⭐ TAGS PARA EVITAR CACHE (NOVO) ⭐ -->
+    <!-- ⭐ TAGS PARA EVITAR CACHE ⭐ -->
     <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
     <meta http-equiv="Pragma" content="no-cache">
     <meta http-equiv="Expires" content="0">
     
-    <!-- CSS com versão para forçar atualização -->
+    <!-- CSS -->
     <link rel="stylesheet" href="style.css?v=2.0">
     <link rel="manifest" href="manifest.json?v=2.0">
     
@@ -46,14 +46,12 @@
     <!-- ============================================ -->
     <!-- MENU LATERAL (HAMBÚRGUER) -->
     <!-- ============================================ -->
-   <nav id="menu-lateral" class="menu-lateral">
-    <!-- ⭐ BOTÃO FECHAR (X) - NOVO ⭐ -->
-    <button id="fechar-menu" class="fechar-menu" aria-label="Fechar menu">
-        ✕
-    </button>
-        <ul>
-        <li><a href="#" data-secao="videos" class="ativo">📺 Vídeos do Canal</a></li>
-        <li><a href="#" data-secao="tutoriais">📖 Tutoriais</a></li>
+    <nav id="menu-lateral" class="menu-lateral">
+        <!-- ⭐ BOTÃO FECHAR (X) - VISÍVEL E FUNCIONAL ⭐ -->
+        <button id="fechar-menu" class="fechar-menu" aria-label="Fechar menu">
+            ✕
+        </button>
+        
         <ul>
             <li><a href="#" data-secao="videos" class="ativo">📺 Vídeos do Canal</a></li>
             <li><a href="#" data-secao="tutoriais">📖 Tutoriais</a></li>
@@ -152,28 +150,77 @@
     <!-- ARQUIVO DE FUNÇÕES -->
     <script src="script.js"></script>
     
-    <!-- FUNÇÕES DO MENU -->
+    <!-- FUNÇÕES DO MENU E FECHAR -->
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             const toggle = document.getElementById('menu-toggle');
             const menu = document.getElementById('menu-lateral');
             const main = document.querySelector('main');
+            const fecharBtn = document.getElementById('fechar-menu');
 
-            // Abrir/fechar menu ao clicar no ícone
-            toggle.addEventListener('click', function() {
-                menu.classList.toggle('aberto');
-                toggle.classList.toggle('ativo');
-            });
+            // ============================================
+            // FUNÇÃO PARA FECHAR O MENU
+            // ============================================
+            function fecharMenu() {
+                if (menu) menu.classList.remove('aberto');
+                if (toggle) toggle.classList.remove('ativo');
+            }
 
-            // Fechar menu ao clicar no conteúdo principal
-            main.addEventListener('click', function() {
-                if (menu.classList.contains('aberto')) {
-                    menu.classList.remove('aberto');
-                    toggle.classList.remove('ativo');
+            // ============================================
+            // FUNÇÃO PARA ABRIR O MENU
+            // ============================================
+            function abrirMenu() {
+                if (menu) menu.classList.add('aberto');
+                if (toggle) toggle.classList.add('ativo');
+            }
+
+            // ============================================
+            // EVENTO DO ÍCONE HAMBÚRGUER (ABRIR/FECHAR)
+            // ============================================
+            if (toggle) {
+                toggle.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    if (menu.classList.contains('aberto')) {
+                        fecharMenu();
+                    } else {
+                        abrirMenu();
+                    }
+                });
+            }
+
+            // ============================================
+            // EVENTO DO BOTÃO FECHAR (X)
+            // ============================================
+            if (fecharBtn) {
+                fecharBtn.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    fecharMenu();
+                });
+            }
+
+            // ============================================
+            // FECHAR AO CLICAR NO CONTEÚDO PRINCIPAL
+            // ============================================
+            if (main) {
+                main.addEventListener('click', function() {
+                    fecharMenu();
+                });
+            }
+
+            // ============================================
+            // FECHAR AO CLICAR FORA DO MENU
+            // ============================================
+            document.addEventListener('click', function(e) {
+                if (menu && menu.classList.contains('aberto')) {
+                    if (!menu.contains(e.target) && !toggle.contains(e.target)) {
+                        fecharMenu();
+                    }
                 }
             });
 
-            // Navegação pelas seções
+            // ============================================
+            // NAVEGAÇÃO PELAS SEÇÕES
+            // ============================================
             const links = menu.querySelectorAll('a[data-secao]');
             const secoes = {
                 videos: document.getElementById('videos-section'),
@@ -189,7 +236,9 @@
                     const secaoId = this.dataset.secao;
 
                     // Esconde todas as seções
-                    Object.values(secoes).forEach(sec => sec.style.display = 'none');
+                    Object.values(secoes).forEach(sec => {
+                        if (sec) sec.style.display = 'none';
+                    });
                     
                     // Mostra a seção clicada
                     if (secoes[secaoId]) {
@@ -201,8 +250,7 @@
                     this.classList.add('ativo');
 
                     // Fecha o menu após clicar
-                    menu.classList.remove('aberto');
-                    toggle.classList.remove('ativo');
+                    fecharMenu();
 
                     // Se for a seção de vídeos, recarrega a lista
                     if (secaoId === 'videos' && typeof buscarVideosRSS === 'function') {
@@ -211,7 +259,9 @@
                 });
             });
 
-            // Inicializa os ícones do Lucide
+            // ============================================
+            // INICIALIZA OS ÍCONES DO LUCIDE
+            // ============================================
             if (typeof lucide !== 'undefined') {
                 lucide.createIcons();
             }
