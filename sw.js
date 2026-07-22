@@ -2,17 +2,17 @@
 // SERVICE WORKER - JEAN NA ESTRADA
 // ============================================
 
-// ⭐ ALTERE ESTE NÚMERO SEMPRE QUE FIZER UMA ATUALIZAÇÃO GRANDE ⭐
-const CACHE_VERSION = 'v2.0.0';
+// ⭐ TROQUE ESTE NÚMERO SEMPRE QUE FIZER UMA ATUALIZAÇÃO GRANDE ⭐
+const CACHE_VERSION = 'v3.0.0';
 const CACHE_NAME = `jean-estrada-${CACHE_VERSION}`;
 
 // Arquivos para cache (com versão para evitar cache antigo)
 const urlsParaCache = [
     '/app-jean-estrada/',
-    '/app-jean-estrada/index.html?v=2.0',
-    '/app-jean-estrada/style.css?v=2.0',
+    '/app-jean-estrada/index.html',
+    '/app-jean-estrada/style.css',
     '/app-jean-estrada/script.js',
-    '/app-jean-estrada/manifest.json?v=2.0',
+    '/app-jean-estrada/manifest.json',
     '/app-jean-estrada/imagens/icone-192.png',
     '/app-jean-estrada/imagens/icone-512.png',
     '/app-jean-estrada/imagens/favicon.ico',
@@ -28,7 +28,7 @@ self.addEventListener('install', event => {
                 return cache.addAll(urlsParaCache);
             })
             .then(() => {
-                // Força o Service Worker a ativar imediatamente
+                // ⭐ FORÇA O SERVICE WORKER A ATIVAR IMEDIATAMENTE ⭐
                 return self.skipWaiting();
             })
     );
@@ -47,7 +47,7 @@ self.addEventListener('activate', event => {
                 })
             );
         }).then(() => {
-            // Toma controle das abas abertas imediatamente
+            // ⭐ TOMA CONTROLE DAS ABAS ABERTAS IMEDIATAMENTE ⭐
             return self.clients.claim();
         })
     );
