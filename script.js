@@ -1,50 +1,17 @@
 // ============================================
-// VERSÃO DO APP - FORÇA ATUALIZAÇÃO
+// VERSÃO DO APP
 // ============================================
-window.versaoApp = '20260726-proxy-final';
+window.versaoApp = '20260726-robusto';
 console.log('📦 Script.js carregado! Versão:', window.versaoApp);
 
 // ============================================
-// CONFIGURAÇÕES DO CANAL
+// CONFIGURAÇÕES
 // ============================================
 const CHANNEL_ID = 'UCFwFlCooeFKHSLXxkRTA70g';
 const MAX_VIDEOS = 10;
 
 // ============================================
-// PROXY CORS PARA RSS
-// ============================================
-const CORS_PROXIES = [
-    'https://api.allorigins.win/raw?url=',      // Mais confiável
-    'https://corsproxy.io/?'                    // Alternativa
-];
-
-// Função para tentar buscar com diferentes proxies
-async function fetchWithProxy(url) {
-    for (const proxy of CORS_PROXIES) {
-        try {
-            const proxyUrl = proxy + encodeURIComponent(url);
-            console.log(`🔄 Tentando proxy: ${proxy}`);
-            const response = await fetch(proxyUrl, {
-                headers: { 'Accept': 'application/xml, text/xml, */*' }
-            });
-            if (response.ok) {
-                const text = await response.text();
-                // Verifica se veio HTML de erro
-                if (text.includes('<!DOCTYPE html>') || text.includes('<html')) {
-                    console.log(`⚠️ Proxy retornou HTML, tentando próximo...`);
-                    continue;
-                }
-                return text;
-            }
-        } catch (e) {
-            console.log(`⚠️ Proxy falhou: ${e.message}`);
-        }
-    }
-    throw new Error('Todos os proxies falharam');
-}
-
-// ============================================
-// FUNÇÃO PARA BUSCAR VÍDEOS
+// FUNÇÃO PARA BUSCAR VÍDEOS (YouTube)
 // ============================================
 window.buscarVideosRSS = async function() {
     const lista = document.getElementById('lista-videos');
@@ -54,6 +21,7 @@ window.buscarVideosRSS = async function() {
     
     try {
         const rssUrl = `https://www.youtube.com/feeds/videos.xml?channel_id=${CHANNEL_ID}`;
+        // Usando rss2json para vídeos (funciona bem)
         const proxyUrl = `https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(rssUrl)}`;
         const resposta = await fetch(proxyUrl);
         const dados = await resposta.json();
@@ -89,18 +57,75 @@ window.buscarVideosRSS = async function() {
 };
 
 // ============================================
-// FUNÇÃO PARA BUSCAR NOTÍCIAS COM PROXY CORS
+// SISTEMA DE PROXY COM FALLBACK PARA NOTÍCIAS
+// ============================================
+
+// Lista de proxies a serem testados em ordem
+const PROXY_LIST = [
+    {
+        name: 'AllOrigins (GET)',
+        fetch: async (url) => {
+            const response = await fetch(`https://api.allorigins.win/get?url=${encodeURIComponent(url)}`);
+            if (!response.ok) throw new Error(`HTTP ${response.status}`);
+            const data = await response.json();
+            // allorigins.win retorna os dados em 'contents'
+            if (!data.contents) throw new Error('Resposta sem conteúdo');
+            return data.contents;
+        }
+    },
+    {
+        name: 'AllOrigins (Raw)',
+        fetch: async (url) => {
+            const response = await fetch(`https://api.allorigins.win/raw?url=${encodeURIComponent(url)}`);
+            if (!response.ok) throw new Error(`HTTP ${response.status}`);
+            return await response.text();
+        }
+    },
+    {
+        name: 'CORSProxy.io',
+        fetch: async (url) => {
+            const response = await fetch(`https://corsproxy.io/?${encodeURIComponent(url)}`);
+            if (!response.ok) throw new Error(`HTTP ${response.status}`);
+            return await response.text();
+        }
+    }
+];
+
+// Função que tenta cada proxy até um funcionar
+async function fetchFeedWithProxy(feedUrl) {
+    for (const proxy of PROXY_LIST) {
+        try {
+            console.log(`🔄 Tentando proxy: ${proxy.name}`);
+            const result = await proxy.fetch(feedUrl);
+            
+            // Verifica se o resultado parece ser XML válido
+            if (result && result.trim().startsWith('<?xml') || result.trim().startsWith('<rss') || result.trim().startsWith('<feed')) {
+                console.log(`✅ Proxy ${proxy.name} funcionou!`);
+                return result;
+            } else {
+                console.log(`⚠️ Proxy ${proxy.name} retornou conteúdo inválido.`);
+            }
+        } catch (e) {
+            console.log(`❌ Proxy ${proxy.name} falhou: ${e.message}`);
+        }
+    }
+    throw new Error('Todos os proxies falharam.');
+}
+
+// ============================================
+// FUNÇÃO PARA BUSCAR NOTÍCIAS
 // ============================================
 window.buscarNoticiasRSS = async function() {
     const lista = document.getElementById('lista-noticias');
     if (!lista) return;
 
+    console.log('📰 Iniciando busca de notícias...');
     lista.innerHTML = `<div style="text-align:center;padding:30px;"><p>🔄 Carregando notícias...</p></div>`;
     
     try {
         const feeds = [
-            { nome: "InsideEVs Brasil", url: "https://insideevs.com/brasil/feed/" },
             { nome: "UOL Tecnologia", url: "https://rss.uol.com.br/feed/tecnologia.xml" },
+            { nome: "InsideEVs Brasil", url: "https://insideevs.com/brasil/feed/" },
             { nome: "Canaltech", url: "https://canaltech.com.br/feed/" }
         ];
         
@@ -110,10 +135,10 @@ window.buscarNoticiasRSS = async function() {
             try {
                 console.log(`📡 Buscando ${feed.nome}...`);
                 
-                // ⭐ USA O PROXY CORS PARA BUSCAR O FEED ⭐
-                const xmlText = await fetchWithProxy(feed.url);
+                // Usa o sistema de proxy com fallback
+                const xmlText = await fetchFeedWithProxy(feed.url);
                 
-                // ⭐ FORÇA A CODIFICAÇÃO UTF-8 ⭐
+                // Força a codificação UTF-8
                 const blob = new Blob([xmlText], { type: 'text/xml;charset=UTF-8' });
                 const urlBlob = URL.createObjectURL(blob);
                 const respostaBlob = await fetch(urlBlob);
@@ -164,7 +189,7 @@ window.buscarNoticiasRSS = async function() {
                         }
                     }
                     
-                    // ⭐ LIMPA E DECODIFICA OS CARACTERES ⭐
+                    // Limpa e decodifica os caracteres especiais
                     const descricaoLimpa = description
                         .replace(/<[^>]*>/g, '')
                         .replace(/&nbsp;/g, ' ')
@@ -192,12 +217,12 @@ window.buscarNoticiasRSS = async function() {
             }
         }
         
-        // Ordena por data
+        // Ordena por data (mais recentes primeiro)
         todasNoticias.sort((a, b) => new Date(b.pubDate) - new Date(a.pubDate));
         const noticias = todasNoticias.slice(0, 15);
         
         if (noticias.length === 0) {
-            lista.innerHTML = `<div style="text-align:center;padding:30px;"><p>📰 Nenhuma notícia encontrada.</p></div>`;
+            lista.innerHTML = `<div style="text-align:center;padding:30px;"><p>📰 Nenhuma notícia encontrada no momento.</p><p style="font-size:14px;color:#94A3B8;margin-top:10px;">Tente novamente mais tarde.</p></div>`;
             return;
         }
         
