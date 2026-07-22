@@ -1,58 +1,106 @@
 /* ============================================
-   APP JEAN NA ESTRADA - ESTILOS COMPLETOS
+   JEAN NA ESTRADA - DESIGN SYSTEM PREMIUM
+   ============================================
+   Cores: Dark Blue (#08101B) + Azul Neon (#00B8FF)
+   Tipografia: Raleway + Inter
+   Estilo: Glassmorphism + Neon Glow
    ============================================ */
 
-/* RESET BÁSICO */
+/* ============================================
+   IMPORTAÇÃO DE FONTES (Google Fonts)
+   ============================================ */
+@import url('https://fonts.googleapis.com/css2?family=Raleway:wght@800&family=Inter:wght@400;600;700&display=swap');
+
+/* ============================================
+   RESET BÁSICO
+   ============================================ */
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    font-family: 'Segoe UI', Arial, sans-serif;
-}
-
-/* CORPO DA PÁGINA */
-body {
-    background-color: #f5f5f5;
-    color: #333;
-    transition: background-color 0.3s, color 0.3s;
-}
-
-/* CABEÇALHO */
-header {
-    background: linear-gradient(135deg, #ff6b00, #ff8800);
-    color: white;
-    padding: 25px 20px;
-    text-align: center;
-    box-shadow: 0 4px 12px rgba(255, 107, 0, 0.3);
-    position: sticky;
-    top: 0;
-    z-index: 100;
 }
 
 /* ============================================
-   MENU HAMBÚRGUER - CABEÇALHO
+   VARIÁVEIS GLOBAIS
    ============================================ */
+:root {
+    --color-bg-primary: #08101B;
+    --color-bg-card: #111827;
+    --color-bg-card-hover: #1a2538;
+    --color-blue-primary: #00B8FF;
+    --color-blue-secondary: #1E90FF;
+    --color-pink: #FF2D55;
+    --color-orange: #FFA500;
+    --color-white: #FFFFFF;
+    --color-text-primary: #FFFFFF;
+    --color-text-secondary: #94A3B8;
+    
+    --font-title: 'Raleway', sans-serif;
+    --font-body: 'Inter', sans-serif;
+    
+    --shadow-card: 0 4px 20px rgba(0, 184, 255, 0.08);
+    --shadow-glow: 0 0 40px rgba(0, 184, 255, 0.15);
+    --radius-card: 16px;
+    
+    --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* ============================================
+   CORPO DA PÁGINA
+   ============================================ */
+body {
+    background-color: var(--color-bg-primary);
+    color: var(--color-text-primary);
+    font-family: var(--font-body);
+    font-weight: 400;
+    line-height: 1.6;
+    min-height: 100vh;
+}
+
+/* ============================================
+   CABEÇALHO (GLASSMORPHISM)
+   ============================================ */
+header {
+    background: rgba(8, 16, 27, 0.85);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(0, 184, 255, 0.15);
+    padding: 16px 20px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.5);
+}
+
 .header-content {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    max-width: 900px;
+    max-width: 1200px;
     margin: 0 auto;
     width: 100%;
 }
 
 .header-content h1 {
+    font-family: var(--font-title);
+    font-weight: 800;
+    font-size: 22px;
+    background: linear-gradient(135deg, var(--color-blue-primary), var(--color-blue-secondary));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    letter-spacing: 1px;
     flex: 1;
     text-align: center;
-    font-size: 24px;
-    margin: 0;
 }
 
 .header-placeholder {
-    width: 30px; /* Mesma largura do botão para centralizar o título */
+    width: 30px;
 }
 
-/* Ícone do Menu (os três tracinhos) */
+/* ============================================
+   MENU HAMBÚRGUER (NEON)
+   ============================================ */
 .menu-toggle {
     display: flex;
     flex-direction: column;
@@ -70,14 +118,14 @@ header {
 .menu-toggle span {
     display: block;
     width: 100%;
-    height: 3px;
-    background: white;
-    border-radius: 3px;
-    transition: all 0.3s ease;
+    height: 2px;
+    background: var(--color-blue-primary);
+    border-radius: 2px;
+    transition: var(--transition-smooth);
     transform-origin: center;
+    box-shadow: 0 0 10px rgba(0, 184, 255, 0.3);
 }
 
-/* Animação do ícone para "X" quando aberto */
 .menu-toggle.ativo span:nth-child(1) {
     transform: translateY(8px) rotate(45deg);
 }
@@ -90,28 +138,28 @@ header {
 }
 
 /* ============================================
-   MENU LATERAL
+   MENU LATERAL (GLASSMORPHISM + NEON)
    ============================================ */
 .menu-lateral {
     position: fixed;
     top: 0;
-    left: -280px; /* Escondido fora da tela */
+    left: -300px;
     width: 280px;
     height: 100%;
-    background: #1a1a1a;
-    color: white;
+    background: rgba(8, 16, 27, 0.95);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-right: 1px solid rgba(0, 184, 255, 0.15);
     padding: 80px 20px 30px;
-    transition: left 0.3s ease;
+    transition: left 0.4s cubic-bezier(0.4, 0, 0.2, 1);
     z-index: 1000;
-    box-shadow: 2px 0 10px rgba(0,0,0,0.3);
-    overflow-y: auto;
+    box-shadow: 4px 0 40px rgba(0, 0, 0, 0.6);
 }
 
 .menu-lateral.aberto {
     left: 0;
 }
 
-/* Lista do menu */
 .menu-lateral ul {
     list-style: none;
     padding: 0;
@@ -119,42 +167,62 @@ header {
 }
 
 .menu-lateral ul li {
-    margin-bottom: 5px;
+    margin-bottom: 4px;
+    position: relative;
 }
 
 .menu-lateral ul li a {
-    display: block;
-    padding: 12px 15px;
-    color: #ccc;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 16px;
+    color: var(--color-text-secondary);
     text-decoration: none;
-    border-radius: 10px;
-    transition: all 0.3s;
-    font-size: 16px;
+    border-radius: var(--radius-card);
+    transition: var(--transition-smooth);
+    font-size: 15px;
     font-weight: 500;
+    font-family: var(--font-body);
+    border: 1px solid transparent;
 }
 
 .menu-lateral ul li a:hover {
-    background: #333;
-    color: white;
+    background: rgba(0, 184, 255, 0.08);
+    color: var(--color-text-primary);
+    border-color: rgba(0, 184, 255, 0.15);
 }
 
 .menu-lateral ul li a.ativo {
-    background: #ff6b00;
-    color: white;
-    box-shadow: 0 4px 10px rgba(255, 107, 0, 0.3);
+    background: rgba(0, 184, 255, 0.12);
+    color: var(--color-blue-primary);
+    border-color: rgba(0, 184, 255, 0.25);
+    box-shadow: 0 0 30px rgba(0, 184, 255, 0.05);
 }
 
-/* Rodapé do menu */
+.menu-lateral ul li a.ativo::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 3px;
+    height: 24px;
+    background: var(--color-blue-primary);
+    border-radius: 0 4px 4px 0;
+    box-shadow: 0 0 20px rgba(0, 184, 255, 0.4);
+}
+
 .menu-footer {
     position: absolute;
     bottom: 20px;
     left: 20px;
     right: 20px;
     text-align: center;
-    font-size: 14px;
-    color: #888;
-    border-top: 1px solid #333;
+    font-size: 12px;
+    color: var(--color-text-secondary);
+    border-top: 1px solid rgba(0, 184, 255, 0.08);
     padding-top: 15px;
+    opacity: 0.6;
 }
 
 /* ============================================
@@ -163,78 +231,95 @@ header {
 main {
     max-width: 900px;
     margin: 20px auto;
-    padding: 0 20px;
-    transition: margin-left 0.3s;
+    padding: 0 16px;
     position: relative;
     z-index: 1;
 }
 
-/* Quando o menu está aberto, o conteúdo fica escuro e não clicável */
 .menu-lateral.aberto ~ main {
-    opacity: 0.7;
+    opacity: 0.5;
     pointer-events: none;
-}
-
-/* SEÇÕES */
-section {
-    background: white;
-    border-radius: 16px;
-    padding: 25px;
-    margin-bottom: 25px;
-    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
-    transition: background-color 0.3s, box-shadow 0.3s;
-}
-
-section h2 {
-    color: #ff6b00;
-    margin-bottom: 18px;
-    font-size: 22px;
-    border-bottom: 3px solid #ff6b00;
-    padding-bottom: 10px;
+    transition: opacity 0.3s;
 }
 
 /* ============================================
-   LISTA DE VÍDEOS - ESTILO SIMPLIFICADO
+   SEÇÕES (CARDS GLASSMORPHISM)
+   ============================================ */
+section {
+    background: rgba(17, 24, 39, 0.85);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    border: 1px solid rgba(0, 184, 255, 0.08);
+    border-radius: var(--radius-card);
+    padding: 24px;
+    margin-bottom: 24px;
+    box-shadow: var(--shadow-card);
+    transition: var(--transition-smooth);
+}
+
+section:hover {
+    border-color: rgba(0, 184, 255, 0.15);
+    box-shadow: var(--shadow-glow);
+}
+
+section h2 {
+    font-family: var(--font-title);
+    font-weight: 800;
+    font-size: 22px;
+    color: var(--color-blue-primary);
+    margin-bottom: 18px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid rgba(0, 184, 255, 0.15);
+    letter-spacing: 0.5px;
+    text-shadow: 0 0 30px rgba(0, 184, 255, 0.1);
+}
+
+/* ============================================
+   LISTA DE VÍDEOS (CARDS NEON)
    ============================================ */
 .video-item {
-    background: #f9f9f9;
-    border-radius: 12px;
-    padding: 15px;
-    margin-bottom: 25px;
-    border: 1px solid #e8e8e8;
-    transition: transform 0.2s;
+    background: rgba(17, 24, 39, 0.6);
+    border: 1px solid rgba(0, 184, 255, 0.06);
+    border-radius: var(--radius-card);
+    padding: 16px;
+    margin-bottom: 20px;
+    transition: var(--transition-smooth);
 }
 
 .video-item:hover {
-    transform: translateY(-2px);
+    transform: translateY(-3px);
+    border-color: rgba(0, 184, 255, 0.2);
+    box-shadow: 0 8px 30px rgba(0, 184, 255, 0.05);
 }
 
 .video-item h3 {
-    color: #333;
+    font-family: var(--font-title);
+    font-weight: 800;
     font-size: 17px;
-    margin-bottom: 5px;
+    color: var(--color-text-primary);
+    margin-bottom: 4px;
     line-height: 1.4;
 }
 
 .video-item .data-publicacao {
     font-size: 13px;
-    color: #888;
+    color: var(--color-text-secondary);
     margin-bottom: 10px;
 }
 
-/* Wrapper do player para manter proporção 16:9 */
-.player-wrapper {
+.video-item .player-wrapper {
     position: relative;
     width: 100%;
-    padding-bottom: 56.25%; /* Proporção 16:9 */
+    padding-bottom: 56.25%;
     height: 0;
     overflow: hidden;
-    border-radius: 10px;
+    border-radius: 12px;
     background: #000;
     margin: 10px 0;
+    border: 1px solid rgba(0, 184, 255, 0.08);
 }
 
-.player-wrapper iframe {
+.video-item .player-wrapper iframe {
     position: absolute;
     top: 0;
     left: 0;
@@ -246,10 +331,17 @@ section h2 {
 .video-item .link-youtube {
     display: inline-block;
     margin-top: 10px;
-    color: #ff6b00;
+    color: var(--color-blue-primary);
     text-decoration: none;
     font-weight: 600;
     font-size: 14px;
+    font-family: var(--font-body);
+    transition: var(--transition-smooth);
+}
+
+.video-item .link-youtube:hover {
+    color: var(--color-pink);
+    text-shadow: 0 0 20px rgba(255, 45, 85, 0.3);
 }
 
 /* ============================================
@@ -264,70 +356,84 @@ section h2 {
     display: flex;
     align-items: center;
     gap: 12px;
-    background: #f0f0f0;
+    background: rgba(17, 24, 39, 0.4);
     margin-bottom: 10px;
     padding: 14px 18px;
-    border-radius: 10px;
-    transition: background 0.3s, transform 0.2s;
-    border-left: 4px solid #ff6b00;
+    border-radius: var(--radius-card);
+    transition: var(--transition-smooth);
+    border-left: 3px solid var(--color-blue-primary);
 }
 
 #lista-arquivos li:hover {
-    background: #e8e8e8;
-    transform: translateX(5px);
+    background: rgba(0, 184, 255, 0.05);
+    transform: translateX(4px);
+    border-left-color: var(--color-pink);
 }
 
-.arquivo-icon {
-    font-size: 20px;
+#lista-arquivos li .arquivo-icon {
+    font-size: 18px;
 }
 
 #lista-arquivos li a {
-    color: #333;
+    color: var(--color-text-secondary);
     text-decoration: none;
     font-weight: 500;
     flex: 1;
+    font-family: var(--font-body);
+    transition: var(--transition-smooth);
 }
 
 #lista-arquivos li a:hover {
-    color: #ff6b00;
+    color: var(--color-text-primary);
 }
 
 /* ============================================
-   BOTÕES
+   BOTÕES (GRADIENTE NEON)
    ============================================ */
-.btn-principal, .btn-secundario {
-    padding: 12px 24px;
+.btn-principal {
+    padding: 12px 28px;
     border: none;
-    border-radius: 10px;
-    font-size: 16px;
+    border-radius: var(--radius-card);
+    font-size: 15px;
     font-weight: 600;
+    font-family: var(--font-body);
     cursor: pointer;
-    transition: all 0.3s;
+    transition: var(--transition-smooth);
     display: inline-flex;
     align-items: center;
     gap: 8px;
-}
-
-.btn-principal {
-    background: #ff6b00;
-    color: white;
-    box-shadow: 0 4px 10px rgba(255, 107, 0, 0.3);
+    background: linear-gradient(135deg, #0066FF, var(--color-blue-primary));
+    color: var(--color-white);
+    box-shadow: 0 4px 20px rgba(0, 184, 255, 0.25);
 }
 
 .btn-principal:hover {
-    background: #e55a00;
-    transform: scale(1.03);
-    box-shadow: 0 6px 15px rgba(255, 107, 0, 0.4);
+    background: linear-gradient(135deg, var(--color-pink), var(--color-orange));
+    transform: translateY(-2px) scale(1.02);
+    box-shadow: 0 8px 30px rgba(255, 45, 85, 0.3);
 }
 
 .btn-secundario {
-    background: #e0e0e0;
-    color: #333;
+    padding: 12px 28px;
+    border: 1px solid rgba(0, 184, 255, 0.2);
+    border-radius: var(--radius-card);
+    font-size: 15px;
+    font-weight: 600;
+    font-family: var(--font-body);
+    cursor: pointer;
+    transition: var(--transition-smooth);
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: transparent;
+    color: var(--color-text-secondary);
 }
 
 .btn-secundario:hover {
-    background: #d0d0d0;
-    transform: scale(1.03);
+    background: rgba(0, 184, 255, 0.05);
+    border-color: var(--color-blue-primary);
+    color: var(--color-text-primary);
+    transform: translateY(-2px);
 }
 
 /* ============================================
@@ -335,78 +441,30 @@ section h2 {
    ============================================ */
 footer {
     text-align: center;
-    padding: 25px 20px;
-    color: #888;
-    font-size: 14px;
-    border-top: 1px solid #ddd;
+    padding: 30px 20px;
+    color: var(--color-text-secondary);
+    font-size: 13px;
+    border-top: 1px solid rgba(0, 184, 255, 0.05);
     margin-top: 20px;
+    opacity: 0.7;
 }
 
 /* ============================================
-   MODO ESCURO (AUTOMÁTICO)
+   GLASSMORPHISM - CLASSE REUTILIZÁVEL
    ============================================ */
-@media (prefers-color-scheme: dark) {
-    body {
-        background-color: #1a1a1a;
-        color: #e0e0e0;
-    }
-    
-    section {
-        background: #2a2a2a;
-        box-shadow: 0 2px 12px rgba(0, 0, 0, 0.4);
-    }
-    
-    .video-item {
-        background: #333;
-        border-color: #444;
-    }
-    
-    .video-item h3 {
-        color: #e0e0e0;
-    }
-    
-    .video-item .data-publicacao {
-        color: #aaa;
-    }
-    
-    #lista-arquivos li {
-        background: #333;
-        border-left-color: #ff6b00;
-    }
-    
-    #lista-arquivos li a {
-        color: #e0e0e0;
-    }
-    
-    #lista-arquivos li:hover {
-        background: #3a3a3a;
-    }
-    
-    .btn-secundario {
-        background: #444;
-        color: #e0e0e0;
-    }
-    
-    .btn-secundario:hover {
-        background: #555;
-    }
-    
-    footer {
-        border-top-color: #444;
-        color: #666;
-    }
-    
-    section h2 {
-        border-bottom-color: #ff6b00;
-    }
+.glass {
+    background: rgba(17, 24, 39, 0.8);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(0, 184, 255, 0.1);
 }
 
 /* ============================================
-   RESPONSIVIDADE (CELULAR)
+   RESPONSIVIDADE
    ============================================ */
 @media (max-width: 600px) {
     .header-content h1 {
-        font-size: 18px;
+        font-size: 17px;
     }
     
     .menu-lateral {
@@ -415,22 +473,13 @@ footer {
         padding-top: 70px;
     }
     
-    .menu-lateral ul li a {
-        font-size: 15px;
-        padding: 10px 14px;
-    }
-    
     section {
-        padding: 18px;
+        padding: 16px;
         border-radius: 12px;
     }
     
     section h2 {
-        font-size: 19px;
-    }
-    
-    .video-item {
-        padding: 12px;
+        font-size: 18px;
     }
     
     .video-item h3 {
@@ -443,9 +492,15 @@ footer {
         width: 100%;
         justify-content: center;
     }
+}
+
+@media (min-width: 1024px) {
+    main {
+        max-width: 1000px;
+        padding: 0 24px;
+    }
     
-    #lista-arquivos li {
-        padding: 12px 14px;
-        font-size: 14px;
+    section {
+        padding: 32px;
     }
 }
