@@ -7,65 +7,96 @@
     <link rel="stylesheet" href="style.css">
     <link rel="manifest" href="manifest.json">
     
-    <!-- Meta tags para melhorar a aparência no celular -->
     <meta name="theme-color" content="#ff6b00">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 </head>
 <body>
-    <!-- CABEÇALHO -->
+    <!-- CABEÇALHO COM MENU HAMBÚRGUER -->
     <header>
         <div class="header-content">
+            <!-- Ícone do Menu -->
+            <button id="menu-toggle" class="menu-toggle" aria-label="Abrir menu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
             <h1>🚐 Jean na Estrada</h1>
-            <p>📺 Carros, Tecnologia e Aventuras</p>
+            <span class="header-placeholder"></span> <!-- Para centralizar o título -->
         </div>
     </header>
 
+    <!-- ============================================ -->
+    <!-- MENU LATERAL (HAMBÚRGUER) -->
+    <!-- ============================================ -->
+    <nav id="menu-lateral" class="menu-lateral">
+        <ul>
+            <li><a href="#" data-secao="videos" class="ativo">📺 Vídeos do Canal</a></li>
+            <li><a href="#" data-secao="tutoriais">📖 Tutoriais</a></li>
+            <li><a href="#" data-secao="membros">⭐ Área de Membros</a></li>
+            <li><a href="#" data-secao="arquivos">🔓 Desbloqueio de Mídia</a></li>
+            <li><a href="#" data-secao="contato">💬 Fale com o Jean</a></li>
+        </ul>
+        <div class="menu-footer">
+            <p>🚐 Jean na Estrada</p>
+            <p style="font-size: 12px; opacity: 0.7;">Versão 2.0</p>
+        </div>
+    </nav>
+
+    <!-- ============================================ -->
     <!-- CONTEÚDO PRINCIPAL -->
+    <!-- ============================================ -->
     <main>
         <!-- SEÇÃO: VÍDEOS DO CANAL -->
-        <section id="videos-section">
+        <section id="videos-section" class="secao-ativa">
             <h2>🎬 Últimos Vídeos</h2>
             <div id="lista-videos">
                 <!-- Os vídeos serão carregados aqui automaticamente -->
             </div>
         </section>
 
+        <!-- SEÇÃO: TUTORIAIS -->
+        <section id="tutoriais-section" style="display: none;">
+            <h2>📖 Tutoriais</h2>
+            <p style="color: #666; margin-bottom: 15px;">Aprenda a desbloquear e personalizar seus equipamentos:</p>
+            <ul id="lista-tutoriais">
+                <li><a href="#">Como desbloquear a multimídia do BYD</a></li>
+                <li><a href="#">Passo a passo: Desbloqueio de Geely EX2</a></li>
+                <li><a href="#">Guia completo para carros elétricos</a></li>
+                <li><a href="#">Dicas de manutenção para sua multimídia</a></li>
+            </ul>
+        </section>
+
+        <!-- SEÇÃO: ÁREA DE MEMBROS (EM CONSTRUÇÃO) -->
+        <section id="membros-section" style="display: none;">
+            <h2>⭐ Área de Membros</h2>
+            <div style="text-align: center; padding: 30px 0;">
+                <p style="font-size: 48px; margin-bottom: 15px;">🔒</p>
+                <p style="font-size: 18px; font-weight: bold;">Em breve!</p>
+                <p style="color: #666; margin-top: 10px;">Esta área será exclusiva para membros do canal.</p>
+                <p style="color: #666; margin-top: 5px;">Em desenvolvimento.</p>
+            </div>
+        </section>
+
         <!-- SEÇÃO: ARQUIVOS DE DESBLOQUEIO -->
-        <section id="arquivos-section">
+        <section id="arquivos-section" style="display: none;">
             <h2>🔓 Desbloqueio de Mídia</h2>
             <p style="color: #666; margin-bottom: 15px;">Arquivos e tutoriais para desbloqueio de multimídia automotiva:</p>
             <ul id="lista-arquivos">
-                <li>
-                    <span class="arquivo-icon">📁</span>
-                    <a href="#">Tutorial de Desbloqueio - BYD</a>
-                </li>
-                <li>
-                    <span class="arquivo-icon">📁</span>
-                    <a href="#">Arquivos para multimídia VW</a>
-                </li>
-                <li>
-                    <span class="arquivo-icon">📁</span>
-                    <a href="#">Desbloqueio de DVD portátil</a>
-                </li>
-                <li>
-                    <span class="arquivo-icon">📁</span>
-                    <a href="#">Tutorial completo - Passo a passo</a>
-                </li>
+                <li><span class="arquivo-icon">📁</span> <a href="#">Tutorial de Desbloqueio - BYD</a></li>
+                <li><span class="arquivo-icon">📁</span> <a href="#">Arquivos para multimídia VW</a></li>
+                <li><span class="arquivo-icon">📁</span> <a href="#">Desbloqueio de DVD portátil</a></li>
+                <li><span class="arquivo-icon">📁</span> <a href="#">Tutorial completo - Passo a passo</a></li>
             </ul>
         </section>
 
         <!-- SEÇÃO: CONTATO -->
-        <section id="contato-section">
+        <section id="contato-section" style="display: none;">
             <h2>💬 Fale com o Jean</h2>
             <p style="color: #666; margin-bottom: 15px;">Deixe sua sugestão, dúvida ou ideia para os próximos vídeos!</p>
             <div style="display: flex; gap: 10px; flex-wrap: wrap;">
-                <button onclick="enviarMensagem()" class="btn-principal">
-                    📝 Enviar Mensagem
-                </button>
-                <button onclick="window.open('https://www.youtube.com/@jeannaestrada', '_blank')" class="btn-secundario">
-                    ▶️ Canal no YouTube
-                </button>
+                <button onclick="window.location.href='mailto:seuemail@gmail.com?subject=Sugestão para o canal'" class="btn-principal">📝 Enviar Mensagem</button>
+                <button onclick="window.open('https://www.youtube.com/@jeannaestrada', '_blank')" class="btn-secundario">▶️ Canal no YouTube</button>
             </div>
         </section>
     </main>
@@ -76,9 +107,70 @@
         <p style="font-size: 12px; margin-top: 5px;">App atualizado automaticamente com os últimos vídeos</p>
     </footer>
 
-    <!-- ARQUIVO DE FUNÇÕES -->
+    <!-- ARQUIVOS DE FUNÇÕES -->
     <script src="script.js"></script>
     
+    <!-- FUNÇÕES DO MENU -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const toggle = document.getElementById('menu-toggle');
+            const menu = document.getElementById('menu-lateral');
+            const main = document.querySelector('main');
+
+            // Abrir/fechar menu ao clicar no ícone
+            toggle.addEventListener('click', function() {
+                menu.classList.toggle('aberto');
+                toggle.classList.toggle('ativo');
+            });
+
+            // Fechar menu ao clicar no conteúdo principal (opcional)
+            main.addEventListener('click', function() {
+                if (menu.classList.contains('aberto')) {
+                    menu.classList.remove('aberto');
+                    toggle.classList.remove('ativo');
+                }
+            });
+
+            // Navegação pelas seções
+            const links = menu.querySelectorAll('a[data-secao]');
+            const secoes = {
+                videos: document.getElementById('videos-section'),
+                tutoriais: document.getElementById('tutoriais-section'),
+                membros: document.getElementById('membros-section'),
+                arquivos: document.getElementById('arquivos-section'),
+                contato: document.getElementById('contato-section')
+            };
+
+            links.forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const secaoId = this.dataset.secao;
+
+                    // Esconde todas as seções
+                    Object.values(secoes).forEach(sec => sec.style.display = 'none');
+                    
+                    // Mostra a seção clicada
+                    if (secoes[secaoId]) {
+                        secoes[secaoId].style.display = 'block';
+                    }
+
+                    // Atualiza a classe 'ativo' nos links do menu
+                    links.forEach(l => l.classList.remove('ativo'));
+                    this.classList.add('ativo');
+
+                    // Fecha o menu após clicar (em celular é melhor)
+                    menu.classList.remove('aberto');
+                    toggle.classList.remove('ativo');
+
+                    // Se for a seção de vídeos, recarrega a lista (opcional)
+                    if (secaoId === 'videos' && typeof buscarVideosRSS === 'function') {
+                        buscarVideosRSS();
+                    }
+                });
+            });
+        });
+    </script>
+
     <!-- SERVICE WORKER - PARA INSTALAR NO CELULAR -->
     <script>
         if ('serviceWorker' in navigator) {
