@@ -1,21 +1,24 @@
 {
   "name": "Jean na Estrada",
   "short_name": "JeanEstrada",
-  "description": "Tutoriais e vídeos de viagem",
+  "description": "Carros, Tecnologia e Aventuras - App Oficial",
   "start_url": "/app-jean-estrada/",
   "display": "standalone",
-  "background_color": "#ffffff",
+  "orientation": "portrait",
+  "background_color": "#f5f5f5",
   "theme_color": "#ff6b00",
   "icons": [
     {
-      "src": "https://via.placeholder.com/192x192.png?text=JE",
+      "src": "icone-192.png",
       "sizes": "192x192",
-      "type": "image/png"
+      "type": "image/png",
+      "purpose": "any maskable"
     },
     {
-      "src": "https://via.placeholder.com/512x512.png?text=JE",
+      "src": "icone-512.png",
       "sizes": "512x512",
-      "type": "image/png"
+      "type": "image/png",
+      "purpose": "any maskable"
     }
   ]
 }
