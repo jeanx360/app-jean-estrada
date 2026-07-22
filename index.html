@@ -172,60 +172,20 @@
         <p style="font-size: 12px; margin-top: 5px;">App atualizado automaticamente com os últimos vídeos</p>
     </footer>
 
-    <!-- ============================================ -->
+       <!-- ============================================ -->
     <!-- SCRIPTS -->
     <!-- ============================================ -->
     
     <!-- ⭐ ARQUIVO DE FUNÇÕES COM VERSÃO ⭐ -->
-    <script src="script.js?v=20260723"></script>
+    <script src="script.js?v=20260723b"></script>
     
     <!-- ⭐ FUNÇÕES DO MENU E NAVEGAÇÃO ⭐ -->
     <script>
         // ============================================
         // VERSÃO DO APP
         // ============================================
-        window.versaoApp = '20260723';
+        window.versaoApp = '20260723b';
         console.log('🚀 App iniciado! Versão:', window.versaoApp);
-        
-        // ============================================
-        // FUNÇÃO PARA ALTERNAR SEÇÕES
-        // ============================================
-        function alternarSecao(secaoId) {
-            console.log('🔄 Alternando para:', secaoId);
-            
-            // Esconde todas as seções
-            const secoes = ['inicio', 'noticias', 'tutoriais', 'produtos', 'contato'];
-            secoes.forEach(id => {
-                const secao = document.getElementById(id + '-section');
-                if (secao) secao.style.display = 'none';
-            });
-            
-            // Mostra a seção selecionada
-            const secaoAlvo = document.getElementById(secaoId + '-section');
-            if (secaoAlvo) {
-                secaoAlvo.style.display = 'block';
-                console.log('✅ Seção exibida:', secaoId);
-            } else {
-                console.log('❌ Seção não encontrada:', secaoId);
-            }
-            
-            // Atualiza o menu
-            document.querySelectorAll('#menu-lateral a[data-secao]').forEach(link => {
-                link.classList.toggle('ativo', link.dataset.secao === secaoId);
-            });
-            
-            // Fecha o menu
-            fecharMenu();
-            
-            // Carrega o conteúdo específico
-            if (secaoId === 'inicio' && typeof window.buscarVideosRSS === 'function') {
-                console.log('📺 Carregando vídeos...');
-                window.buscarVideosRSS();
-            } else if (secaoId === 'noticias' && typeof window.buscarNoticiasRSS === 'function') {
-                console.log('📰 Carregando notícias...');
-                window.buscarNoticiasRSS();
-            }
-        }
         
         // ============================================
         // FUNÇÕES DO MENU
@@ -281,13 +241,17 @@
                 });
             }
             
-            // Navegação do menu
+            // ⭐ NAVEGAÇÃO CORRIGIDA - USA A FUNÇÃO GLOBAL ⭐
             document.querySelectorAll('#menu-lateral a[data-secao]').forEach(link => {
                 link.addEventListener('click', function(e) {
                     e.preventDefault();
                     const secaoId = this.dataset.secao;
                     console.log('🔗 Menu clicado:', secaoId);
-                    alternarSecao(secaoId);
+                    if (typeof window.alternarSecao === 'function') {
+                        window.alternarSecao(secaoId);
+                    } else {
+                        console.log('❌ Função alternarSecao não encontrada!');
+                    }
                 });
             });
             
@@ -298,11 +262,11 @@
             
             // Carrega os vídeos na inicialização
             setTimeout(function() {
-                if (typeof window.buscarVideosRSS === 'function') {
-                    console.log('📺 Carregando vídeos iniciais...');
-                    window.buscarVideosRSS();
+                if (typeof window.alternarSecao === 'function') {
+                    console.log('📺 Carregando seção inicial...');
+                    window.alternarSecao('inicio');
                 } else {
-                    console.log('❌ Função buscarVideosRSS não encontrada!');
+                    console.log('❌ Função alternarSecao não encontrada!');
                 }
             }, 300);
         });
