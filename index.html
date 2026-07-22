@@ -153,17 +153,17 @@
         <p style="font-size: 12px; margin-top: 5px;">App atualizado automaticamente com os últimos vídeos</p>
     </footer>
 
-    <!-- ============================================ -->
+       <!-- ============================================ -->
     <!-- SCRIPTS -->
     <!-- ============================================ -->
     
-    <script src="script.js?v=20260725"></script>
+    <script src="script.js?v=20260726-proxy"></script>
     
     <script>
         // ============================================
         // VERSÃO DO APP
         // ============================================
-        window.versaoApp = '20260725';
+        window.versaoApp = '20260726-proxy';
         console.log('🚀 App iniciado! Versão:', window.versaoApp);
         
         // ============================================
@@ -183,21 +183,14 @@
             if (toggle) toggle.classList.add('ativo');
         }
         
-        // ============================================
-        // FUNÇÃO PARA TROCAR DE SEÇÃO (RECARREGA A PÁGINA)
-        // ============================================
         function trocarSecao(secaoId) {
             console.log('🔄 Trocando para:', secaoId);
             window.location.href = window.location.pathname + '?secao=' + secaoId;
         }
         
-        // ============================================
-        // EVENTOS DO MENU
-        // ============================================
         document.addEventListener('DOMContentLoaded', function() {
             console.log('✅ DOM carregado!');
             
-            // Menu toggle
             const toggle = document.getElementById('menu-toggle');
             if (toggle) {
                 toggle.addEventListener('click', function(e) {
@@ -211,7 +204,6 @@
                 });
             }
             
-            // Botão fechar
             const fecharBtn = document.getElementById('fechar-menu');
             if (fecharBtn) {
                 fecharBtn.addEventListener('click', function(e) {
@@ -220,7 +212,6 @@
                 });
             }
             
-            // Fechar ao clicar no main
             const main = document.querySelector('main');
             if (main) {
                 main.addEventListener('click', function() {
@@ -228,7 +219,6 @@
                 });
             }
             
-            // ⭐ NAVEGAÇÃO - USA RECARGA DA PÁGINA ⭐
             document.querySelectorAll('#menu-lateral a[data-secao]').forEach(link => {
                 link.addEventListener('click', function(e) {
                     e.preventDefault();
@@ -238,19 +228,14 @@
                 });
             });
             
-            // Inicializa os ícones Lucide
             if (typeof lucide !== 'undefined') {
                 lucide.createIcons();
             }
             
-            // ============================================
-            // ⭐ CARREGA A SEÇÃO CORRETA BASEADO NA URL ⭐
-            // ============================================
             const urlParams = new URLSearchParams(window.location.search);
             const secao = urlParams.get('secao') || 'inicio';
             console.log('📌 Seção atual:', secao);
             
-            // Mostra a seção correta
             const secoes = ['inicio', 'noticias', 'tutoriais', 'produtos', 'contato'];
             secoes.forEach(id => {
                 const secaoEl = document.getElementById(id + '-section');
@@ -259,25 +244,19 @@
                 }
             });
             
-            // Atualiza o menu
             document.querySelectorAll('#menu-lateral a[data-secao]').forEach(link => {
                 link.classList.toggle('ativo', link.dataset.secao === secao);
             });
             
-            // ⭐ CARREGA O CONTEÚDO DA SEÇÃO ⭐
             if (secao === 'inicio') {
                 if (typeof window.buscarVideosRSS === 'function') {
                     console.log('📺 Carregando vídeos...');
                     window.buscarVideosRSS();
-                } else {
-                    console.log('❌ buscarVideosRSS não encontrada');
                 }
             } else if (secao === 'noticias') {
                 if (typeof window.buscarNoticiasRSS === 'function') {
                     console.log('📰 Carregando notícias...');
                     window.buscarNoticiasRSS();
-                } else {
-                    console.log('❌ buscarNoticiasRSS não encontrada');
                 }
             }
         });
