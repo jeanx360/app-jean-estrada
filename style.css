@@ -1,327 +1,172 @@
 /* ============================================
-   APP JEAN NA ESTRADA - ESTILOS COMPLETOS
+   MENU HAMBÚRGUER
    ============================================ */
 
-/* RESET BÁSICO */
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    font-family: 'Segoe UI', Arial, sans-serif;
-}
-
-/* CORPO DA PÁGINA */
-body {
-    background-color: #f5f5f5;
-    color: #333;
-    transition: background-color 0.3s, color 0.3s;
-}
-
-/* CABEÇALHO */
-header {
-    background: linear-gradient(135deg, #ff6b00, #ff8800);
-    color: white;
-    padding: 25px 20px;
-    text-align: center;
-    box-shadow: 0 4px 12px rgba(255, 107, 0, 0.3);
-    position: sticky;
-    top: 0;
-    z-index: 100;
-}
-
-header h1 {
-    font-size: 28px;
-    margin-bottom: 5px;
-    letter-spacing: 1px;
-}
-
-header p {
-    font-size: 16px;
-    opacity: 0.9;
-    font-weight: 300;
-}
-
-/* CONTEÚDO PRINCIPAL */
-main {
-    max-width: 900px;
-    margin: 20px auto;
-    padding: 0 20px;
-}
-
-/* SEÇÕES */
-section {
-    background: white;
-    border-radius: 16px;
-    padding: 25px;
-    margin-bottom: 25px;
-    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
-    transition: background-color 0.3s, box-shadow 0.3s;
-}
-
-section h2 {
-    color: #ff6b00;
-    margin-bottom: 18px;
-    font-size: 22px;
-    border-bottom: 3px solid #ff6b00;
-    padding-bottom: 10px;
-}
-
-/* ============================================
-   LISTA DE VÍDEOS
-   ============================================ */
-#lista-videos {
+/* Ícone do Menu (os três tracinhos) */
+.menu-toggle {
     display: flex;
     flex-direction: column;
-    gap: 25px;
-}
-
-.video-item {
-    background: #f9f9f9;
-    border-radius: 12px;
-    padding: 20px;
-    transition: transform 0.2s, box-shadow 0.2s;
-    border: 1px solid #e8e8e8;
-}
-
-.video-item:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
-}
-
-.video-item h3 {
-    color: #333;
-    font-size: 18px;
-    margin-bottom: 8px;
-    line-height: 1.4;
-}
-
-.video-item .data-publicacao {
-    font-size: 13px;
-    color: #888;
-    margin-bottom: 10px;
-}
-
-.video-item img {
-    width: 100%;
-    border-radius: 10px;
-    margin: 12px 0;
-    border: 1px solid #ddd;
-}
-
-.video-item .descricao {
-    font-size: 14px;
-    color: #666;
-    margin-bottom: 15px;
-    line-height: 1.5;
-}
-
-.video-item iframe {
-    width: 100%;
-    border-radius: 10px;
-    aspect-ratio: 16/9;
-    background: #000;
-}
-
-.video-item .link-youtube {
-    display: inline-block;
-    margin-top: 12px;
-    color: #ff6b00;
-    text-decoration: none;
-    font-weight: 600;
-    font-size: 14px;
-}
-
-.video-item .link-youtube:hover {
-    text-decoration: underline;
-}
-
-/* ============================================
-   LISTA DE ARQUIVOS
-   ============================================ */
-#lista-arquivos {
-    list-style: none;
+    justify-content: space-around;
+    width: 30px;
+    height: 25px;
+    background: transparent;
+    border: none;
+    cursor: pointer;
     padding: 0;
+    z-index: 1010;
+    position: relative;
 }
 
-#lista-arquivos li {
+.menu-toggle span {
+    display: block;
+    width: 100%;
+    height: 3px;
+    background: white;
+    border-radius: 3px;
+    transition: all 0.3s ease;
+    transform-origin: center;
+}
+
+/* Animação do ícone para "X" quando aberto */
+.menu-toggle.ativo span:nth-child(1) {
+    transform: translateY(8px) rotate(45deg);
+}
+.menu-toggle.ativo span:nth-child(2) {
+    opacity: 0;
+    transform: scaleX(0);
+}
+.menu-toggle.ativo span:nth-child(3) {
+    transform: translateY(-8px) rotate(-45deg);
+}
+
+/* Header com flex para alinhar os itens */
+.header-content {
     display: flex;
     align-items: center;
-    gap: 12px;
-    background: #f0f0f0;
-    margin-bottom: 10px;
-    padding: 14px 18px;
-    border-radius: 10px;
-    transition: background 0.3s, transform 0.2s;
-    border-left: 4px solid #ff6b00;
+    justify-content: space-between;
+    max-width: 900px;
+    margin: 0 auto;
+    width: 100%;
 }
 
-#lista-arquivos li:hover {
-    background: #e8e8e8;
-    transform: translateX(5px);
-}
-
-.arquivo-icon {
-    font-size: 20px;
-}
-
-#lista-arquivos li a {
-    color: #333;
-    text-decoration: none;
-    font-weight: 500;
+.header-content h1 {
     flex: 1;
+    text-align: center;
+    font-size: 24px;
+    margin: 0;
 }
 
-#lista-arquivos li a:hover {
-    color: #ff6b00;
+.header-placeholder {
+    width: 30px; /* Mesma largura do botão para centralizar o título */
 }
 
 /* ============================================
-   BOTÕES
+   MENU LATERAL
    ============================================ */
-.btn-principal, .btn-secundario {
-    padding: 12px 24px;
-    border: none;
-    border-radius: 10px;
-    font-size: 16px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.3s;
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
+.menu-lateral {
+    position: fixed;
+    top: 0;
+    left: -280px; /* Escondido fora da tela */
+    width: 280px;
+    height: 100%;
+    background: #1a1a1a;
+    color: white;
+    padding: 80px 20px 30px;
+    transition: left 0.3s ease;
+    z-index: 1000;
+    box-shadow: 2px 0 10px rgba(0,0,0,0.3);
+    overflow-y: auto;
 }
 
-.btn-principal {
+.menu-lateral.aberto {
+    left: 0;
+}
+
+/* Lista do menu */
+.menu-lateral ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.menu-lateral ul li {
+    margin-bottom: 5px;
+}
+
+.menu-lateral ul li a {
+    display: block;
+    padding: 12px 15px;
+    color: #ccc;
+    text-decoration: none;
+    border-radius: 10px;
+    transition: all 0.3s;
+    font-size: 16px;
+    font-weight: 500;
+}
+
+.menu-lateral ul li a:hover {
+    background: #333;
+    color: white;
+}
+
+.menu-lateral ul li a.ativo {
     background: #ff6b00;
     color: white;
     box-shadow: 0 4px 10px rgba(255, 107, 0, 0.3);
 }
 
-.btn-principal:hover {
-    background: #e55a00;
-    transform: scale(1.03);
-    box-shadow: 0 6px 15px rgba(255, 107, 0, 0.4);
-}
-
-.btn-secundario {
-    background: #e0e0e0;
-    color: #333;
-}
-
-.btn-secundario:hover {
-    background: #d0d0d0;
-    transform: scale(1.03);
-}
-
-/* ============================================
-   RODAPÉ
-   ============================================ */
-footer {
+/* Rodapé do menu */
+.menu-footer {
+    position: absolute;
+    bottom: 20px;
+    left: 20px;
+    right: 20px;
     text-align: center;
-    padding: 25px 20px;
-    color: #888;
     font-size: 14px;
-    border-top: 1px solid #ddd;
-    margin-top: 20px;
+    color: #888;
+    border-top: 1px solid #333;
+    padding-top: 15px;
 }
 
 /* ============================================
-   MODO ESCURO (AUTOMÁTICO)
+   OVERLAY PARA FECHAR O MENU (clique fora)
    ============================================ */
-@media (prefers-color-scheme: dark) {
-    body {
-        background-color: #1a1a1a;
-        color: #e0e0e0;
-    }
-    
-    section {
-        background: #2a2a2a;
-        box-shadow: 0 2px 12px rgba(0, 0, 0, 0.4);
-    }
-    
-    .video-item {
-        background: #333;
-        border-color: #444;
-    }
-    
-    .video-item h3 {
-        color: #e0e0e0;
-    }
-    
-    .video-item .descricao {
-        color: #aaa;
-    }
-    
-    #lista-arquivos li {
-        background: #333;
-        border-left-color: #ff6b00;
-    }
-    
-    #lista-arquivos li a {
-        color: #e0e0e0;
-    }
-    
-    #lista-arquivos li:hover {
-        background: #3a3a3a;
-    }
-    
-    .btn-secundario {
-        background: #444;
-        color: #e0e0e0;
-    }
-    
-    .btn-secundario:hover {
-        background: #555;
-    }
-    
-    footer {
-        border-top-color: #444;
-        color: #666;
-    }
-    
-    section h2 {
-        border-bottom-color: #ff6b00;
-    }
+.menu-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.5);
+    z-index: 999;
+}
+
+.menu-lateral.aberto + .menu-overlay {
+    display: block;
+}
+
+/* Ajustes no main para não sobrepor o menu */
+main {
+    transition: margin-left 0.3s;
 }
 
 /* ============================================
-   RESPONSIVIDADE (CELULAR)
+   RESPONSIVIDADE DO MENU
    ============================================ */
 @media (max-width: 600px) {
-    header h1 {
-        font-size: 22px;
+    .header-content h1 {
+        font-size: 18px;
     }
     
-    header p {
-        font-size: 14px;
+    .menu-lateral {
+        width: 260px;
+        left: -260px;
+        padding-top: 70px;
     }
     
-    section {
-        padding: 18px;
-        border-radius: 12px;
-    }
-    
-    section h2 {
-        font-size: 19px;
-    }
-    
-    .video-item {
-        padding: 15px;
-    }
-    
-    .video-item h3 {
-        font-size: 16px;
-    }
-    
-    .btn-principal, .btn-secundario {
-        padding: 10px 18px;
-        font-size: 14px;
-        width: 100%;
-        justify-content: center;
-    }
-    
-    #lista-arquivos li {
-        padding: 12px 14px;
-        font-size: 14px;
+    .menu-lateral ul li a {
+        font-size: 15px;
+        padding: 10px 14px;
     }
 }
