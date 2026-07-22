@@ -2,26 +2,38 @@
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
+    <!-- ⭐ FORÇA A CODIFICAÇÃO PARA UTF-8 (CORRIGE ACENTOS) ⭐ -->
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
     <title>Jean na Estrada - App Oficial</title>
     
+    <!-- ⭐ TAGS PARA EVITAR CACHE ⭐ -->
     <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
     <meta http-equiv="Pragma" content="no-cache">
     <meta http-equiv="Expires" content="0">
     
+    <!-- CSS -->
     <link rel="stylesheet" href="style.css">
     <link rel="manifest" href="manifest.json">
     
+    <!-- FAVICON E ÍCONES -->
     <link rel="icon" href="imagens/favicon.ico" type="image/x-icon">
     <link rel="apple-touch-icon" href="imagens/apple-touch-icon.png">
     
+    <!-- META TAGS PARA PWA -->
     <meta name="theme-color" content="#00B8FF">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     
+    <!-- LUCIDE ICONS -->
     <script src="https://unpkg.com/lucide@latest"></script>
 </head>
-<body>
+<!-- ⭐ FORÇA A BUSCA DE VÍDEOS AO CARREGAR A PÁGINA (onload) - ESSENCIAL PARA IPHONE ⭐ -->
+<body onload="buscarVideosRSS();">
+
+    <!-- ============================================ -->
+    <!-- CABEÇALHO COM MENU HAMBÚRGUER -->
+    <!-- ============================================ -->
     <header>
         <div class="header-content">
             <button id="menu-toggle" class="menu-toggle" aria-label="Abrir menu">
@@ -34,8 +46,14 @@
         </div>
     </header>
 
+    <!-- ============================================ -->
+    <!-- MENU LATERAL - NOVA ESTRUTURA -->
+    <!-- ============================================ -->
     <nav id="menu-lateral" class="menu-lateral">
-        <button id="fechar-menu" class="fechar-menu" aria-label="Fechar menu">✕</button>
+        <button id="fechar-menu" class="fechar-menu" aria-label="Fechar menu">
+            ✕
+        </button>
+        
         <ul>
             <li><a href="#" data-secao="inicio" class="ativo">🏠 Início</a></li>
             <li><a href="#" data-secao="noticias">📰 Notícias</a></li>
@@ -49,23 +67,36 @@
         </div>
     </nav>
 
+    <!-- ============================================ -->
+    <!-- CONTEÚDO PRINCIPAL -->
+    <!-- ============================================ -->
     <main>
-        <!-- INÍCIO -->
+        <!-- ========================================== -->
+        <!-- SEÇÃO: INÍCIO (VÍDEOS DO CANAL) -->
+        <!-- ========================================== -->
         <section id="inicio-section" class="secao-ativa">
             <h2>🎬 Últimos Vídeos</h2>
-            <div id="lista-videos"></div>
+            <div id="lista-videos">
+                <!-- Os vídeos serão carregados aqui automaticamente -->
+            </div>
         </section>
 
-        <!-- NOTÍCIAS -->
+        <!-- ========================================== -->
+        <!-- SEÇÃO: NOTÍCIAS (RSS) -->
+        <!-- ========================================== -->
         <section id="noticias-section" style="display: none;">
             <h2>📰 Notícias</h2>
             <p style="color: #94A3B8; margin-bottom: 15px;">As últimas notícias sobre carros elétricos e tecnologia:</p>
             <div id="lista-noticias">
-                <div style="text-align:center;padding:30px;"><p>🔄 Carregando notícias...</p></div>
+                <div style="text-align:center;padding:30px;">
+                    <p style="font-size:18px;">🔄 Carregando notícias...</p>
+                </div>
             </div>
         </section>
 
-        <!-- TUTORIAIS -->
+        <!-- ========================================== -->
+        <!-- SEÇÃO: TUTORIAIS + DESBLOQUEIOS -->
+        <!-- ========================================== -->
         <section id="tutoriais-section" style="display: none;">
             <h2>📖 Tutoriais</h2>
             <p style="color: #94A3B8; margin-bottom: 15px;">Tutoriais e desbloqueios de multimídia automotiva:</p>
@@ -85,7 +116,9 @@
             </ul>
         </section>
 
-        <!-- PRODUTOS -->
+        <!-- ========================================== -->
+        <!-- SEÇÃO: PRODUTOS RECOMENDADOS (AFILIADOS) -->
+        <!-- ========================================== -->
         <section id="produtos-section" style="display: none;">
             <h2>🛒 Produtos Recomendados</h2>
             <p style="color: #94A3B8; margin-bottom: 15px;">Produtos que eu testei e recomendo:</p>
@@ -105,28 +138,37 @@
             </ul>
         </section>
 
-        <!-- CONTATO -->
+        <!-- ========================================== -->
+        <!-- SEÇÃO: FALE COMIGO (CONTATO + REDES) -->
+        <!-- ========================================== -->
         <section id="contato-section" style="display: none;">
             <h2>💬 Fale Comigo</h2>
             <p style="color: #94A3B8; margin-bottom: 15px;">Entre em contato ou me siga nas redes sociais:</p>
             
+            <!-- EMAIL -->
             <div style="background: rgba(17,24,39,0.4); padding: 14px 18px; border-radius: 16px; margin-bottom: 12px; border-left: 3px solid #00B8FF; display: flex; align-items: center; gap: 12px;">
                 <span style="font-size: 20px;">📧</span>
                 <a href="mailto:contato.jeannaestrada@gmail.com" style="color: #94A3B8; text-decoration: none; font-weight: 500;">contato.jeannaestrada@gmail.com</a>
             </div>
             
+            <!-- REDES SOCIAIS -->
             <div style="display: flex; flex-direction: column; gap: 10px; margin-top: 15px;">
-                <a href="https://www.youtube.com/@jeannaestrada" target="_blank" style="display: flex; align-items: center; gap: 12px; background: rgba(17,24,39,0.4); padding: 14px 18px; border-radius: 16px; text-decoration: none; border-left: 3px solid #FF0000;">
+                <!-- YouTube -->
+                <a href="https://www.youtube.com/@jeannaestrada" target="_blank" style="display: flex; align-items: center; gap: 12px; background: rgba(17,24,39,0.4); padding: 14px 18px; border-radius: 16px; text-decoration: none; border-left: 3px solid #FF0000; transition: var(--transition-smooth);">
                     <span style="font-size: 20px;">▶️</span>
                     <span style="color: #94A3B8; font-weight: 500;">YouTube</span>
                     <span style="margin-left: auto; color: #FF0000;">@jeannaestrada</span>
                 </a>
-                <a href="https://www.tiktok.com/@jeannaestrada" target="_blank" style="display: flex; align-items: center; gap: 12px; background: rgba(17,24,39,0.4); padding: 14px 18px; border-radius: 16px; text-decoration: none; border-left: 3px solid #00f2ea;">
+                
+                <!-- TikTok -->
+                <a href="https://www.tiktok.com/@jeannaestrada" target="_blank" style="display: flex; align-items: center; gap: 12px; background: rgba(17,24,39,0.4); padding: 14px 18px; border-radius: 16px; text-decoration: none; border-left: 3px solid #00f2ea; transition: var(--transition-smooth);">
                     <span style="font-size: 20px;">🎵</span>
                     <span style="color: #94A3B8; font-weight: 500;">TikTok</span>
                     <span style="margin-left: auto; color: #00f2ea;">@jeannaestrada</span>
                 </a>
-                <a href="https://www.instagram.com/jeannaestradaoficial/" target="_blank" style="display: flex; align-items: center; gap: 12px; background: rgba(17,24,39,0.4); padding: 14px 18px; border-radius: 16px; text-decoration: none; border-left: 3px solid #E4405F;">
+                
+                <!-- Instagram -->
+                <a href="https://www.instagram.com/jeannaestradaoficial/" target="_blank" style="display: flex; align-items: center; gap: 12px; background: rgba(17,24,39,0.4); padding: 14px 18px; border-radius: 16px; text-decoration: none; border-left: 3px solid #E4405F; transition: var(--transition-smooth);">
                     <span style="font-size: 20px;">📸</span>
                     <span style="color: #94A3B8; font-weight: 500;">Instagram</span>
                     <span style="margin-left: auto; color: #E4405F;">@jeannaestradaoficial</span>
@@ -135,14 +177,40 @@
         </section>
     </main>
 
+    <!-- ============================================ -->
+    <!-- RODAPÉ -->
+    <!-- ============================================ -->
     <footer>
         <p>🚐 Jean na Estrada - Todos os direitos reservados</p>
         <p style="font-size: 12px; margin-top: 5px;">App atualizado automaticamente com os últimos vídeos</p>
     </footer>
 
+    <!-- ============================================ -->
+    <!-- SCRIPTS -->
+    <!-- ============================================ -->
+    
+    <!-- ARQUIVO DE FUNÇÕES -->
     <script src="script.js"></script>
     
-    <!-- FUNÇÕES DO MENU -->
+    <!-- ⭐ SCRIPT PARA GARANTIR QUE OS VÍDEOS CARREGUEM NO IPHONE ⭐ -->
+    <script>
+        // Garante que os vídeos sejam carregados mesmo se o DOMContentLoaded falhar
+        if (document.readyState === 'complete') {
+            if (typeof buscarVideosRSS === 'function') {
+                buscarVideosRSS();
+            }
+        } else {
+            document.addEventListener('readystatechange', function() {
+                if (document.readyState === 'complete') {
+                    if (typeof buscarVideosRSS === 'function') {
+                        buscarVideosRSS();
+                    }
+                }
+            });
+        }
+    </script>
+
+    <!-- FUNÇÕES DO MENU E NAVEGAÇÃO -->
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             const toggle = document.getElementById('menu-toggle');
@@ -150,16 +218,25 @@
             const main = document.querySelector('main');
             const fecharBtn = document.getElementById('fechar-menu');
 
+            // ============================================
+            // FUNÇÃO PARA FECHAR O MENU
+            // ============================================
             function fecharMenu() {
                 if (menu) menu.classList.remove('aberto');
                 if (toggle) toggle.classList.remove('ativo');
             }
 
+            // ============================================
+            // FUNÇÃO PARA ABRIR O MENU
+            // ============================================
             function abrirMenu() {
                 if (menu) menu.classList.add('aberto');
                 if (toggle) toggle.classList.add('ativo');
             }
 
+            // ============================================
+            // EVENTO DO ÍCONE HAMBÚRGUER
+            // ============================================
             if (toggle) {
                 toggle.addEventListener('click', function(e) {
                     e.stopPropagation();
@@ -171,6 +248,9 @@
                 });
             }
 
+            // ============================================
+            // EVENTO DO BOTÃO FECHAR (X)
+            // ============================================
             if (fecharBtn) {
                 fecharBtn.addEventListener('click', function(e) {
                     e.stopPropagation();
@@ -178,12 +258,18 @@
                 });
             }
 
+            // ============================================
+            // FECHAR AO CLICAR NO CONTEÚDO PRINCIPAL
+            // ============================================
             if (main) {
                 main.addEventListener('click', function() {
                     fecharMenu();
                 });
             }
 
+            // ============================================
+            // FECHAR AO CLICAR FORA DO MENU
+            // ============================================
             document.addEventListener('click', function(e) {
                 if (menu && menu.classList.contains('aberto')) {
                     if (!menu.contains(e.target) && !toggle.contains(e.target)) {
@@ -192,6 +278,9 @@
                 }
             });
 
+            // ============================================
+            // NAVEGAÇÃO PELAS SEÇÕES
+            // ============================================
             const links = menu.querySelectorAll('a[data-secao]');
             const secoes = {
                 inicio: document.getElementById('inicio-section'),
@@ -206,35 +295,45 @@
                     e.preventDefault();
                     const secaoId = this.dataset.secao;
 
+                    // Esconde todas as seções
                     Object.values(secoes).forEach(sec => {
                         if (sec) sec.style.display = 'none';
                     });
                     
+                    // Mostra a seção clicada
                     if (secoes[secaoId]) {
                         secoes[secaoId].style.display = 'block';
                     }
 
+                    // Atualiza a classe 'ativo' nos links do menu
                     links.forEach(l => l.classList.remove('ativo'));
                     this.classList.add('ativo');
 
+                    // Fecha o menu após clicar
                     fecharMenu();
 
+                    // Se for a seção de início, recarrega os vídeos
                     if (secaoId === 'inicio' && typeof buscarVideosRSS === 'function') {
                         buscarVideosRSS();
                     }
                     
+                    // Se for a seção de notícias, carrega as notícias
                     if (secaoId === 'noticias' && typeof buscarNoticiasRSS === 'function') {
                         buscarNoticiasRSS();
                     }
                 });
             });
 
+            // ============================================
+            // INICIALIZA OS ÍCONES DO LUCIDE
+            // ============================================
             if (typeof lucide !== 'undefined') {
                 lucide.createIcons();
             }
         });
     </script>
 
+    <!-- SERVICE WORKER - PARA INSTALAR NO CELULAR -->
     <script>
         if ('serviceWorker' in navigator) {
             navigator.serviceWorker.register('sw.js')
