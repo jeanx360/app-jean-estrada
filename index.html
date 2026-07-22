@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jean na Estrada</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="manifest" href="manifest.json">
+</head>
+<body>
+    <header>
+        <h1>🚐 Jean na Estrada</h1>
+        <p>📺 Tutoriais e Vídeos de Viagem</p>
+    </header>
+
+    <main>
+        <!-- VÍDEOS DO SEU CANAL -->
+        <section id="videos">
+            <h2>🎬 Últimos Vídeos</h2>
+            <div id="lista-videos">
+                <!-- Os vídeos vão aparecer aqui -->
+            </div>
+        </section>
+
+        <!-- ARQUIVOS DE DESBLOQUEIO -->
+        <section id="arquivos">
+            <h2>🔓 Arquivos para Desbloqueio de Mídia</h2>
+            <ul>
+                <li>📁 <a href="#">Desbloqueio de DVD</a></li>
+                <li>📁 <a href="#">Desbloqueio de Blu-ray</a></li>
+                <li>📁 <a href="#">Tutorial completo</a></li>
+            </ul>
+        </section>
+
+        <!-- CONTATO COM O PÚBLICO -->
+        <section id="contato">
+            <h2>💬 Fale com o Jean</h2>
+            <p>Deixe sua sugestão de vídeo!</p>
+            <button onclick="alert('Em breve você poderá enviar mensagens! 📱')">
+                Enviar sugestão
+            </button>
+        </section>
+    </main>
+
+    <footer>
+        <p>🚐 Jean na Estrada - Todos os direitos reservados</p>
+    </footer>
+
+    <script src="script.js"></script>
+    <script>
+        // Instalar app no celular
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('sw.js');
+        }
+    </script>
+</body>
+</html>
