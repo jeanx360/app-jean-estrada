@@ -2,8 +2,7 @@
 // SERVICE WORKER - JEAN NA ESTRADA
 // ============================================
 
-// ⭐ TROQUE ESTE NÚMERO PARA FORÇAR ATUALIZAÇÃO ⭐
-const CACHE_VERSION = 'v3.0.3';
+const CACHE_VERSION = 'v4.0.0';
 const CACHE_NAME = `jean-estrada-${CACHE_VERSION}`;
 
 const urlsParaCache = [
@@ -18,7 +17,6 @@ const urlsParaCache = [
     '/app-jean-estrada/imagens/apple-touch-icon.png'
 ];
 
-// INSTALAÇÃO
 self.addEventListener('install', event => {
     event.waitUntil(
         caches.open(CACHE_NAME)
@@ -32,7 +30,6 @@ self.addEventListener('install', event => {
     );
 });
 
-// ATIVAÇÃO - Remove caches antigos
 self.addEventListener('activate', event => {
     event.waitUntil(
         caches.keys().then(cacheNames => {
@@ -50,7 +47,6 @@ self.addEventListener('activate', event => {
     );
 });
 
-// BUSCA
 self.addEventListener('fetch', event => {
     event.respondWith(
         caches.match(event.request, { ignoreSearch: true })
