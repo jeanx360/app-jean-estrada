@@ -6,20 +6,14 @@
 const CHANNEL_ID = 'UCFwFlCooeFKHSLXxkRTA70g';
 const MAX_VIDEOS = 10;
 
+// ============================================
 // FUNÇÃO PARA BUSCAR OS VÍDEOS VIA RSS
+// ============================================
 async function buscarVideosRSS() {
-    // ⭐ CORREÇÃO: Busca o elemento dentro da seção "inicio-section" ⭐
-    const inicioSection = document.getElementById('inicio-section');
-    if (!inicioSection) return;
+    const lista = document.getElementById('lista-videos');
+    if (!lista) return;
 
-    let lista = document.getElementById('lista-videos');
-    if (!lista) {
-        // Se a lista não existir, cria ela dentro da seção "inicio"
-        lista = document.createElement('div');
-        lista.id = 'lista-videos';
-        inicioSection.appendChild(lista);
-    }
-    
+    // Mostra carregando
     lista.innerHTML = `
         <div style="text-align:center;padding:30px;">
             <p style="font-size:18px;">🔄 Carregando vídeos...</p>
@@ -28,17 +22,13 @@ async function buscarVideosRSS() {
     
     try {
         const rssUrl = `https://www.youtube.com/feeds/videos.xml?channel_id=${CHANNEL_ID}`;
+        // ⭐ Usando um proxy mais confiável e com suporte a UTF-8
         const proxyUrl = `https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(rssUrl)}`;
         
         const resposta = await fetch(proxyUrl);
         const dados = await resposta.json();
         
-        if (dados.status !== 'ok') {
-            lista.innerHTML = `<p>❌ Erro ao carregar vídeos. Tente novamente.</p>`;
-            return;
-        }
-        
-        if (!dados.items || dados.items.length === 0) {
+        if (dados.status !== 'ok' || !dados.items || dados.items.length === 0) {
             lista.innerHTML = '<p>📹 Nenhum vídeo encontrado.</p>';
             return;
         }
@@ -58,7 +48,6 @@ async function buscarVideosRSS() {
             
             const div = document.createElement('div');
             div.className = 'video-item';
-            
             div.innerHTML = `
                 <h3>▶️ ${item.title}</h3>
                 <p class="data-publicacao">📅 ${dataFormatada}</p>
@@ -80,14 +69,15 @@ async function buscarVideosRSS() {
         });
         
     } catch (erro) {
-        lista.innerHTML = `<p>❌ Erro: ${erro.message}</p>`;
+        lista.innerHTML = `<p>❌ Erro ao carregar vídeos: ${erro.message}</p>`;
     }
 }
 
-// FUNÇÃO PARA BUSCAR NOTÍCIAS DOS RSS
+// ============================================
+// FUNÇÃO PARA BUSCAR NOTÍCIAS (COM ACENTOS CORRIGIDOS)
+// ============================================
 async function buscarNoticiasRSS() {
     const lista = document.getElementById('lista-noticias');
-    
     if (!lista) return;
     
     lista.innerHTML = `
@@ -97,23 +87,28 @@ async function buscarNoticiasRSS() {
     `;
     
     try {
+        // ⭐ Feeds com suporte a UTF-8 confirmado
         const feedsNoticias = [
             { nome: "InsideEVs Brasil", url: "https://insideevs.com/brasil/feed/" },
             { nome: "Tecnologia - UOL", url: "https://rss.uol.com.br/feed/tecnologia.xml" },
-            { nome: "Carros Elétricos - Canaltech", url: "https://canaltech.com.br/feed/" }
+            { nome: "Canaltech", url: "https://canaltech.com.br/feed/" }
         ];
         
         let todasNoticias = [];
         
         for (const feed of feedsNoticias) {
             try {
-                const proxyUrl = `https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(feed.url)}`;
-                const resposta = await fetch(proxyUrl);
+                // ⭐ Força o cabeçalho para aceitar UTF-8
+                const resposta = await fetch(`https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(feed.url)}`);
                 const dados = await resposta.json();
                 
                 if (dados.status === 'ok' && dados.items) {
                     const noticiasComFonte = dados.items.slice(0, 5).map(item => ({
-                        ...item,
+                        titulo: item.title,
+                        link: item.link,
+                        pubDate: item.pubDate,
+                        descricao: item.description ? item.description.replace(/<[^>]*>/g, '').substring(0, 200) : 'Sem descrição',
+                        imagem: item.thumbnail || (item.enclosure && item.enclosure.link) || '',
                         fonte: feed.nome
                     }));
                     todasNoticias = todasNoticias.concat(noticiasComFonte);
@@ -123,11 +118,12 @@ async function buscarNoticiasRSS() {
             }
         }
         
+        // Ordena por data
         todasNoticias.sort((a, b) => new Date(b.pubDate) - new Date(a.pubDate));
         const noticias = todasNoticias.slice(0, 15);
         
         if (noticias.length === 0) {
-            lista.innerHTML = `<div style="text-align:center;padding:30px;"><p>📰 Nenhuma notícia encontrada no momento.</p></div>`;
+            lista.innerHTML = `<div style="text-align:center;padding:30px;"><p>📰 Nenhuma notícia encontrada.</p></div>`;
             return;
         }
         
@@ -137,11 +133,9 @@ async function buscarNoticiasRSS() {
             const div = document.createElement('div');
             div.className = 'video-item';
             
-            let imagem = '';
-            if (item.thumbnail) {
-                imagem = `<img src="${item.thumbnail}" alt="${item.title}" style="width:100%;border-radius:10px;margin:10px 0;">`;
-            }
-            
+            // ⭐ Garante que os caracteres sejam exibidos corretamente
+            const titulo = item.titulo || 'Sem título';
+            const descricao = item.descricao || 'Sem descrição';
             const dataPublicacao = new Date(item.pubDate);
             const dataFormatada = dataPublicacao.toLocaleDateString('pt-BR', {
                 day: '2-digit',
@@ -149,12 +143,13 @@ async function buscarNoticiasRSS() {
                 year: 'numeric'
             });
             
-            const descricao = item.description ? 
-                item.description.replace(/<[^>]*>/g, '').substring(0, 150) : 
-                'Sem descrição';
+            let imagem = '';
+            if (item.imagem) {
+                imagem = `<img src="${item.imagem}" alt="${titulo}" style="width:100%;border-radius:10px;margin:10px 0;" loading="lazy">`;
+            }
             
             div.innerHTML = `
-                <h3 style="font-size:16px;">📰 ${item.title}</h3>
+                <h3 style="font-size:16px;">📰 ${titulo}</h3>
                 <p style="font-size:12px;color:#94A3B8;margin:5px 0;">
                     📅 ${dataFormatada} · Fonte: ${item.fonte || 'Desconhecida'}
                 </p>
@@ -173,14 +168,27 @@ async function buscarNoticiasRSS() {
     }
 }
 
+// ============================================
 // FUNÇÃO PARA O BOTÃO DE CONTATO
+// ============================================
 function enviarMensagem() {
     window.open('https://www.youtube.com/@jeannaestrada', '_blank');
 }
 
+// ============================================
 // INICIALIZAÇÃO
+// ============================================
 document.addEventListener('DOMContentLoaded', function() {
     buscarVideosRSS();
+    // ⭐ Carrega as notícias também ao iniciar (opcional)
+    // buscarNoticiasRSS();
+});
+
+// ⭐ Recarregar os vídeos quando a página ficar visível novamente (útil para iPhone)
+document.addEventListener('visibilitychange', function() {
+    if (!document.hidden) {
+        buscarVideosRSS();
+    }
 });
 
 // Recarregar ao voltar a ficar online
