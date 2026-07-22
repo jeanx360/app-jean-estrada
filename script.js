@@ -1,12 +1,7 @@
 // ============================================
-// VERSÃO DO APP - FORÇA ATUALIZAÇÃO NO IPHONE
+// VERSÃO DO APP - FORÇA ATUALIZAÇÃO
 // ============================================
-window.versaoApp = '20260722';
-
-// ============================================
-// APP JEAN NA ESTRADA - BUSCA VIA RSS (SEM API)
-// ============================================
-// ... (o resto do seu script permanece igual) ...
+window.versaoApp = '20260722b';
 
 // ============================================
 // APP JEAN NA ESTRADA - BUSCA VIA RSS (SEM API)
@@ -20,10 +15,14 @@ const MAX_VIDEOS = 10;
 // FUNÇÃO PARA BUSCAR OS VÍDEOS VIA RSS
 // ============================================
 async function buscarVideosRSS() {
+    // ⭐ USA O ELEMENTO EXCLUSIVO DE VÍDEOS ⭐
     const lista = document.getElementById('lista-videos');
-    if (!lista) return;
+    if (!lista) {
+        console.log('Elemento lista-videos não encontrado');
+        return;
+    }
 
-    // Mostra carregando
+    console.log('🔄 Buscando vídeos...');
     lista.innerHTML = `
         <div style="text-align:center;padding:30px;">
             <p style="font-size:18px;">🔄 Carregando vídeos...</p>
@@ -32,7 +31,6 @@ async function buscarVideosRSS() {
     
     try {
         const rssUrl = `https://www.youtube.com/feeds/videos.xml?channel_id=${CHANNEL_ID}`;
-        // ⭐ Usando um proxy mais confiável e com suporte a UTF-8
         const proxyUrl = `https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(rssUrl)}`;
         
         const resposta = await fetch(proxyUrl);
@@ -78,18 +76,26 @@ async function buscarVideosRSS() {
             lista.appendChild(div);
         });
         
+        console.log('✅ Vídeos carregados com sucesso!');
+        
     } catch (erro) {
         lista.innerHTML = `<p>❌ Erro ao carregar vídeos: ${erro.message}</p>`;
+        console.log('Erro ao buscar vídeos:', erro);
     }
 }
 
 // ============================================
-// FUNÇÃO PARA BUSCAR NOTÍCIAS (COM ACENTOS CORRIGIDOS)
+// FUNÇÃO PARA BUSCAR NOTÍCIAS
 // ============================================
 async function buscarNoticiasRSS() {
+    // ⭐ USA O ELEMENTO EXCLUSIVO DE NOTÍCIAS ⭐
     const lista = document.getElementById('lista-noticias');
-    if (!lista) return;
-    
+    if (!lista) {
+        console.log('Elemento lista-noticias não encontrado');
+        return;
+    }
+
+    console.log('🔄 Buscando notícias...');
     lista.innerHTML = `
         <div style="text-align:center;padding:30px;">
             <p style="font-size:18px;">🔄 Carregando notícias...</p>
@@ -97,7 +103,6 @@ async function buscarNoticiasRSS() {
     `;
     
     try {
-        // ⭐ Feeds com suporte a UTF-8 confirmado
         const feedsNoticias = [
             { nome: "InsideEVs Brasil", url: "https://insideevs.com/brasil/feed/" },
             { nome: "Tecnologia - UOL", url: "https://rss.uol.com.br/feed/tecnologia.xml" },
@@ -108,7 +113,6 @@ async function buscarNoticiasRSS() {
         
         for (const feed of feedsNoticias) {
             try {
-                // ⭐ Força o cabeçalho para aceitar UTF-8
                 const resposta = await fetch(`https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(feed.url)}`);
                 const dados = await resposta.json();
                 
@@ -128,7 +132,6 @@ async function buscarNoticiasRSS() {
             }
         }
         
-        // Ordena por data
         todasNoticias.sort((a, b) => new Date(b.pubDate) - new Date(a.pubDate));
         const noticias = todasNoticias.slice(0, 15);
         
@@ -143,7 +146,6 @@ async function buscarNoticiasRSS() {
             const div = document.createElement('div');
             div.className = 'video-item';
             
-            // ⭐ Garante que os caracteres sejam exibidos corretamente
             const titulo = item.titulo || 'Sem título';
             const descricao = item.descricao || 'Sem descrição';
             const dataPublicacao = new Date(item.pubDate);
@@ -172,6 +174,8 @@ async function buscarNoticiasRSS() {
             lista.appendChild(div);
         });
         
+        console.log('✅ Notícias carregadas com sucesso!');
+        
     } catch (erro) {
         lista.innerHTML = `<div style="text-align:center;padding:30px;"><p>❌ Erro ao carregar notícias: ${erro.message}</p></div>`;
         console.log('Erro ao buscar notícias:', erro);
@@ -186,20 +190,16 @@ function enviarMensagem() {
 }
 
 // ============================================
-// INICIALIZAÇÃO
+// INICIALIZAÇÃO - CARREGA OS VÍDEOS
 // ============================================
-document.addEventListener('DOMContentLoaded', function() {
-    buscarVideosRSS();
-    // ⭐ Carrega as notícias também ao iniciar (opcional)
-    // buscarNoticiasRSS();
-});
+console.log('🚀 App Jean na Estrada iniciado! Versão:', window.versaoApp);
 
-// ⭐ Recarregar os vídeos quando a página ficar visível novamente (útil para iPhone)
-document.addEventListener('visibilitychange', function() {
-    if (!document.hidden) {
+// Carrega os vídeos ao iniciar
+setTimeout(function() {
+    if (typeof buscarVideosRSS === 'function') {
         buscarVideosRSS();
     }
-});
+}, 200);
 
 // Recarregar ao voltar a ficar online
 document.addEventListener('online', function() {
