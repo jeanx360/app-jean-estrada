@@ -4,15 +4,29 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
     <title>Jean na Estrada - App Oficial</title>
+    
+    <!-- CSS -->
     <link rel="stylesheet" href="style.css">
+    
+    <!-- MANIFEST (PWA) -->
     <link rel="manifest" href="manifest.json">
     
-    <meta name="theme-color" content="#ff6b00">
+    <!-- FAVICON E ÍCONES -->
+    <link rel="icon" href="imagens/favicon.ico" type="image/x-icon">
+    <link rel="apple-touch-icon" href="imagens/apple-touch-icon.png">
+    
+    <!-- META TAGS PARA PWA -->
+    <meta name="theme-color" content="#00B8FF">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    
+    <!-- LUCIDE ICONS -->
+    <script src="https://unpkg.com/lucide@latest"></script>
 </head>
 <body>
+    <!-- ============================================ -->
     <!-- CABEÇALHO COM MENU HAMBÚRGUER -->
+    <!-- ============================================ -->
     <header>
         <div class="header-content">
             <!-- Ícone do Menu -->
@@ -22,7 +36,7 @@
                 <span></span>
             </button>
             <h1>🚐 Jean na Estrada</h1>
-            <span class="header-placeholder"></span> <!-- Para centralizar o título -->
+            <span class="header-placeholder"></span>
         </div>
     </header>
 
@@ -58,30 +72,38 @@
         <!-- SEÇÃO: TUTORIAIS -->
         <section id="tutoriais-section" style="display: none;">
             <h2>📖 Tutoriais</h2>
-            <p style="color: #666; margin-bottom: 15px;">Aprenda a desbloquear e personalizar seus equipamentos:</p>
-            <ul id="lista-tutoriais">
-                <li><a href="#">Como desbloquear a multimídia do BYD</a></li>
-                <li><a href="#">Passo a passo: Desbloqueio de Geely EX2</a></li>
-                <li><a href="#">Guia completo para carros elétricos</a></li>
-                <li><a href="#">Dicas de manutenção para sua multimídia</a></li>
+            <p style="color: #94A3B8; margin-bottom: 15px;">Aprenda a desbloquear e personalizar seus equipamentos:</p>
+            <ul id="lista-tutoriais" style="list-style: none; padding: 0;">
+                <li style="background: rgba(17,24,39,0.4); padding: 14px 18px; border-radius: 16px; margin-bottom: 10px; border-left: 3px solid #00B8FF;">
+                    <a href="#" style="color: #94A3B8; text-decoration: none; font-weight: 500;">Como desbloquear a multimídia do BYD</a>
+                </li>
+                <li style="background: rgba(17,24,39,0.4); padding: 14px 18px; border-radius: 16px; margin-bottom: 10px; border-left: 3px solid #00B8FF;">
+                    <a href="#" style="color: #94A3B8; text-decoration: none; font-weight: 500;">Passo a passo: Desbloqueio de Geely EX2</a>
+                </li>
+                <li style="background: rgba(17,24,39,0.4); padding: 14px 18px; border-radius: 16px; margin-bottom: 10px; border-left: 3px solid #00B8FF;">
+                    <a href="#" style="color: #94A3B8; text-decoration: none; font-weight: 500;">Guia completo para carros elétricos</a>
+                </li>
+                <li style="background: rgba(17,24,39,0.4); padding: 14px 18px; border-radius: 16px; margin-bottom: 10px; border-left: 3px solid #00B8FF;">
+                    <a href="#" style="color: #94A3B8; text-decoration: none; font-weight: 500;">Dicas de manutenção para sua multimídia</a>
+                </li>
             </ul>
         </section>
 
         <!-- SEÇÃO: ÁREA DE MEMBROS (EM CONSTRUÇÃO) -->
         <section id="membros-section" style="display: none;">
             <h2>⭐ Área de Membros</h2>
-            <div style="text-align: center; padding: 30px 0;">
+            <div style="text-align: center; padding: 40px 0;">
                 <p style="font-size: 48px; margin-bottom: 15px;">🔒</p>
-                <p style="font-size: 18px; font-weight: bold;">Em breve!</p>
-                <p style="color: #666; margin-top: 10px;">Esta área será exclusiva para membros do canal.</p>
-                <p style="color: #666; margin-top: 5px;">Em desenvolvimento.</p>
+                <p style="font-size: 20px; font-weight: 700; font-family: 'Raleway', sans-serif;">Em breve!</p>
+                <p style="color: #94A3B8; margin-top: 10px;">Esta área será exclusiva para membros do canal.</p>
+                <p style="color: #94A3B8; margin-top: 5px;">Em desenvolvimento.</p>
             </div>
         </section>
 
         <!-- SEÇÃO: ARQUIVOS DE DESBLOQUEIO -->
         <section id="arquivos-section" style="display: none;">
             <h2>🔓 Desbloqueio de Mídia</h2>
-            <p style="color: #666; margin-bottom: 15px;">Arquivos e tutoriais para desbloqueio de multimídia automotiva:</p>
+            <p style="color: #94A3B8; margin-bottom: 15px;">Arquivos e tutoriais para desbloqueio de multimídia automotiva:</p>
             <ul id="lista-arquivos">
                 <li><span class="arquivo-icon">📁</span> <a href="#">Tutorial de Desbloqueio - BYD</a></li>
                 <li><span class="arquivo-icon">📁</span> <a href="#">Arquivos para multimídia VW</a></li>
@@ -93,21 +115,31 @@
         <!-- SEÇÃO: CONTATO -->
         <section id="contato-section" style="display: none;">
             <h2>💬 Fale com o Jean</h2>
-            <p style="color: #666; margin-bottom: 15px;">Deixe sua sugestão, dúvida ou ideia para os próximos vídeos!</p>
+            <p style="color: #94A3B8; margin-bottom: 15px;">Deixe sua sugestão, dúvida ou ideia para os próximos vídeos!</p>
             <div style="display: flex; gap: 10px; flex-wrap: wrap;">
-                <button onclick="window.location.href='mailto:seuemail@gmail.com?subject=Sugestão para o canal'" class="btn-principal">📝 Enviar Mensagem</button>
-                <button onclick="window.open('https://www.youtube.com/@jeannaestrada', '_blank')" class="btn-secundario">▶️ Canal no YouTube</button>
+                <button onclick="window.location.href='mailto:seuemail@gmail.com?subject=Sugestão para o canal'" class="btn-principal">
+                    📝 Enviar Mensagem
+                </button>
+                <button onclick="window.open('https://www.youtube.com/@jeannaestrada', '_blank')" class="btn-secundario">
+                    ▶️ Canal no YouTube
+                </button>
             </div>
         </section>
     </main>
 
+    <!-- ============================================ -->
     <!-- RODAPÉ -->
+    <!-- ============================================ -->
     <footer>
         <p>🚐 Jean na Estrada - Todos os direitos reservados</p>
         <p style="font-size: 12px; margin-top: 5px;">App atualizado automaticamente com os últimos vídeos</p>
     </footer>
 
-    <!-- ARQUIVOS DE FUNÇÕES -->
+    <!-- ============================================ -->
+    <!-- SCRIPTS -->
+    <!-- ============================================ -->
+    
+    <!-- ARQUIVO DE FUNÇÕES -->
     <script src="script.js"></script>
     
     <!-- FUNÇÕES DO MENU -->
@@ -123,7 +155,7 @@
                 toggle.classList.toggle('ativo');
             });
 
-            // Fechar menu ao clicar no conteúdo principal (opcional)
+            // Fechar menu ao clicar no conteúdo principal
             main.addEventListener('click', function() {
                 if (menu.classList.contains('aberto')) {
                     menu.classList.remove('aberto');
@@ -158,16 +190,21 @@
                     links.forEach(l => l.classList.remove('ativo'));
                     this.classList.add('ativo');
 
-                    // Fecha o menu após clicar (em celular é melhor)
+                    // Fecha o menu após clicar
                     menu.classList.remove('aberto');
                     toggle.classList.remove('ativo');
 
-                    // Se for a seção de vídeos, recarrega a lista (opcional)
+                    // Se for a seção de vídeos, recarrega a lista
                     if (secaoId === 'videos' && typeof buscarVideosRSS === 'function') {
                         buscarVideosRSS();
                     }
                 });
             });
+
+            // Inicializa os ícones do Lucide
+            if (typeof lucide !== 'undefined') {
+                lucide.createIcons();
+            }
         });
     </script>
 
