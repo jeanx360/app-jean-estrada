@@ -1,7 +1,7 @@
 // ============================================
 // VERSÃO DO APP - FORÇA ATUALIZAÇÃO
 // ============================================
-window.versaoApp = '20260725';
+window.versaoApp = '20260725-fix';
 console.log('📦 Script.js carregado! Versão:', window.versaoApp);
 
 // ============================================
@@ -16,14 +16,13 @@ const MAX_VIDEOS = 10;
 // FUNÇÃO PARA BUSCAR OS VÍDEOS VIA RSS
 // ============================================
 window.buscarVideosRSS = async function() {
-    console.log('🔍 buscarVideosRSS() chamada');
     const lista = document.getElementById('lista-videos');
     if (!lista) {
         console.log('❌ Elemento #lista-videos não encontrado');
         return;
     }
-    console.log('✅ Elemento #lista-videos encontrado');
 
+    console.log('🔄 Buscando vídeos...');
     lista.innerHTML = `
         <div style="text-align:center;padding:30px;">
             <p style="font-size:18px;">🔄 Carregando vídeos...</p>
@@ -31,13 +30,12 @@ window.buscarVideosRSS = async function() {
     `;
     
     try {
+        // Usar o rss2json para vídeos (funciona bem)
         const rssUrl = `https://www.youtube.com/feeds/videos.xml?channel_id=${CHANNEL_ID}`;
         const proxyUrl = `https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(rssUrl)}`;
-        console.log('📡 Buscando RSS:', rssUrl);
         
         const resposta = await fetch(proxyUrl);
         const dados = await resposta.json();
-        console.log('📡 Resposta recebida, status:', dados.status);
         
         if (dados.status !== 'ok' || !dados.items || dados.items.length === 0) {
             lista.innerHTML = '<p>📹 Nenhum vídeo encontrado.</p>';
@@ -46,7 +44,6 @@ window.buscarVideosRSS = async function() {
         
         lista.innerHTML = '';
         const videos = dados.items.slice(0, MAX_VIDEOS);
-        console.log(`📹 ${videos.length} vídeos encontrados`);
         
         videos.forEach(item => {
             const videoUrl = item.link;
@@ -84,12 +81,12 @@ window.buscarVideosRSS = async function() {
         
     } catch (erro) {
         lista.innerHTML = `<p>❌ Erro ao carregar vídeos: ${erro.message}</p>`;
-        console.log('❌ Erro ao buscar vídeos:', erro);
+        console.log('Erro ao buscar vídeos:', erro);
     }
 };
 
 // ============================================
-// FUNÇÃO PARA BUSCAR NOTÍCIAS
+// FUNÇÃO PARA BUSCAR NOTÍCIAS (COM DOMPARSER E UTF-8)
 // ============================================
 window.buscarNoticiasRSS = async function() {
     console.log('🔍 buscarNoticiasRSS() chamada');
@@ -100,7 +97,7 @@ window.buscarNoticiasRSS = async function() {
     }
     console.log('✅ Elemento #lista-noticias encontrado');
 
-    // ⭐ LIMPEZA COMPLETA DO ELEMENTO ⭐
+    // Limpa e mostra carregando
     lista.innerHTML = '';
     lista.innerHTML = `
         <div style="text-align:center;padding:30px;">
@@ -120,30 +117,74 @@ window.buscarNoticiasRSS = async function() {
         
         for (const feed of feedsNoticias) {
             try {
-                const proxyUrl = `https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(feed.url)}`;
                 console.log(`📡 Buscando ${feed.nome}:`, feed.url);
-                const resposta = await fetch(proxyUrl);
-                const dados = await resposta.json();
+                const resposta = await fetch(feed.url);
+                const texto = await resposta.text(); // Pega o texto bruto do XML
                 
-                if (dados.status === 'ok' && dados.items) {
-                    const noticiasComFonte = dados.items.slice(0, 5).map(item => ({
-                        titulo: item.title,
-                        link: item.link,
-                        pubDate: item.pubDate,
-                        descricao: item.description ? item.description.replace(/<[^>]*>/g, '').substring(0, 200) : 'Sem descrição',
-                        imagem: item.thumbnail || (item.enclosure && item.enclosure.link) || '',
-                        fonte: feed.nome
-                    }));
-                    todasNoticias = todasNoticias.concat(noticiasComFonte);
-                    console.log(`✅ ${feed.nome}: ${noticiasComFonte.length} notícias`);
-                } else {
-                    console.log(`⚠️ ${feed.nome}: resposta inválida`);
+                // ⭐ CORREÇÃO: Força a codificação UTF-8
+                const blob = new Blob([texto], { type: 'text/xml;charset=UTF-8' });
+                const urlBlob = URL.createObjectURL(blob);
+                const respostaBlob = await fetch(urlBlob);
+                const textoCorrigido = await respostaBlob.text();
+                URL.revokeObjectURL(urlBlob);
+                
+                // Parseia o XML
+                const parser = new DOMParser();
+                const xmlDoc = parser.parseFromString(textoCorrigido, 'text/xml');
+                
+                // Verifica se há erro de parsing
+                const parseError = xmlDoc.querySelector('parsererror');
+                if (parseError) {
+                    console.log(`⚠️ Erro ao parsear ${feed.nome}:`, parseError.textContent);
+                    continue;
                 }
+                
+                // Extrai os itens
+                const items = xmlDoc.querySelectorAll('item');
+                console.log(`📡 ${feed.nome}: ${items.length} itens encontrados`);
+                
+                // Pega os 5 primeiros itens
+                const itensLimitados = Array.from(items).slice(0, 5);
+                
+                itensLimitados.forEach(item => {
+                    const title = item.querySelector('title')?.textContent || 'Sem título';
+                    const link = item.querySelector('link')?.textContent || '#';
+                    const pubDate = item.querySelector('pubDate')?.textContent || new Date().toUTCString();
+                    const description = item.querySelector('description')?.textContent || 'Sem descrição';
+                    
+                    // Extrai a imagem do conteúdo ou do enclosure
+                    let imagem = '';
+                    const enclosure = item.querySelector('enclosure');
+                    if (enclosure) {
+                        imagem = enclosure.getAttribute('url') || '';
+                    }
+                    if (!imagem) {
+                        const content = item.querySelector('content') || item.querySelector('encoded');
+                        if (content) {
+                            const imgMatch = content.textContent.match(/<img[^>]+src="([^">]+)"/);
+                            if (imgMatch) imagem = imgMatch[1];
+                        }
+                    }
+                    
+                    // Limpa a descrição (remove HTML)
+                    const descricaoLimpa = description.replace(/<[^>]*>/g, '').substring(0, 200);
+                    
+                    todasNoticias.push({
+                        titulo: title,
+                        link: link,
+                        pubDate: pubDate,
+                        descricao: descricaoLimpa,
+                        imagem: imagem,
+                        fonte: feed.nome
+                    });
+                });
+                
             } catch (erro) {
                 console.log(`❌ Erro ao buscar ${feed.nome}:`, erro);
             }
         }
         
+        // Ordena por data
         todasNoticias.sort((a, b) => new Date(b.pubDate) - new Date(a.pubDate));
         const noticias = todasNoticias.slice(0, 15);
         console.log(`📰 Total de notícias: ${noticias.length}`);
@@ -153,11 +194,10 @@ window.buscarNoticiasRSS = async function() {
             return;
         }
         
-        // ⭐ LIMPA NOVAMENTE ANTES DE ADICIONAR ⭐
+        // Limpa e renderiza
         lista.innerHTML = '';
-        console.log('📰 Renderizando notícias...');
         
-        noticias.forEach((item, index) => {
+        noticias.forEach(item => {
             const div = document.createElement('div');
             div.className = 'video-item';
             
