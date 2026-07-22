@@ -1,127 +1,139 @@
 // ============================================
-// APP JEAN NA ESTRADA - BUSCA AUTOMÁTICA DE VÍDEOS
+// APP JEAN NA ESTRADA - BUSCA VIA RSS (SEM API)
 // ============================================
 
-// SUAS CONFIGURAÇÕES (já preenchidas!)
-const API_KEY = 'AIzaSyAYUcYcEIIiGPfiaNNAe2jfk2xHCyJtM-s';
-const NOME_CANAL = 'jeannaestrada';  // Seu canal sem o @
+// CONFIGURAÇÕES DO SEU CANAL
+const CHANNEL_ID = 'UCFwFlCooeFKHSLXxkRTA70g';  // ✅ ID do seu canal
 const MAX_VIDEOS = 10;  // Quantos vídeos mostrar
 
-// FUNÇÃO PRINCIPAL - Busca os vídeos do canal
-async function buscarVideos() {
+// FUNÇÃO PARA BUSCAR OS VÍDEOS VIA RSS
+async function buscarVideosRSS() {
     const lista = document.getElementById('lista-videos');
     
     // Mostra mensagem de carregamento
     lista.innerHTML = `
         <div style="text-align:center;padding:30px;">
-            <p>🔄 Carregando vídeos do Jean na Estrada...</p>
+            <p style="font-size:18px;">🔄 Carregando vídeos...</p>
+            <p style="font-size:14px;color:#888;margin-top:10px;">Buscando os últimos vídeos do Jean na Estrada</p>
         </div>
     `;
     
     try {
-        // Primeiro, precisamos descobrir o ID do canal (YouTube usa ID numérico)
-        const urlCanal = `https://www.googleapis.com/youtube/v3/channels?part=id&forUsername=${NOME_CANAL}&key=${API_KEY}`;
-        const respostaCanal = await fetch(urlCanal);
-        const dadosCanal = await respostaCanal.json();
+        // O RSS do YouTube
+        const rssUrl = `https://www.youtube.com/feeds/videos.xml?channel_id=${CHANNEL_ID}`;
         
-        // Verifica se o canal foi encontrado
-        if (dadosCanal.error) {
-            lista.innerHTML = `<p>❌ Erro: ${dadosCanal.error.message}</p>`;
-            console.log('Erro ao buscar canal:', dadosCanal);
-            return;
-        }
+        // Usamos um serviço de proxy para resolver o problema de CORS
+        const proxyUrl = `https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(rssUrl)}`;
         
-        if (!dadosCanal.items || dadosCanal.items.length === 0) {
-            lista.innerHTML = `<p>❌ Canal "${NOME_CANAL}" não encontrado</p>`;
-            return;
-        }
+        const resposta = await fetch(proxyUrl);
+        const dados = await resposta.json();
         
-        // Pega o ID do canal
-        const channelId = dadosCanal.items[0].id;
-        console.log('ID do canal:', channelId);
-        
-        // Agora busca os vídeos do canal
-        const urlVideos = `https://www.googleapis.com/youtube/v3/search?part=snippet&channelId=${channelId}&order=date&maxResults=${MAX_VIDEOS}&type=video&key=${API_KEY}`;
-        const respostaVideos = await fetch(urlVideos);
-        const dadosVideos = await respostaVideos.json();
-        
-        // Verifica se deu erro nos vídeos
-        if (dadosVideos.error) {
-            lista.innerHTML = `<p>❌ Erro ao buscar vídeos: ${dadosVideos.error.message}</p>`;
-            console.log('Erro na busca de vídeos:', dadosVideos);
+        // Verifica se deu erro
+        if (dados.status !== 'ok') {
+            lista.innerHTML = `
+                <div style="text-align:center;padding:30px;color:#ff6b00;">
+                    <p>❌ Erro ao carregar vídeos</p>
+                    <p style="font-size:14px;color:#888;">O servidor de RSS está temporariamente indisponível.</p>
+                    <button onclick="buscarVideosRSS()" style="margin-top:15px;padding:10px 20px;background:#ff6b00;color:white;border:none;border-radius:8px;cursor:pointer;">
+                        🔄 Tentar novamente
+                    </button>
+                </div>
+            `;
+            console.log('Erro no RSS:', dados);
             return;
         }
         
         // Verifica se tem vídeos
-        if (!dadosVideos.items || dadosVideos.items.length === 0) {
-            lista.innerHTML = '<p>📹 Nenhum vídeo encontrado no canal</p>';
+        if (!dados.items || dados.items.length === 0) {
+            lista.innerHTML = `
+                <div style="text-align:center;padding:30px;">
+                    <p>📹 Nenhum vídeo encontrado no canal</p>
+                    <p style="font-size:14px;color:#888;">Verifique se o canal está correto.</p>
+                </div>
+            `;
             return;
         }
         
         // Limpa a lista
         lista.innerHTML = '';
         
-        // Para cada vídeo encontrado, cria um card
-        dadosVideos.items.forEach((item, index) => {
-            const videoId = item.id.videoId;
-            const titulo = item.snippet.title;
-            const descricao = item.snippet.description || 'Sem descrição';
-            const thumbnail = item.snippet.thumbnails.medium.url;
-            const dataPublicacao = new Date(item.snippet.publishedAt);
-            const dataFormatada = dataPublicacao.toLocaleDateString('pt-BR');
+        // Pega só os últimos MAX_VIDEOS
+        const videos = dados.items.slice(0, MAX_VIDEOS);
+        
+        // Para cada vídeo, cria um card
+        videos.forEach(item => {
+            // Extrai o ID do vídeo do link do YouTube
+            const videoUrl = item.link;
+            const videoId = videoUrl.split('v=')[1] || videoUrl.split('/').pop();
+            
+            // Extrai a thumbnail do YouTube
+            const thumbnail = `https://img.youtube.com/vi/${videoId}/mqdefault.jpg`;
+            
+            // Formata a data
+            const dataPublicacao = new Date(item.pubDate);
+            const dataFormatada = dataPublicacao.toLocaleDateString('pt-BR', {
+                day: '2-digit',
+                month: '2-digit',
+                year: 'numeric'
+            });
+            
+            // Limpa a descrição (remove HTML se houver)
+            const descricao = item.description ? 
+                item.description.replace(/<[^>]*>/g, '').substring(0, 200) : 
+                'Sem descrição';
+            
+            // Verifica se é modo escuro
+            const isDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
             
             // Cria o card do vídeo
             const div = document.createElement('div');
             div.className = 'video-item';
-            div.style.marginBottom = '30px';
-            div.style.padding = '20px';
-            div.style.background = '#f9f9f9';
-            div.style.borderRadius = '12px';
-            div.style.boxShadow = '0 2px 8px rgba(0,0,0,0.1)';
-            
-            // Se for modo escuro, ajusta a cor
-            if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
-                div.style.background = '#2a2a2a';
-                div.style.color = '#e0e0e0';
-            }
             
             div.innerHTML = `
-                <h3 style="margin-bottom:10px;color:#ff6b00;">▶️ ${titulo}</h3>
-                <p style="font-size:14px;color:#888;margin-bottom:8px;">📅 ${dataFormatada}</p>
-                <img src="${thumbnail}" alt="${titulo}" style="width:100%;border-radius:8px;margin:10px 0;">
-                <p style="font-size:14px;color:#666;margin-bottom:15px;">${descricao.substring(0, 200)}${descricao.length > 200 ? '...' : ''}</p>
+                <h3>▶️ ${item.title}</h3>
+                <p class="data-publicacao">📅 ${dataFormatada}</p>
+                <img src="${thumbnail}" alt="${item.title}" loading="lazy">
+                <p class="descricao">${descricao}${item.description && item.description.length > 200 ? '...' : ''}</p>
                 <iframe 
                     width="100%" 
                     height="250" 
                     src="https://www.youtube.com/embed/${videoId}" 
                     frameborder="0" 
                     allowfullscreen
-                    style="border-radius:8px;">
+                    loading="lazy">
                 </iframe>
-                <div style="margin-top:10px;text-align:right;">
-                    <a href="https://youtu.be/${videoId}" target="_blank" style="color:#ff6b00;text-decoration:none;font-weight:bold;">
-                        🔗 Assistir no YouTube
-                    </a>
-                </div>
+                <a href="${item.link}" target="_blank" class="link-youtube">
+                    🔗 Assistir no YouTube
+                </a>
             `;
             lista.appendChild(div);
         });
         
         // Adiciona contador de vídeos
-        const contador = document.createElement('p');
+        const contador = document.createElement('div');
         contador.style.textAlign = 'center';
         contador.style.marginTop = '20px';
-        contador.style.color = '#888';
+        contador.style.padding = '15px';
+        contador.style.background = '#f0f7ff';
+        contador.style.borderRadius = '10px';
         contador.style.fontSize = '14px';
-        contador.innerHTML = `📊 Mostrando ${dadosVideos.items.length} vídeos do canal Jean na Estrada`;
+        contador.style.color = '#555';
+        contador.innerHTML = `📊 Mostrando ${videos.length} vídeos do canal Jean na Estrada`;
+        
+        // Ajusta a cor no modo escuro
+        if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+            contador.style.background = '#2a3a4a';
+            contador.style.color = '#aaa';
+        }
+        
         lista.appendChild(contador);
         
     } catch (erro) {
         lista.innerHTML = `
             <div style="text-align:center;padding:30px;color:#ff6b00;">
                 <p>❌ Ocorreu um erro ao carregar os vídeos</p>
-                <p style="font-size:14px;color:#888;">${erro.message}</p>
-                <button onclick="buscarVideos()" style="margin-top:15px;padding:10px 20px;background:#ff6b00;color:white;border:none;border-radius:8px;cursor:pointer;">
+                <p style="font-size:14px;color:#888;margin-top:8px;">${erro.message}</p>
+                <button onclick="buscarVideosRSS()" style="margin-top:15px;padding:10px 20px;background:#ff6b00;color:white;border:none;border-radius:8px;cursor:pointer;">
                     🔄 Tentar novamente
                 </button>
             </div>
@@ -130,12 +142,22 @@ async function buscarVideos() {
     }
 }
 
+// FUNÇÃO PARA O BOTÃO DE CONTATO
+function enviarMensagem() {
+    // Abre o YouTube Studio ou um link para contato
+    window.open('https://www.youtube.com/@jeannaestrada', '_blank');
+    
+    // Opção: se quiser um formulário mais elaborado, pode substituir por:
+    // window.open('mailto:seuemail@gmail.com?subject=Sugestão para o canal', '_blank');
+}
+
 // ============================================
 // INICIALIZAÇÃO - Roda quando a página abre
 // ============================================
-document.addEventListener('DOMContentLoaded', buscarVideos);
+document.addEventListener('DOMContentLoaded', buscarVideosRSS);
 
-// Também busca quando clicar no botão de "Tentar novamente"
-if (document.getElementById('botao-recarregar')) {
-    document.getElementById('botao-recarregar').addEventListener('click', buscarVideos);
-}
+// Recarrega quando perder a conexão e voltar
+document.addEventListener('online', buscarVideosRSS);
+
+// Recarrega a cada 5 minutos (para manter atualizado)
+setInterval(buscarVideosRSS, 300000);
