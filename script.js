@@ -1,7 +1,7 @@
 // ============================================
 // VERSÃO DO APP
 // ============================================
-window.versaoApp = '20260726-completo';
+window.versaoApp = '20260726-final';
 console.log('📦 Script.js carregado! Versão:', window.versaoApp);
 
 // ============================================
@@ -103,34 +103,35 @@ async function fetchFeedWithProxy(feedUrl) {
 // FUNÇÃO PARA EXTRAIR IMAGEM DO ITEM RSS
 // ============================================
 function extrairImagem(item) {
-    // 1. Tenta obter do elemento <enclosure>
+    // 1. Tenta <enclosure>
     const enclosure = item.querySelector('enclosure');
     if (enclosure) {
         const url = enclosure.getAttribute('url');
         if (url) return url;
     }
     
-    // 2. Tenta obter do elemento <media:content>
+    // 2. Tenta <media:content>
     const mediaContent = item.querySelector('media\\:content, content');
     if (mediaContent) {
         const url = mediaContent.getAttribute('url');
         if (url) return url;
     }
     
-    // 3. Tenta obter do elemento <media:thumbnail>
+    // 3. Tenta <media:thumbnail>
     const mediaThumb = item.querySelector('media\\:thumbnail, thumbnail');
     if (mediaThumb) {
         const url = mediaThumb.getAttribute('url');
         if (url) return url;
     }
     
-    // 4. Tenta extrair do HTML do <description> ou <content:encoded>
+    // 4. Tenta extrair do HTML do <description>
     const description = item.querySelector('description');
     if (description) {
         const match = description.textContent.match(/<img[^>]+src="([^">]+)"/);
         if (match) return match[1];
     }
     
+    // 5. Tenta extrair do <content:encoded>
     const encoded = item.querySelector('content\\:encoded, encoded');
     if (encoded) {
         const match = encoded.textContent.match(/<img[^>]+src="([^">]+)"/);
@@ -138,6 +139,36 @@ function extrairImagem(item) {
     }
     
     return '';
+}
+
+// ============================================
+// FILTRO POR PALAVRAS-CHAVE (CARROS ELÉTRICOS E TECNOLOGIA)
+// ============================================
+const PALAVRAS_CHAVE = [
+    // Marcas de carros elétricos
+    'byd', 'tesla', 'volvo', 'bmw', 'mercedes', 'audi', 'porsche', 'volkswagen', 'vw',
+    'renault', 'nissan', 'hyundai', 'kia', 'jaguar', 'land rover', 'ford', 'chevrolet',
+    'gm', 'fiat', 'peugeot', 'citroën', 'opel', 'mitsubishi', 'subaru', 'honda', 'toyota',
+    'lexus', 'mini', 'smart', 'gwm', 'ora', 'geely', 'leapmotor', 'jetour', 'byd',
+    
+    // Termos específicos
+    'elétrico', 'eletrico', 'eletrificado', 'hibrido', 'híbrido', 'plugin', 'phev',
+    'bev', 'ev', 'evs', 'carro elétrico', 'veículo elétrico', 'mobilidade elétrica',
+    'carregamento', 'recarga', 'bateria', 'autonomia', 'motor elétrico', 'eletroposto',
+    
+    // Tecnologia
+    'tecnologia', 'inovação', 'automação', 'condução autônoma', 'sensor',
+    'inteligência artificial', 'carro conectado', 'multimídia', 'painel digital',
+    'atualização', 'recarga rápida', 'arquitetura 800v', '800v',
+    
+    // Eventos e lançamentos
+    'lançamento', 'novo modelo', 'pré-venda', 'teste', 'review', 'análise',
+    'comparativo', 'preço', 'financiamento', 'vendas', 'mercado'
+];
+
+function filtrarNoticia(titulo, descricao) {
+    const texto = (titulo + ' ' + descricao).toLowerCase();
+    return PALAVRAS_CHAVE.some(palavra => texto.includes(palavra));
 }
 
 // ============================================
@@ -151,14 +182,14 @@ window.buscarNoticiasRSS = async function() {
     lista.innerHTML = `<div style="text-align:center;padding:30px;"><p>🔄 Carregando notícias especializadas...</p></div>`;
     
     try {
-        // ⭐ FEEDS FOCADOS EM CARROS ELÉTRICOS E TECNOLOGIA ⭐
+        // ⭐ FEEDS CONFIRMADOS E OTIMIZADOS ⭐
         const feeds = [
-            { nome: "InsideEVs Brasil", url: "https://insideevs.uol.com.br/feed/" },
-            { nome: "Motor1.com", url: "https://motor1.uol.com.br/feed/" },
-            { nome: "Canaltech", url: "https://canaltech.com.br/feed/" },
-            { nome: "Quilowatt", url: "https://quilowatt.com.br/feed/" },
-            { nome: "UOL Carros", url: "https://rss.carros.uol.com.br/" },
-            { nome: "G1 Carros", url: "https://g1.globo.com/dynamo/carros/rss2.xml" }
+            { nome: "InsideEVs Brasil", url: "https://insideevs.uol.com.br/rss/articles/all/" },
+            { nome: "Motor1.com", url: "https://motor1.uol.com.br/rss/news/all/" },
+            { nome: "Quilowatt", url: "https://quilowatt.com.br/feed/" }
+            // Canal Solar e Canal Energia podem ser adicionados se desejar
+            // { nome: "Canal Solar", url: "https://canalsolar.com.br/feed/" },
+            // { nome: "Canal Energia", url: "https://canalenergia.com.br/feed/" }
         ];
         
         let todasNoticias = [];
@@ -171,6 +202,7 @@ window.buscarNoticiasRSS = async function() {
                 
                 const xmlText = await fetchFeedWithProxy(feed.url);
                 
+                // Força a codificação UTF-8
                 const blob = new Blob([xmlText], { type: 'text/xml;charset=UTF-8' });
                 const urlBlob = URL.createObjectURL(blob);
                 const respostaBlob = await fetch(urlBlob);
@@ -193,9 +225,10 @@ window.buscarNoticiasRSS = async function() {
                 
                 console.log(`📡 ${feed.nome}: ${items.length} itens encontrados`);
                 
-                const itensLimitados = Array.from(items).slice(0, 5);
+                let itensFiltrados = 0;
+                const itensLimitados = Array.from(items).slice(0, 15);
                 
-                itensLimitados.forEach(item => {
+                for (const item of itensLimitados) {
                     let title = item.querySelector('title')?.textContent || 'Sem título';
                     let link = item.querySelector('link')?.getAttribute('href') || 
                               item.querySelector('link')?.textContent || '#';
@@ -206,10 +239,14 @@ window.buscarNoticiasRSS = async function() {
                                      item.querySelector('summary')?.textContent || 
                                      'Sem descrição';
                     
-                    // ⭐ EXTRAI A IMAGEM USANDO A FUNÇÃO ESPECIALIZADA ⭐
+                    // ⭐ APLICA O FILTRO POR PALAVRAS-CHAVE ⭐
+                    if (!filtrarNoticia(title, description)) {
+                        continue; // Pula itens irrelevantes
+                    }
+                    itensFiltrados++;
+                    
                     let imagem = extrairImagem(item);
                     
-                    // Limpa e decodifica os caracteres especiais
                     const descricaoLimpa = description
                         .replace(/<[^>]*>/g, '')
                         .replace(/&nbsp;/g, ' ')
@@ -230,8 +267,9 @@ window.buscarNoticiasRSS = async function() {
                         imagem: imagem,
                         fonte: feed.nome
                     });
-                });
+                }
                 
+                console.log(`📡 ${feed.nome}: ${itensFiltrados} itens relevantes encontrados`);
                 feedsCarregados++;
                 
             } catch (erro) {
@@ -244,7 +282,7 @@ window.buscarNoticiasRSS = async function() {
         const noticias = todasNoticias.slice(0, 20);
         
         if (noticias.length === 0) {
-            lista.innerHTML = `<div style="text-align:center;padding:30px;"><p>📰 Nenhuma notícia encontrada no momento.</p><p style="font-size:14px;color:#94A3B8;margin-top:10px;">Tente novamente mais tarde.</p></div>`;
+            lista.innerHTML = `<div style="text-align:center;padding:30px;"><p>📰 Nenhuma notícia relevante encontrada.</p><p style="font-size:14px;color:#94A3B8;margin-top:10px;">Tente novamente mais tarde.</p></div>`;
             return;
         }
         
@@ -260,7 +298,6 @@ window.buscarNoticiasRSS = async function() {
                 year: 'numeric'
             });
             
-            // ⭐ EXIBE A IMAGEM (se existir) ⭐
             let imagemHTML = '';
             if (item.imagem) {
                 imagemHTML = `<img src="${item.imagem}" alt="${item.titulo}" style="width:100%;border-radius:10px;margin:10px 0;max-height:300px;object-fit:cover;" loading="lazy" onerror="this.style.display='none'">`;
@@ -280,7 +317,7 @@ window.buscarNoticiasRSS = async function() {
             lista.appendChild(div);
         });
         
-        console.log(`✅ Notícias carregadas com sucesso! (${feedsCarregados} fontes carregadas)`);
+        console.log(`✅ Notícias carregadas com sucesso! (${feedsCarregados} fontes carregadas, ${noticias.length} notícias exibidas)`);
         
     } catch (erro) {
         lista.innerHTML = `<p>❌ Erro ao carregar notícias: ${erro.message}</p>`;
