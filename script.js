@@ -2,16 +2,16 @@
 // (Substitua os IDs pelos seus vídeos)
 const videos = [
     { 
-        titulo: "Como viajar com pouco dinheiro", 
-        id: "dQw4w9WgXcQ"  // ← SUBSTITUA PELO ID DO SEU VÍDEO
+        titulo: "Desbloqueei o PRIMEIRO Geely EX2 do canal! Veja como ficou", 
+        id: "MK0Kzi_jw8"  // ← SUBSTITUA PELO ID DO SEU VÍDEO
     },
     { 
-        titulo: "Desbloqueio de mídia passo a passo", 
-        id: "dQw4w9WgXcQ"  // ← SUBSTITUA PELO ID DO SEU VÍDEO
+        titulo: "Ele largou o Uber? Descubra como fatura R$100 por hora no BlaBlaCar!", 
+        id: "8dqOxo15bwI"  // ← SUBSTITUA PELO ID DO SEU VÍDEO
     },
     { 
-        titulo: "Melhores destinos para 2026", 
-        id: "dQw4w9WgXcQ"  // ← SUBSTITUA PELO ID DO SEU VÍDEO
+        titulo: "O BYD Dolphin chegou aos 300 MIL KM! Como está o carro?", 
+        id: "tlTpTLeQGKA"  // ← SUBSTITUA PELO ID DO SEU VÍDEO
     }
 ];
 
