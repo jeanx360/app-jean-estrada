@@ -1,19 +1,50 @@
 // ============================================
 // VERSÃO DO APP - FORÇA ATUALIZAÇÃO
 // ============================================
-window.versaoApp = '20260725-final';
+window.versaoApp = '20260726-proxy';
 console.log('📦 Script.js carregado! Versão:', window.versaoApp);
 
 // ============================================
-// APP JEAN NA ESTRADA - BUSCA VIA RSS (SEM API)
+// CONFIGURAÇÕES DO CANAL
 // ============================================
-
-// CONFIGURAÇÕES DO SEU CANAL
 const CHANNEL_ID = 'UCFwFlCooeFKHSLXxkRTA70g';
 const MAX_VIDEOS = 10;
 
 // ============================================
-// FUNÇÃO PARA BUSCAR OS VÍDEOS VIA RSS
+// PROXY CORS PARA RSS
+// ============================================
+const CORS_PROXIES = [
+    'https://api.allorigins.win/raw?url=',      // Mais confiável[reference:4]
+    'https://corsproxy.io/?'                    // Alternativa[reference:5]
+];
+
+// Função para tentar buscar com diferentes proxies
+async function fetchWithProxy(url) {
+    for (const proxy of CORS_PROXIES) {
+        try {
+            const proxyUrl = proxy + encodeURIComponent(url);
+            console.log(`🔄 Tentando proxy: ${proxy}`);
+            const response = await fetch(proxyUrl, {
+                headers: { 'Accept': 'application/xml, text/xml, */*' }
+            });
+            if (response.ok) {
+                const text = await response.text();
+                // Verifica se veio HTML de erro
+                if (text.includes('<!DOCTYPE html>') || text.includes('<html')) {
+                    console.log(`⚠️ Proxy retornou HTML, tentando próximo...`);
+                    continue;
+                }
+                return text;
+            }
+        } catch (e) {
+            console.log(`⚠️ Proxy falhou: ${e.message}`);
+        }
+    }
+    throw new Error('Todos os proxies falharam');
+}
+
+// ============================================
+// FUNÇÃO PARA BUSCAR VÍDEOS
 // ============================================
 window.buscarVideosRSS = async function() {
     const lista = document.getElementById('lista-videos');
@@ -58,7 +89,7 @@ window.buscarVideosRSS = async function() {
 };
 
 // ============================================
-// FUNÇÃO PARA BUSCAR NOTÍCIAS COM DOMPARSER
+// FUNÇÃO PARA BUSCAR NOTÍCIAS COM PROXY CORS
 // ============================================
 window.buscarNoticiasRSS = async function() {
     const lista = document.getElementById('lista-noticias');
@@ -67,10 +98,9 @@ window.buscarNoticiasRSS = async function() {
     lista.innerHTML = `<div style="text-align:center;padding:30px;"><p>🔄 Carregando notícias...</p></div>`;
     
     try {
-        // ⭐ FEEDS COM SUPORTE CONFIRMADO
         const feeds = [
-            { nome: "UOL Tecnologia", url: "https://rss.uol.com.br/feed/tecnologia.xml" },
             { nome: "InsideEVs Brasil", url: "https://insideevs.com/brasil/feed/" },
+            { nome: "UOL Tecnologia", url: "https://rss.uol.com.br/feed/tecnologia.xml" },
             { nome: "Canaltech", url: "https://canaltech.com.br/feed/" }
         ];
         
@@ -79,27 +109,12 @@ window.buscarNoticiasRSS = async function() {
         for (const feed of feeds) {
             try {
                 console.log(`📡 Buscando ${feed.nome}...`);
-                const resposta = await fetch(feed.url, {
-                    headers: {
-                        'Accept': 'application/xml, text/xml, */*'
-                    }
-                });
                 
-                if (!resposta.ok) {
-                    console.log(`⚠️ ${feed.nome} retornou status ${resposta.status}`);
-                    continue;
-                }
+                // ⭐ USA O PROXY CORS PARA BUSCAR O FEED ⭐
+                const xmlText = await fetchWithProxy(feed.url);
                 
-                // ⭐ LÊ O TEXTO BRUTO E FORÇA UTF-8
-                let texto = await resposta.text();
-                
-                // Remove BOM se existir
-                if (texto.charCodeAt(0) === 0xFEFF) {
-                    texto = texto.slice(1);
-                }
-                
-                // ⭐ FORÇA A CODIFICAÇÃO UTF-8
-                const blob = new Blob([texto], { type: 'text/xml;charset=UTF-8' });
+                // ⭐ FORÇA A CODIFICAÇÃO UTF-8 ⭐
+                const blob = new Blob([xmlText], { type: 'text/xml;charset=UTF-8' });
                 const urlBlob = URL.createObjectURL(blob);
                 const respostaBlob = await fetch(urlBlob);
                 const textoCorrigido = await respostaBlob.text();
@@ -109,17 +124,14 @@ window.buscarNoticiasRSS = async function() {
                 const parser = new DOMParser();
                 const xml = parser.parseFromString(textoCorrigido, 'text/xml');
                 
-                // Verifica erro de parsing
                 const parseError = xml.querySelector('parsererror');
                 if (parseError) {
                     console.log(`⚠️ Erro ao parsear ${feed.nome}`);
                     continue;
                 }
                 
-                // Extrai os itens (trata diferentes estruturas)
                 let items = xml.querySelectorAll('item');
                 if (items.length === 0) {
-                    // Tenta com 'entry' (Atom)
                     items = xml.querySelectorAll('entry');
                 }
                 
@@ -128,25 +140,17 @@ window.buscarNoticiasRSS = async function() {
                 const itensLimitados = Array.from(items).slice(0, 5);
                 
                 itensLimitados.forEach(item => {
-                    // Tenta diferentes formas de obter título
-                    let title = item.querySelector('title')?.textContent || 
-                               item.querySelector('title')?.textContent;
-                    
-                    // Link
+                    let title = item.querySelector('title')?.textContent || 'Sem título';
                     let link = item.querySelector('link')?.getAttribute('href') || 
                               item.querySelector('link')?.textContent || '#';
-                    
-                    // Data
                     let pubDate = item.querySelector('pubDate')?.textContent || 
                                  item.querySelector('published')?.textContent || 
                                  new Date().toUTCString();
-                    
-                    // Descrição
                     let description = item.querySelector('description')?.textContent || 
                                      item.querySelector('summary')?.textContent || 
                                      'Sem descrição';
                     
-                    // Imagem
+                    // Extrai imagem
                     let imagem = '';
                     const enclosure = item.querySelector('enclosure');
                     if (enclosure) {
@@ -160,7 +164,7 @@ window.buscarNoticiasRSS = async function() {
                         }
                     }
                     
-                    // ⭐ LIMPA A DESCRIÇÃO (REMOVE HTML E DECODIFICA ENTIDADES)
+                    // ⭐ LIMPA E DECODIFICA OS CARACTERES ⭐
                     const descricaoLimpa = description
                         .replace(/<[^>]*>/g, '')
                         .replace(/&nbsp;/g, ' ')
@@ -169,6 +173,7 @@ window.buscarNoticiasRSS = async function() {
                         .replace(/&gt;/g, '>')
                         .replace(/&quot;/g, '"')
                         .replace(/&#39;/g, "'")
+                        .replace(/&#(\d+);/g, (match, dec) => String.fromCharCode(dec))
                         .trim()
                         .substring(0, 200);
                     
@@ -183,7 +188,7 @@ window.buscarNoticiasRSS = async function() {
                 });
                 
             } catch (erro) {
-                console.log(`❌ Erro ao buscar ${feed.nome}:`, erro);
+                console.log(`❌ Erro ao buscar ${feed.nome}:`, erro.message);
             }
         }
         
