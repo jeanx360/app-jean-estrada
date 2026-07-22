@@ -1,0 +1,21 @@
+{
+  "name": "Jean na Estrada",
+  "short_name": "JeanEstrada",
+  "description": "Tutoriais e vídeos de viagem",
+  "start_url": "/app-jean-estrada/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#ff6b00",
+  "icons": [
+    {
+      "src": "https://via.placeholder.com/192x192.png?text=JE",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "https://via.placeholder.com/512x512.png?text=JE",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
