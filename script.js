@@ -1,7 +1,7 @@
 // ============================================
 // VERSÃO DO APP - FORÇA ATUALIZAÇÃO
 // ============================================
-window.versaoApp = '20260726-proxy';
+window.versaoApp = '20260726-proxy-final';
 console.log('📦 Script.js carregado! Versão:', window.versaoApp);
 
 // ============================================
@@ -14,8 +14,8 @@ const MAX_VIDEOS = 10;
 // PROXY CORS PARA RSS
 // ============================================
 const CORS_PROXIES = [
-    'https://api.allorigins.win/raw?url=',      // Mais confiável[reference:4]
-    'https://corsproxy.io/?'                    // Alternativa[reference:5]
+    'https://api.allorigins.win/raw?url=',      // Mais confiável
+    'https://corsproxy.io/?'                    // Alternativa
 ];
 
 // Função para tentar buscar com diferentes proxies
