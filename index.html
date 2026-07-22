@@ -25,9 +25,7 @@
 </head>
 <body>
 
-    <!-- ============================================ -->
     <!-- CABEÇALHO -->
-    <!-- ============================================ -->
     <header>
         <div class="header-content">
             <button id="menu-toggle" class="menu-toggle" aria-label="Abrir menu">
@@ -40,9 +38,7 @@
         </div>
     </header>
 
-    <!-- ============================================ -->
     <!-- MENU LATERAL -->
-    <!-- ============================================ -->
     <nav id="menu-lateral" class="menu-lateral">
         <button id="fechar-menu" class="fechar-menu" aria-label="Fechar menu">✕</button>
         <ul>
@@ -58,13 +54,9 @@
         </div>
     </nav>
 
-    <!-- ============================================ -->
     <!-- CONTEÚDO PRINCIPAL -->
-    <!-- ============================================ -->
     <main>
-        <!-- ========================================== -->
-        <!-- SEÇÃO: INÍCIO (VÍDEOS DO CANAL) -->
-        <!-- ========================================== -->
+        <!-- SEÇÃO: INÍCIO (VÍDEOS) -->
         <section id="inicio-section">
             <h2>🎬 Últimos Vídeos</h2>
             <div id="lista-videos">
@@ -74,9 +66,7 @@
             </div>
         </section>
 
-        <!-- ========================================== -->
         <!-- SEÇÃO: NOTÍCIAS (RSS) -->
-        <!-- ========================================== -->
         <section id="noticias-section" style="display: none;">
             <h2>📰 Notícias</h2>
             <p style="color: #94A3B8; margin-bottom: 15px;">As últimas notícias sobre carros elétricos e tecnologia:</p>
@@ -87,9 +77,7 @@
             </div>
         </section>
 
-        <!-- ========================================== -->
         <!-- SEÇÃO: TUTORIAIS -->
-        <!-- ========================================== -->
         <section id="tutoriais-section" style="display: none;">
             <h2>📖 Tutoriais</h2>
             <p style="color: #94A3B8; margin-bottom: 15px;">Tutoriais e desbloqueios de multimídia automotiva:</p>
@@ -109,9 +97,7 @@
             </ul>
         </section>
 
-        <!-- ========================================== -->
         <!-- SEÇÃO: PRODUTOS -->
-        <!-- ========================================== -->
         <section id="produtos-section" style="display: none;">
             <h2>🛒 Produtos Recomendados</h2>
             <p style="color: #94A3B8; margin-bottom: 15px;">Produtos que eu testei e recomendo:</p>
@@ -131,9 +117,7 @@
             </ul>
         </section>
 
-        <!-- ========================================== -->
         <!-- SEÇÃO: CONTATO -->
-        <!-- ========================================== -->
         <section id="contato-section" style="display: none;">
             <h2>💬 Fale Comigo</h2>
             <p style="color: #94A3B8; margin-bottom: 15px;">Entre em contato ou me siga nas redes sociais:</p>
@@ -163,9 +147,7 @@
         </section>
     </main>
 
-    <!-- ============================================ -->
     <!-- RODAPÉ -->
-    <!-- ============================================ -->
     <footer>
         <p>🚐 Jean na Estrada - Todos os direitos reservados</p>
         <p style="font-size: 12px; margin-top: 5px;">App atualizado automaticamente com os últimos vídeos</p>
@@ -185,7 +167,7 @@
         console.log('🚀 App iniciado! Versão:', window.versaoApp);
         
         // ============================================
-        // FUNÇÕES DO MENU (SEM RECARREGAR A PÁGINA)
+        // FUNÇÕES DO MENU
         // ============================================
         function fecharMenu() {
             const menu = document.getElementById('menu-lateral');
