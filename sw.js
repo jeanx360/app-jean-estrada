@@ -3,7 +3,7 @@
 // ============================================
 
 // ⭐ TROQUE ESTE NÚMERO PARA FORÇAR ATUALIZAÇÃO ⭐
-const CACHE_VERSION = 'v3.0.2';
+const CACHE_VERSION = 'v3.0.3';
 const CACHE_NAME = `jean-estrada-${CACHE_VERSION}`;
 
 const urlsParaCache = [
