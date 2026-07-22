@@ -64,10 +64,10 @@ header {
     background: linear-gradient(135deg, rgba(8, 16, 27, 0.88), rgba(8, 16, 27, 0.92)), 
                 url('imagens/banner.png') center/cover no-repeat;
     color: white;
-    padding: 20px 20px;
+    padding: 16px 20px;
     position: sticky;
     top: 0;
-    z-index: 100;
+    z-index: 1500;
     box-shadow: 0 4px 30px rgba(0, 0, 0, 0.5);
     border-bottom: 1px solid rgba(0, 184, 255, 0.15);
 }
@@ -111,7 +111,7 @@ header {
     border: none;
     cursor: pointer;
     padding: 0;
-    z-index: 1010;
+    z-index: 1600;
     position: relative;
 }
 
@@ -150,10 +150,11 @@ header {
     backdrop-filter: blur(20px);
     -webkit-backdrop-filter: blur(20px);
     border-right: 1px solid rgba(0, 184, 255, 0.15);
-    padding: 80px 20px 30px;
+    padding: 20px 20px 30px;
     transition: left 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-    z-index: 1000;
+    z-index: 2000;
     box-shadow: 4px 0 40px rgba(0, 0, 0, 0.6);
+    overflow-y: auto;
 }
 
 .menu-lateral.aberto {
@@ -163,7 +164,7 @@ header {
 .menu-lateral ul {
     list-style: none;
     padding: 0;
-    margin: 0;
+    margin: 60px 0 0;
 }
 
 .menu-lateral ul li {
@@ -223,6 +224,38 @@ header {
     border-top: 1px solid rgba(0, 184, 255, 0.08);
     padding-top: 15px;
     opacity: 0.6;
+}
+
+/* ============================================
+   BOTÃO FECHAR (X) - CORRIGIDO
+   ============================================ */
+.fechar-menu {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(0, 184, 255, 0.15);
+    color: var(--color-text-secondary);
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    font-size: 22px;
+    font-weight: 300;
+    cursor: pointer;
+    transition: var(--transition-smooth);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    line-height: 1;
+    z-index: 2100;
+    opacity: 0.9;
+}
+
+.fechar-menu:hover {
+    background: rgba(255, 45, 85, 0.15);
+    border-color: var(--color-pink);
+    color: var(--color-pink);
+    transform: rotate(90deg);
 }
 
 /* ============================================
@@ -470,7 +503,19 @@ footer {
     .menu-lateral {
         width: 260px;
         left: -260px;
-        padding-top: 70px;
+        padding: 16px 16px 20px;
+    }
+    
+    .fechar-menu {
+        top: 12px;
+        right: 12px;
+        width: 36px;
+        height: 36px;
+        font-size: 20px;
+    }
+    
+    .menu-lateral ul {
+        margin-top: 50px;
     }
     
     section {
