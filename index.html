@@ -475,50 +475,50 @@
             document.body.classList.toggle('dark-mode', e.target.checked);
         });
 
-        // ============================================
-        // TOGGLE NOTIFICAÇÕES (ONE SIGNAL - CORRIGIDO)
-        // ============================================
-        document.getElementById('toggle-notificacoes')?.addEventListener('change', async function(e) {
-            const ativar = e.target.checked;
-            localStorage.setItem('notificacoes', ativar);
-            
-            if (ativar) {
-                console.log("📡 Ativando notificações...");
-                if (typeof OneSignal !== 'undefined' && OneSignal.Notifications) {
-                    try {
-                        const permission = await OneSignal.Notifications.requestPermission({
-                            modalOptions: {
-                                title: "🔔 Jean na Estrada",
-                                message: "Receba notificações sobre novas notícias e vídeos!",
-                                acceptButtonText: "📰 Quero receber",
-                                cancelButtonText: "❌ Não, obrigado"
-                            }
-                        });
-                        if (permission) {
-                            alert('✅ Notificações ativadas!');
-                            console.log("✅ Permissão concedida.");
-                        } else {
-                            alert('❌ Você negou as notificações.');
-                            e.target.checked = false;
-                            localStorage.setItem('notificacoes', 'false');
-                        }
-                    } catch (error) {
-                        console.error("❌ Erro ao solicitar permissão:", error);
-                        alert('❌ Erro ao ativar notificações. Tente novamente.');
-                        e.target.checked = false;
-                        localStorage.setItem('notificacoes', 'false');
+// ============================================
+// TOGGLE NOTIFICAÇÕES (ONE SIGNAL - CORRIGIDO)
+// ============================================
+document.getElementById('toggle-notificacoes')?.addEventListener('change', async function(e) {
+    const ativar = e.target.checked;
+    localStorage.setItem('notificacoes', ativar);
+    
+    if (ativar) {
+        console.log("📡 Ativando notificações...");
+        if (typeof OneSignal !== 'undefined' && OneSignal.Notifications) {
+            try {
+                const permission = await OneSignal.Notifications.requestPermission({
+                    modalOptions: {
+                        title: "🔔 Jean na Estrada",
+                        message: "Receba notificações sobre novas notícias e vídeos!",
+                        acceptButtonText: "📰 Quero receber",
+                        cancelButtonText: "❌ Não, obrigado"
                     }
+                });
+                if (permission) {
+                    alert('✅ Notificações ativadas!');
+                    console.log("✅ Permissão concedida.");
                 } else {
-                    console.error("❌ OneSignal não está disponível.");
-                    alert('❌ Serviço de notificações não disponível no momento.');
+                    alert('❌ Você negou as notificações.');
                     e.target.checked = false;
                     localStorage.setItem('notificacoes', 'false');
                 }
-            } else {
-                console.log("🔕 Desativando notificações.");
-                alert('🔕 Notificações desativadas.');
+            } catch (error) {
+                console.error("❌ Erro ao solicitar permissão:", error);
+                alert('❌ Erro ao ativar notificações. Tente novamente.');
+                e.target.checked = false;
+                localStorage.setItem('notificacoes', 'false');
             }
-        });
+        } else {
+            console.error("❌ OneSignal não está disponível.");
+            alert('❌ Serviço de notificações não disponível no momento.');
+            e.target.checked = false;
+            localStorage.setItem('notificacoes', 'false');
+        }
+    } else {
+        console.log("🔕 Desativando notificações.");
+        alert('🔕 Notificações desativadas.');
+    }
+});
     </script>
 
     <!-- SERVICE WORKER (PRINCIPAL) -->
