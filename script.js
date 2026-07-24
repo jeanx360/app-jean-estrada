@@ -1,11 +1,11 @@
 // ============================================
 // VERSÃO DO APP (SEMÂNTICA)
 // ============================================
-const APP_VERSION = '1.03';  // Versão atual
+const APP_VERSION = '1.03';
 console.log(`📱 Jean na Estrada App v${APP_VERSION}`);
 
 // ============================================
-// VERSÃO DO APP
+// VERSÃO DO APP (TÉCNICA)
 // ============================================
 window.versaoApp = '20260726-final';
 console.log('📦 Script.js carregado! Versão:', window.versaoApp);
@@ -62,12 +62,24 @@ window.buscarVideosRSS = async function() {
 };
 
 // ============================================
-// PROXY CORS COM FALLBACK (ATUALIZADO)
+// PROXY CORS COM FALLBACK (ATUALIZADO - MAIS PROXIES)
 // ============================================
 
 const PROXY_LIST = [
+    // 1. AllOrigins (mais confiável, mas pode ser lento)
     {
-        name: 'CORSProxy.io (Alt)',
+        name: 'AllOrigins (Raw)',
+        fetch: async (url) => {
+            const response = await fetch(`https://api.allorigins.win/raw?url=${encodeURIComponent(url)}`, {
+                signal: AbortSignal.timeout(10000) // 10 segundos
+            });
+            if (!response.ok) throw new Error(`HTTP ${response.status}`);
+            return await response.text();
+        }
+    },
+    // 2. CORSProxy.io (alternativa)
+    {
+        name: 'CORSProxy.io',
         fetch: async (url) => {
             const response = await fetch(`https://corsproxy.io/?${encodeURIComponent(url)}`, {
                 signal: AbortSignal.timeout(5000)
@@ -76,22 +88,13 @@ const PROXY_LIST = [
             return await response.text();
         }
     },
+    // 3. Proxy.cors.sh (com chave pública temporária)
     {
-        name: 'AllOrigins (Raw)',
-        fetch: async (url) => {
-            const response = await fetch(`https://api.allorigins.win/raw?url=${encodeURIComponent(url)}`, {
-                signal: AbortSignal.timeout(8000) // Aumentei o timeout
-            });
-            if (!response.ok) throw new Error(`HTTP ${response.status}`);
-            return await response.text();
-        }
-    },
-    {
-        name: 'Proxy.cors.sh (Novo)',
+        name: 'Proxy.cors.sh',
         fetch: async (url) => {
             const response = await fetch(`https://proxy.cors.sh/${encodeURIComponent(url)}`, {
                 headers: {
-                    'x-cors-api-key': 'temp_7a8b9c0d1e2f3g4h5i6j' // Chave pública temporária
+                    'x-cors-api-key': 'temp_7a8b9c0d1e2f3g4h5i6j'
                 },
                 signal: AbortSignal.timeout(5000)
             });
@@ -99,10 +102,33 @@ const PROXY_LIST = [
             return await response.text();
         }
     },
+    // 4. CORS.io (alternativa)
     {
-        name: 'CORS.io (Alternativo)',
+        name: 'CORS.io',
         fetch: async (url) => {
             const response = await fetch(`https://cors.io/?${encodeURIComponent(url)}`, {
+                signal: AbortSignal.timeout(5000)
+            });
+            if (!response.ok) throw new Error(`HTTP ${response.status}`);
+            return await response.text();
+        }
+    },
+    // 5. CORS Anywhere (Heroku, público)
+    {
+        name: 'CORS Anywhere',
+        fetch: async (url) => {
+            const response = await fetch(`https://cors-anywhere.herokuapp.com/${encodeURIComponent(url)}`, {
+                signal: AbortSignal.timeout(5000)
+            });
+            if (!response.ok) throw new Error(`HTTP ${response.status}`);
+            return await response.text();
+        }
+    },
+    // 6. CORS Proxy (eu.org)
+    {
+        name: 'CORS Proxy (eu.org)',
+        fetch: async (url) => {
+            const response = await fetch(`https://corsproxy.eu.org/${encodeURIComponent(url)}`, {
                 signal: AbortSignal.timeout(5000)
             });
             if (!response.ok) throw new Error(`HTTP ${response.status}`);
@@ -111,39 +137,62 @@ const PROXY_LIST = [
     }
 ];
 
+async function fetchFeedWithProxy(feedUrl) {
+    let lastError = null;
+    for (const proxy of PROXY_LIST) {
+        try {
+            console.log(`🔄 Tentando proxy: ${proxy.name}`);
+            const result = await proxy.fetch(feedUrl);
+            // Verifica se o resultado parece XML
+            const trimmed = result.trim();
+            if (trimmed.startsWith('<?xml') || trimmed.startsWith('<rss') || trimmed.startsWith('<feed')) {
+                console.log(`✅ Proxy ${proxy.name} funcionou!`);
+                return result;
+            } else {
+                console.log(`⚠️ Proxy ${proxy.name} retornou conteúdo inválido.`);
+                // Se não for XML, tenta o próximo
+                continue;
+            }
+        } catch (e) {
+            console.log(`❌ Proxy ${proxy.name} falhou: ${e.message}`);
+            lastError = e;
+            // Se for 403 ou 404, não espera o timeout, vai para o próximo
+            if (e.message.includes('403') || e.message.includes('404')) {
+                continue;
+            }
+        }
+    }
+    throw new Error(`Todos os proxies falharam. Último erro: ${lastError ? lastError.message : 'Desconhecido'}`);
+}
+
 // ============================================
 // FUNÇÃO PARA EXTRAIR IMAGEM DO ITEM RSS
 // ============================================
 function extrairImagem(item) {
-    // 1. Tenta <enclosure>
     const enclosure = item.querySelector('enclosure');
     if (enclosure) {
         const url = enclosure.getAttribute('url');
         if (url) return url;
     }
     
-    // 2. Tenta <media:content>
     const mediaContent = item.querySelector('media\\:content, content');
     if (mediaContent) {
         const url = mediaContent.getAttribute('url');
         if (url) return url;
     }
     
-    // 3. Tenta <media:thumbnail>
     const mediaThumb = item.querySelector('media\\:thumbnail, thumbnail');
     if (mediaThumb) {
         const url = mediaThumb.getAttribute('url');
         if (url) return url;
     }
     
-    // 4. Tenta extrair do HTML do <description>
     const description = item.querySelector('description');
     if (description) {
         const match = description.textContent.match(/<img[^>]+src="([^">]+)"/);
         if (match) return match[1];
     }
     
-    // 5. Tenta extrair do <content:encoded>
     const encoded = item.querySelector('content\\:encoded, encoded');
     if (encoded) {
         const match = encoded.textContent.match(/<img[^>]+src="([^">]+)"/);
@@ -157,23 +206,16 @@ function extrairImagem(item) {
 // FILTRO POR PALAVRAS-CHAVE (CARROS ELÉTRICOS E TECNOLOGIA)
 // ============================================
 const PALAVRAS_CHAVE = [
-    // Marcas de carros elétricos
     'byd', 'tesla', 'volvo', 'bmw', 'mercedes', 'audi', 'porsche', 'volkswagen', 'vw',
     'renault', 'nissan', 'hyundai', 'kia', 'jaguar', 'land rover', 'ford', 'chevrolet',
     'gm', 'fiat', 'peugeot', 'citroën', 'opel', 'mitsubishi', 'subaru', 'honda', 'toyota',
-    'lexus', 'mini', 'smart', 'gwm', 'ora', 'geely', 'leapmotor', 'jetour', 'byd',
-    
-    // Termos específicos
+    'lexus', 'mini', 'smart', 'gwm', 'ora', 'geely', 'leapmotor', 'jetour',
     'elétrico', 'eletrico', 'eletrificado', 'hibrido', 'híbrido', 'plugin', 'phev',
     'bev', 'ev', 'evs', 'carro elétrico', 'veículo elétrico', 'mobilidade elétrica',
     'carregamento', 'recarga', 'bateria', 'autonomia', 'motor elétrico', 'eletroposto',
-    
-    // Tecnologia
     'tecnologia', 'inovação', 'automação', 'condução autônoma', 'sensor',
     'inteligência artificial', 'carro conectado', 'multimídia', 'painel digital',
     'atualização', 'recarga rápida', 'arquitetura 800v', '800v',
-    
-    // Eventos e lançamentos
     'lançamento', 'novo modelo', 'pré-venda', 'teste', 'review', 'análise',
     'comparativo', 'preço', 'financiamento', 'vendas', 'mercado'
 ];
@@ -184,7 +226,7 @@ function filtrarNoticia(titulo, descricao) {
 }
 
 // ============================================
-// FUNÇÃO PARA BUSCAR NOTÍCIAS
+// FUNÇÃO PARA BUSCAR NOTÍCIAS (COM PROXY CORRIGIDO)
 // ============================================
 window.buscarNoticiasRSS = async function() {
     const lista = document.getElementById('lista-noticias');
@@ -194,14 +236,10 @@ window.buscarNoticiasRSS = async function() {
     lista.innerHTML = `<div style="text-align:center;padding:30px;"><p>🔄 Carregando notícias especializadas...</p></div>`;
     
     try {
-        // ⭐ FEEDS CONFIRMADOS E OTIMIZADOS ⭐
         const feeds = [
             { nome: "InsideEVs Brasil", url: "https://insideevs.uol.com.br/rss/articles/all/" },
             { nome: "Motor1.com", url: "https://motor1.uol.com.br/rss/news/all/" },
             { nome: "Quilowatt", url: "https://quilowatt.com.br/feed/" }
-            // Canal Solar e Canal Energia podem ser adicionados se desejar
-            // { nome: "Canal Solar", url: "https://canalsolar.com.br/feed/" },
-            // { nome: "Canal Energia", url: "https://canalenergia.com.br/feed/" }
         ];
         
         let todasNoticias = [];
@@ -251,9 +289,8 @@ window.buscarNoticiasRSS = async function() {
                                      item.querySelector('summary')?.textContent || 
                                      'Sem descrição';
                     
-                    // ⭐ APLICA O FILTRO POR PALAVRAS-CHAVE ⭐
                     if (!filtrarNoticia(title, description)) {
-                        continue; // Pula itens irrelevantes
+                        continue;
                     }
                     itensFiltrados++;
                     
@@ -289,7 +326,6 @@ window.buscarNoticiasRSS = async function() {
             }
         }
         
-        // Ordena por data (mais recentes primeiro)
         todasNoticias.sort((a, b) => new Date(b.pubDate) - new Date(a.pubDate));
         const noticias = todasNoticias.slice(0, 20);
         
