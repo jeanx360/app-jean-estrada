@@ -51,7 +51,8 @@
                 <span></span>
             </button>
             <div class="logo">
-                <img src="imagens/logo_definitivo_do_canal.png" alt="Jean na Estrada" class="logo-img">
+                <!-- ⭐ LOGO DO CANAL (coloque o arquivo na pasta /imagens) ⭐ -->
+                <img src="imagens/logo_definitivo_do_canal.png" alt="Jean na Estrada" class="logo-img" onerror="this.style.display='none'">
                 <span class="brand">Jean na Estrada</span>
                 <span class="tagline">Tecnologia, carros elétricos e liberdade</span>
             </div>
@@ -69,21 +70,21 @@
     <!-- ============================================ -->
     <!-- MENU LATERAL -->
     <!-- ============================================ -->
-    <nav id="menu-lateral" class="menu-lateral">
+    <nav id="menu-lateral" class="menu-lateral aberto">
         <div class="menu-header">
             <span class="nav-section-title">Navegação</span>
             <button id="fechar-menu" class="close-btn" aria-label="Fechar menu">✕</button>
         </div>
         <ul>
-            <li><a href="?secao=inicio" class="ativo">🏠 Início</a></li>
-            <li><a href="?secao=noticias">📰 Notícias</a></li>
-            <li><a href="?secao=tutoriais">📖 Tutoriais</a></li>
-            <li><a href="?secao=produtos">🛒 Produtos</a></li>
-            <li><a href="?secao=guia">📘 Guia do Iniciante</a></li>
-            <li><a href="?secao=calculadora">🧮 Calculadora EV</a></li>
-            <li><a href="?secao=parceiros">🤝 Parceiros</a></li>
-            <li><a href="?secao=contato">💬 Fale Comigo</a></li>
-            <li><a href="?secao=configuracoes">⚙️ Configurações</a></li>
+            <li><a href="?secao=inicio" class="ativo" data-secao="inicio">🏠 Início</a></li>
+            <li><a href="?secao=noticias" data-secao="noticias">📰 Notícias</a></li>
+            <li><a href="?secao=tutoriais" data-secao="tutoriais">📖 Tutoriais</a></li>
+            <li><a href="?secao=produtos" data-secao="produtos">🛒 Produtos</a></li>
+            <li><a href="?secao=guia" data-secao="guia">📘 Guia do Iniciante</a></li>
+            <li><a href="?secao=calculadora" data-secao="calculadora">🧮 Calculadora EV</a></li>
+            <li><a href="?secao=parceiros" data-secao="parceiros">🤝 Parceiros</a></li>
+            <li><a href="?secao=contato" data-secao="contato">💬 Fale Comigo</a></li>
+            <li><a href="?secao=configuracoes" data-secao="configuracoes">⚙️ Configurações</a></li>
         </ul>
         <div class="menu-footer">
             <p>🚐 Jean na Estrada</p>
@@ -430,6 +431,11 @@
             const fecharBtn = document.getElementById('fechar-menu');
             const main = document.querySelector('main');
 
+            // ⭐ ABRIR MENU EM DESKTOP (tela > 768px)
+            if (window.innerWidth >= 768) {
+                menu.classList.add('aberto');
+            }
+
             function fecharMenu() {
                 if (menu) menu.classList.remove('aberto');
                 if (toggleBtn) toggleBtn.classList.remove('ativo');
@@ -464,7 +470,7 @@
                 });
             }
 
-            // Navegação do menu (links com data-secao)
+            // ⭐ NAVEGAÇÃO (links com data-secao)
             document.querySelectorAll('#menu-lateral a[data-secao]').forEach(link => {
                 link.addEventListener('click', function(e) {
                     e.preventDefault();
@@ -517,6 +523,16 @@
             const temaSalvo = localStorage.getItem('tema') || 'dark';
             if (temaSalvo !== 'dark') {
                 document.documentElement.classList.add(temaSalvo + '-mode');
+            }
+        });
+
+        // ⭐ FECHAR MENU AO REDIMENSIONAR PARA MOBILE
+        window.addEventListener('resize', function() {
+            const menu = document.getElementById('menu-lateral');
+            if (window.innerWidth < 768) {
+                menu.classList.remove('aberto');
+            } else {
+                menu.classList.add('aberto');
             }
         });
     </script>
