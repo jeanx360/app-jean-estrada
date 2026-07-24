@@ -1,7 +1,7 @@
 // ============================================
 // VERSÃO DO APP (SEMÂNTICA)
 // ============================================
-const APP_VERSION = '1.03';
+const APP_VERSION = '1.04';
 console.log(`📱 Jean na Estrada App v${APP_VERSION}`);
 
 // ============================================
