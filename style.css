@@ -549,3 +549,27 @@ footer {
         padding: 32px;
     }
 }
+
+/* ============================================
+   TOGGLES - MODO ESCURO E NOTIFICAÇÕES
+   ============================================ */
+#toggle-dark:checked + span + span,
+#toggle-notificacoes:checked + span + span {
+    left: 25px;
+}
+
+#toggle-dark:checked + span,
+#toggle-notificacoes:checked + span {
+    background: var(--color-blue-primary);
+}
+
+/* Ajuste para garantir que o toggle funcione corretamente */
+#toggle-dark:checked + span + span,
+#toggle-notificacoes:checked + span + span {
+    transition: var(--transition-smooth);
+}
+
+#toggle-dark + span,
+#toggle-notificacoes + span {
+    transition: var(--transition-smooth);
+}
