@@ -1,16 +1,17 @@
 /* ============================================
    JEAN NA ESTRADA - DESIGN REFINADO
    ============================================
-   Inspirado no Kinex - "Pretty, not flashy"
+   Filosofia: "Pretty, not flashy"
+   Inspirado no Kinex - Minimalista, legível
    ============================================ */
 
 /* ============================================
-   IMPORTAÇÃO DE FONTES
+   IMPORTAÇÃO DE FONTES (Google Fonts)
    ============================================ */
-@import url('https://fonts.googleapis.com/css2?family=Raleway:wght@800&family=Inter:wght@400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Raleway:wght@700;800&family=Inter:wght@400;500;600;700&display=swap');
 
 /* ============================================
-   RESET E VARIÁVEIS
+   RESET BÁSICO
    ============================================ */
 * {
     margin: 0;
@@ -18,83 +19,74 @@
     box-sizing: border-box;
 }
 
+/* ============================================
+   VARIÁVEIS GLOBAIS
+   ============================================ */
 :root {
-    /* Tema Claro */
-    --bg-body: #F5F7FA;
-    --bg-surface: #FFFFFF;
-    --bg-surface-hover: #F0F2F5;
-    --text-primary: #1A1A2E;
-    --text-secondary: #4B5563;
-    --text-muted: #9CA3AF;
-    --border-light: #E5E7EB;
-    --border-focus: #D1D5DB;
-    --accent: #2563EB;
-    --accent-hover: #1D4ED8;
-    --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.04);
-    --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.04);
-    --shadow-lg: 0 8px 30px rgba(0, 0, 0, 0.04);
+    /* Tema Claro (padrão) */
+    --color-bg: #F5F7FA;
+    --color-surface: #FFFFFF;
+    --color-surface-hover: #F1F3F5;
+    --color-border: #E5E7EB;
     
-    /* Tema Escuro (sobrescrito por .dark-mode) */
-    --bg-body-dark: #0A0D14;
-    --bg-surface-dark: #151A24;
-    --bg-surface-hover-dark: #1E2533;
-    --text-primary-dark: #F0F2F5;
-    --text-secondary-dark: #9CA3AF;
-    --text-muted-dark: #6B7280;
-    --border-dark: #2A2F3A;
-    --accent-dark: #3B82F6;
-    --accent-hover-dark: #2563EB;
+    --color-text-primary: #1A1A2E;      /* Preto suave para títulos */
+    --color-text-secondary: #4B5563;    /* Cinza escuro para textos */
+    --color-text-muted: #9CA3AF;        /* Cinza claro para textos secundários */
     
-    /* Tipografia */
-    --font-title: 'Raleway', sans-serif;
-    --font-body: 'Inter', sans-serif;
+    --color-accent: #2563EB;            /* Azul refinado para botões/links */
+    --color-accent-hover: #1D4ED8;
+    --color-accent-bg: rgba(37, 99, 235, 0.06);
     
-    /* Espaçamentos */
+    --shadow-card: 0 2px 8px rgba(0, 0, 0, 0.04), 0 8px 24px rgba(0, 0, 0, 0.02);
     --radius-card: 16px;
     --radius-sm: 10px;
-    --space-xs: 4px;
-    --space-sm: 8px;
-    --space-md: 16px;
-    --space-lg: 24px;
-    --space-xl: 32px;
+    --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     
-    /* Transições */
-    --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    /* Tema Escuro (sobrescrito pela classe .dark-mode) */
+    --color-bg-dark: #0A0D14;
+    --color-surface-dark: #151A24;
+    --color-surface-hover-dark: #1E2533;
+    --color-border-dark: #2A2F3A;
+    --color-text-primary-dark: #F0F2F5;
+    --color-text-secondary-dark: #9CA3AF;
+    --color-text-muted-dark: #6B7280;
+    --color-accent-dark: #3B82F6;
+    --color-accent-hover-dark: #2563EB;
 }
 
 /* ============================================
-   CORPO
+   CORPO DA PÁGINA
    ============================================ */
 body {
-    background-color: var(--bg-body);
-    color: var(--text-primary);
-    font-family: var(--font-body);
+    background-color: var(--color-bg);
+    color: var(--color-text-primary);
+    font-family: 'Inter', sans-serif;
     font-weight: 400;
     line-height: 1.6;
     min-height: 100vh;
-    transition: var(--transition);
+    transition: background-color 0.3s, color 0.3s;
     -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
 }
 
 /* ============================================
    CABEÇALHO
    ============================================ */
 header {
-    background: var(--bg-surface);
-    padding: var(--space-md) var(--space-lg);
+    background: var(--color-surface);
+    padding: 14px 20px;
     position: sticky;
     top: 0;
     z-index: 1500;
-    border-bottom: 1px solid var(--border-light);
-    box-shadow: var(--shadow-sm);
-    transition: var(--transition);
+    border-bottom: 1px solid var(--color-border);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.02);
+    transition: background-color 0.3s, border-color 0.3s;
 }
 
 body.dark-mode header {
-    background: var(--bg-surface-dark);
-    border-bottom-color: var(--border-dark);
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+    background: rgba(10, 13, 20, 0.92);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--color-border-dark);
 }
 
 .header-content {
@@ -107,20 +99,20 @@ body.dark-mode header {
 }
 
 .header-content h1 {
-    font-family: var(--font-title);
+    font-family: 'Raleway', sans-serif;
     font-weight: 800;
     font-size: 22px;
-    background: linear-gradient(135deg, var(--accent), #7C3AED);
+    background: linear-gradient(135deg, #1A1A2E, #4B5563);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
-    letter-spacing: 1px;
+    letter-spacing: 0.5px;
     flex: 1;
     text-align: center;
 }
 
 body.dark-mode .header-content h1 {
-    background: linear-gradient(135deg, var(--accent-dark), #8B5CF6);
+    background: linear-gradient(135deg, #F0F2F5, #9CA3AF);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
@@ -137,8 +129,8 @@ body.dark-mode .header-content h1 {
     display: flex;
     flex-direction: column;
     justify-content: space-around;
-    width: 30px;
-    height: 25px;
+    width: 28px;
+    height: 22px;
     background: transparent;
     border: none;
     cursor: pointer;
@@ -151,14 +143,14 @@ body.dark-mode .header-content h1 {
     display: block;
     width: 100%;
     height: 2px;
-    background: var(--text-primary);
+    background: var(--color-text-primary);
     border-radius: 2px;
-    transition: var(--transition);
+    transition: var(--transition-smooth);
     transform-origin: center;
 }
 
 body.dark-mode .menu-toggle span {
-    background: var(--text-primary-dark);
+    background: var(--color-text-primary-dark);
 }
 
 .menu-toggle.ativo span:nth-child(1) {
@@ -181,18 +173,20 @@ body.dark-mode .menu-toggle span {
     left: -300px;
     width: 280px;
     height: 100%;
-    background: var(--bg-surface);
-    border-right: 1px solid var(--border-light);
-    padding: var(--space-lg) var(--space-md) var(--space-xl);
-    transition: left 0.4s cubic-bezier(0.4, 0, 0.2, 1), var(--transition);
+    background: var(--color-surface);
+    border-right: 1px solid var(--color-border);
+    padding: 20px 20px 30px;
+    transition: left 0.4s cubic-bezier(0.4, 0, 0.2, 1), background-color 0.3s, border-color 0.3s;
     z-index: 2000;
-    box-shadow: var(--shadow-lg);
+    box-shadow: 4px 0 20px rgba(0, 0, 0, 0.03);
     overflow-y: auto;
 }
 
 body.dark-mode .menu-lateral {
-    background: var(--bg-surface-dark);
-    border-right-color: var(--border-dark);
+    background: rgba(10, 13, 20, 0.95);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-right: 1px solid var(--color-border-dark);
     box-shadow: 4px 0 40px rgba(0, 0, 0, 0.4);
 }
 
@@ -207,45 +201,46 @@ body.dark-mode .menu-lateral {
 }
 
 .menu-lateral ul li {
-    margin-bottom: var(--space-xs);
+    margin-bottom: 4px;
     position: relative;
 }
 
 .menu-lateral ul li a {
     display: flex;
     align-items: center;
-    gap: var(--space-md);
-    padding: var(--space-sm) var(--space-md);
-    color: var(--text-secondary);
+    gap: 12px;
+    padding: 12px 16px;
+    color: var(--color-text-secondary);
     text-decoration: none;
     border-radius: var(--radius-sm);
-    transition: var(--transition);
+    transition: var(--transition-smooth);
     font-size: 15px;
     font-weight: 500;
+    font-family: 'Inter', sans-serif;
     border: 1px solid transparent;
 }
 
 .menu-lateral ul li a:hover {
-    background: var(--bg-surface-hover);
-    color: var(--text-primary);
-    border-color: var(--border-light);
+    background: var(--color-surface-hover);
+    color: var(--color-text-primary);
+    border-color: var(--color-border);
 }
 
 body.dark-mode .menu-lateral ul li a:hover {
-    background: var(--bg-surface-hover-dark);
-    color: var(--text-primary-dark);
-    border-color: var(--border-dark);
+    background: rgba(255, 255, 255, 0.04);
+    color: var(--color-text-primary-dark);
+    border-color: var(--color-border-dark);
 }
 
 .menu-lateral ul li a.ativo {
-    background: rgba(37, 99, 235, 0.06);
-    color: var(--accent);
+    background: var(--color-accent-bg);
+    color: var(--color-accent);
     border-color: rgba(37, 99, 235, 0.12);
 }
 
 body.dark-mode .menu-lateral ul li a.ativo {
     background: rgba(59, 130, 246, 0.08);
-    color: var(--accent-dark);
+    color: var(--color-accent-dark);
     border-color: rgba(59, 130, 246, 0.15);
 }
 
@@ -256,31 +251,31 @@ body.dark-mode .menu-lateral ul li a.ativo {
     top: 50%;
     transform: translateY(-50%);
     width: 3px;
-    height: 20px;
-    background: var(--accent);
+    height: 24px;
+    background: var(--color-accent);
     border-radius: 0 4px 4px 0;
 }
 
 body.dark-mode .menu-lateral ul li a.ativo::before {
-    background: var(--accent-dark);
+    background: var(--color-accent-dark);
 }
 
 .menu-footer {
     position: absolute;
-    bottom: var(--space-lg);
-    left: var(--space-md);
-    right: var(--space-md);
+    bottom: 20px;
+    left: 20px;
+    right: 20px;
     text-align: center;
     font-size: 12px;
-    color: var(--text-muted);
-    border-top: 1px solid var(--border-light);
-    padding-top: var(--space-md);
+    color: var(--color-text-muted);
+    border-top: 1px solid var(--color-border);
+    padding-top: 15px;
     opacity: 0.6;
 }
 
 body.dark-mode .menu-footer {
-    border-top-color: var(--border-dark);
-    color: var(--text-muted-dark);
+    border-top-color: var(--color-border-dark);
+    color: var(--color-text-muted-dark);
 }
 
 /* ============================================
@@ -288,18 +283,18 @@ body.dark-mode .menu-footer {
    ============================================ */
 .fechar-menu {
     position: absolute;
-    top: var(--space-md);
-    right: var(--space-md);
-    background: var(--bg-surface-hover);
-    border: 1px solid var(--border-light);
-    color: var(--text-secondary);
-    width: 36px;
-    height: 36px;
+    top: 16px;
+    right: 16px;
+    background: var(--color-surface-hover);
+    border: 1px solid var(--color-border);
+    color: var(--color-text-secondary);
+    width: 40px;
+    height: 40px;
     border-radius: 50%;
-    font-size: 18px;
+    font-size: 20px;
     font-weight: 400;
     cursor: pointer;
-    transition: var(--transition);
+    transition: var(--transition-smooth);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -308,20 +303,20 @@ body.dark-mode .menu-footer {
 }
 
 .fechar-menu:hover {
-    background: var(--border-light);
-    color: var(--text-primary);
+    background: #E5E7EB;
+    color: var(--color-text-primary);
     transform: rotate(90deg);
 }
 
 body.dark-mode .fechar-menu {
-    background: var(--bg-surface-hover-dark);
-    border-color: var(--border-dark);
-    color: var(--text-secondary-dark);
+    background: rgba(255, 255, 255, 0.06);
+    border-color: var(--color-border-dark);
+    color: var(--color-text-secondary-dark);
 }
 
 body.dark-mode .fechar-menu:hover {
-    background: var(--border-dark);
-    color: var(--text-primary-dark);
+    background: rgba(255, 255, 255, 0.1);
+    color: var(--color-text-primary-dark);
 }
 
 /* ============================================
@@ -329,14 +324,14 @@ body.dark-mode .fechar-menu:hover {
    ============================================ */
 main {
     max-width: 900px;
-    margin: var(--space-lg) auto;
-    padding: 0 var(--space-md);
+    margin: 20px auto;
+    padding: 0 16px;
     position: relative;
     z-index: 1;
 }
 
 .menu-lateral.aberto ~ main {
-    opacity: 0.5;
+    opacity: 0.4;
     pointer-events: none;
     transition: opacity 0.3s;
 }
@@ -345,87 +340,96 @@ main {
    SEÇÕES (CARDS)
    ============================================ */
 section {
-    background: var(--bg-surface);
-    border: 1px solid var(--border-light);
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
     border-radius: var(--radius-card);
-    padding: var(--space-lg);
-    margin-bottom: var(--space-lg);
-    box-shadow: var(--shadow-sm);
-    transition: var(--transition);
+    padding: 24px;
+    margin-bottom: 24px;
+    box-shadow: var(--shadow-card);
+    transition: background-color 0.3s, border-color 0.3s, box-shadow 0.3s;
 }
 
 body.dark-mode section {
-    background: var(--bg-surface-dark);
-    border-color: var(--border-dark);
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+    background: var(--color-surface-dark);
+    border: 1px solid var(--color-border-dark);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
 }
 
 section h2 {
-    font-family: var(--font-title);
-    font-weight: 800;
+    font-family: 'Raleway', sans-serif;
+    font-weight: 700;
     font-size: 22px;
-    color: var(--text-primary);
-    margin-bottom: var(--space-md);
-    padding-bottom: var(--space-sm);
-    border-bottom: 2px solid var(--border-light);
-    letter-spacing: 0.5px;
-    transition: var(--transition);
+    color: var(--color-text-primary);
+    margin-bottom: 18px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid var(--color-border);
+    letter-spacing: 0.3px;
+    transition: color 0.3s, border-color 0.3s;
 }
 
 body.dark-mode section h2 {
-    color: var(--text-primary-dark);
-    border-bottom-color: var(--border-dark);
+    color: var(--color-text-primary-dark);
+    border-bottom-color: var(--color-border-dark);
+}
+
+section p {
+    color: var(--color-text-secondary);
+    transition: color 0.3s;
+}
+
+body.dark-mode section p {
+    color: var(--color-text-secondary-dark);
 }
 
 /* ============================================
    LISTA DE VÍDEOS
    ============================================ */
 .video-item {
-    background: var(--bg-body);
-    border: 1px solid var(--border-light);
+    background: var(--color-bg);
+    border: 1px solid var(--color-border);
     border-radius: var(--radius-card);
-    padding: var(--space-md);
-    margin-bottom: var(--space-md);
-    transition: var(--transition);
+    padding: 16px;
+    margin-bottom: 20px;
+    transition: var(--transition-smooth);
 }
 
 body.dark-mode .video-item {
     background: rgba(255, 255, 255, 0.02);
-    border-color: var(--border-dark);
+    border-color: var(--color-border-dark);
 }
 
 .video-item:hover {
     transform: translateY(-2px);
-    box-shadow: var(--shadow-md);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.04);
 }
 
 body.dark-mode .video-item:hover {
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
 }
 
 .video-item h3 {
-    font-family: var(--font-title);
-    font-weight: 800;
+    font-family: 'Raleway', sans-serif;
+    font-weight: 700;
     font-size: 17px;
-    color: var(--text-primary);
-    margin-bottom: var(--space-xs);
+    color: var(--color-text-primary);
+    margin-bottom: 4px;
     line-height: 1.4;
-    transition: var(--transition);
+    transition: color 0.3s;
 }
 
 body.dark-mode .video-item h3 {
-    color: var(--text-primary-dark);
+    color: var(--color-text-primary-dark);
 }
 
 .video-item .data-publicacao {
     font-size: 13px;
-    color: var(--text-secondary);
-    margin-bottom: var(--space-sm);
-    transition: var(--transition);
+    color: var(--color-text-muted);
+    margin-bottom: 10px;
+    transition: color 0.3s;
 }
 
 body.dark-mode .video-item .data-publicacao {
-    color: var(--text-secondary-dark);
+    color: var(--color-text-muted-dark);
 }
 
 .video-item .player-wrapper {
@@ -436,12 +440,12 @@ body.dark-mode .video-item .data-publicacao {
     overflow: hidden;
     border-radius: var(--radius-sm);
     background: #000;
-    margin: var(--space-sm) 0;
-    border: 1px solid var(--border-light);
+    margin: 10px 0;
+    border: 1px solid var(--color-border);
 }
 
 body.dark-mode .video-item .player-wrapper {
-    border-color: var(--border-dark);
+    border-color: var(--color-border-dark);
 }
 
 .video-item .player-wrapper iframe {
@@ -455,153 +459,262 @@ body.dark-mode .video-item .player-wrapper {
 
 .video-item .link-youtube {
     display: inline-block;
-    margin-top: var(--space-sm);
-    color: var(--accent);
+    margin-top: 10px;
+    color: var(--color-accent);
     text-decoration: none;
     font-weight: 600;
     font-size: 14px;
-    transition: var(--transition);
+    font-family: 'Inter', sans-serif;
+    transition: var(--transition-smooth);
 }
 
 .video-item .link-youtube:hover {
-    color: var(--accent-hover);
+    color: var(--color-accent-hover);
     text-decoration: underline;
 }
 
 body.dark-mode .video-item .link-youtube {
-    color: var(--accent-dark);
+    color: var(--color-accent-dark);
 }
 
 body.dark-mode .video-item .link-youtube:hover {
-    color: var(--accent-hover-dark);
+    color: var(--color-accent-hover-dark);
 }
 
 /* ============================================
-   LISTA DE ARQUIVOS
+   LISTA DE TUTORIAIS, PRODUTOS, CONTATOS
    ============================================ */
-#lista-arquivos {
-    list-style: none;
-    padding: 0;
-}
-
-#lista-arquivos li {
+#lista-tutoriais li,
+#lista-produtos li,
+#lista-arquivos li,
+#lista-contatos li {
     display: flex;
     align-items: center;
-    gap: var(--space-md);
-    background: var(--bg-body);
-    margin-bottom: var(--space-sm);
-    padding: var(--space-sm) var(--space-md);
+    gap: 12px;
+    background: var(--color-bg);
+    margin-bottom: 10px;
+    padding: 14px 18px;
     border-radius: var(--radius-sm);
-    transition: var(--transition);
-    border-left: 3px solid var(--accent);
+    transition: var(--transition-smooth);
+    border-left: 3px solid var(--color-accent);
 }
 
-body.dark-mode #lista-arquivos li {
+body.dark-mode #lista-tutoriais li,
+body.dark-mode #lista-produtos li,
+body.dark-mode #lista-arquivos li,
+body.dark-mode #lista-contatos li {
     background: rgba(255, 255, 255, 0.02);
-    border-left-color: var(--accent-dark);
+    border-left-color: var(--color-accent-dark);
 }
 
-#lista-arquivos li:hover {
-    background: var(--bg-surface-hover);
+#lista-tutoriais li:hover,
+#lista-produtos li:hover,
+#lista-arquivos li:hover,
+#lista-contatos li:hover {
+    background: var(--color-surface-hover);
     transform: translateX(4px);
 }
 
-body.dark-mode #lista-arquivos li:hover {
-    background: var(--bg-surface-hover-dark);
+body.dark-mode #lista-tutoriais li:hover,
+body.dark-mode #lista-produtos li:hover,
+body.dark-mode #lista-arquivos li:hover,
+body.dark-mode #lista-contatos li:hover {
+    background: rgba(255, 255, 255, 0.04);
 }
 
-#lista-arquivos li .arquivo-icon {
-    font-size: 18px;
-}
-
-#lista-arquivos li a {
-    color: var(--text-primary);
+#lista-tutoriais li a,
+#lista-produtos li a,
+#lista-arquivos li a,
+#lista-contatos li a {
+    color: var(--color-text-primary);
     text-decoration: none;
     font-weight: 500;
     flex: 1;
-    transition: var(--transition);
+    font-family: 'Inter', sans-serif;
+    transition: var(--transition-smooth);
 }
 
-body.dark-mode #lista-arquivos li a {
-    color: var(--text-primary-dark);
+body.dark-mode #lista-tutoriais li a,
+body.dark-mode #lista-produtos li a,
+body.dark-mode #lista-arquivos li a,
+body.dark-mode #lista-contatos li a {
+    color: var(--color-text-primary-dark);
 }
 
-#lista-arquivos li a:hover {
-    color: var(--accent);
+#lista-tutoriais li a:hover,
+#lista-produtos li a:hover,
+#lista-arquivos li a:hover,
+#lista-contatos li a:hover {
+    color: var(--color-accent);
 }
 
-body.dark-mode #lista-arquivos li a:hover {
-    color: var(--accent-dark);
+body.dark-mode #lista-tutoriais li a:hover,
+body.dark-mode #lista-produtos li a:hover,
+body.dark-mode #lista-arquivos li a:hover,
+body.dark-mode #lista-contatos li a:hover {
+    color: var(--color-accent-dark);
+}
+
+/* ============================================
+   GUIA DO INICIANTE - CARDS DE CONTEÚDO
+   ============================================ */
+#guia-section .guia-card {
+    background: var(--color-bg);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-sm);
+    padding: 16px 20px;
+    transition: var(--transition-smooth);
+    margin-bottom: 12px;
+}
+
+body.dark-mode #guia-section .guia-card {
+    background: rgba(255, 255, 255, 0.02);
+    border-color: var(--color-border-dark);
+}
+
+#guia-section .guia-card h3 {
+    font-family: 'Raleway', sans-serif;
+    font-weight: 700;
+    font-size: 16px;
+    color: var(--color-text-primary);
+    margin-bottom: 4px;
+    transition: color 0.3s;
+}
+
+body.dark-mode #guia-section .guia-card h3 {
+    color: var(--color-text-primary-dark);
+}
+
+#guia-section .guia-card p {
+    font-size: 14px;
+    color: var(--color-text-secondary);
+    line-height: 1.5;
+    transition: color 0.3s;
+}
+
+body.dark-mode #guia-section .guia-card p {
+    color: var(--color-text-secondary-dark);
+}
+
+/* ============================================
+   CALCULADORA
+   ============================================ */
+#calculadora-section input {
+    background: var(--color-bg);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-sm);
+    padding: 12px 14px;
+    width: 100%;
+    color: var(--color-text-primary);
+    font-size: 15px;
+    font-family: 'Inter', sans-serif;
+    transition: border-color 0.3s, background 0.3s;
+}
+
+body.dark-mode #calculadora-section input {
+    background: var(--color-surface-dark);
+    border-color: var(--color-border-dark);
+    color: var(--color-text-primary-dark);
+}
+
+#calculadora-section input:focus {
+    outline: none;
+    border-color: var(--color-accent);
+}
+
+body.dark-mode #calculadora-section input:focus {
+    border-color: var(--color-accent-dark);
 }
 
 /* ============================================
    BOTÕES
    ============================================ */
 .btn-principal {
-    padding: var(--space-sm) var(--space-lg);
+    padding: 12px 28px;
     border: none;
     border-radius: var(--radius-sm);
     font-size: 15px;
     font-weight: 600;
-    font-family: var(--font-body);
+    font-family: 'Inter', sans-serif;
     cursor: pointer;
-    transition: var(--transition);
+    transition: var(--transition-smooth);
     display: inline-flex;
     align-items: center;
-    gap: var(--space-sm);
-    background: var(--accent);
+    gap: 8px;
+    background: var(--color-accent);
     color: #FFFFFF;
     box-shadow: 0 2px 8px rgba(37, 99, 235, 0.15);
 }
 
 .btn-principal:hover {
-    background: var(--accent-hover);
+    background: var(--color-accent-hover);
     transform: translateY(-2px);
     box-shadow: 0 4px 16px rgba(37, 99, 235, 0.2);
 }
 
 body.dark-mode .btn-principal {
-    background: var(--accent-dark);
-    box-shadow: 0 2px 8px rgba(59, 130, 246, 0.15);
+    background: var(--color-accent-dark);
+    box-shadow: 0 2px 8px rgba(59, 130, 246, 0.2);
 }
 
 body.dark-mode .btn-principal:hover {
-    background: var(--accent-hover-dark);
-    box-shadow: 0 4px 16px rgba(59, 130, 246, 0.2);
+    background: var(--color-accent-hover-dark);
+    box-shadow: 0 4px 16px rgba(59, 130, 246, 0.3);
 }
 
 .btn-secundario {
-    padding: var(--space-sm) var(--space-lg);
-    border: 1px solid var(--border-light);
+    padding: 12px 28px;
+    border: 1px solid var(--color-border);
     border-radius: var(--radius-sm);
     font-size: 15px;
     font-weight: 600;
-    font-family: var(--font-body);
+    font-family: 'Inter', sans-serif;
     cursor: pointer;
-    transition: var(--transition);
+    transition: var(--transition-smooth);
     display: inline-flex;
     align-items: center;
-    gap: var(--space-sm);
+    gap: 8px;
     background: transparent;
-    color: var(--text-secondary);
+    color: var(--color-text-secondary);
 }
 
 .btn-secundario:hover {
-    background: var(--bg-surface-hover);
-    border-color: var(--border-focus);
-    color: var(--text-primary);
+    background: var(--color-surface-hover);
+    border-color: var(--color-text-secondary);
+    color: var(--color-text-primary);
     transform: translateY(-2px);
 }
 
 body.dark-mode .btn-secundario {
-    border-color: var(--border-dark);
-    color: var(--text-secondary-dark);
+    border-color: var(--color-border-dark);
+    color: var(--color-text-secondary-dark);
 }
 
 body.dark-mode .btn-secundario:hover {
-    background: var(--bg-surface-hover-dark);
-    border-color: var(--border-dark);
-    color: var(--text-primary-dark);
+    background: rgba(255, 255, 255, 0.04);
+    border-color: var(--color-text-secondary-dark);
+    color: var(--color-text-primary-dark);
+}
+
+/* ============================================
+   CONTATO - REDES SOCIAIS
+   ============================================ */
+#contato-section a {
+    color: var(--color-text-primary);
+    text-decoration: none;
+    transition: color 0.2s;
+}
+
+#contato-section a:hover {
+    color: var(--color-accent);
+}
+
+body.dark-mode #contato-section a {
+    color: var(--color-text-primary-dark);
+}
+
+body.dark-mode #contato-section a:hover {
+    color: var(--color-accent-dark);
 }
 
 /* ============================================
@@ -609,33 +722,18 @@ body.dark-mode .btn-secundario:hover {
    ============================================ */
 footer {
     text-align: center;
-    padding: var(--space-xl) var(--space-md);
-    color: var(--text-muted);
+    padding: 30px 20px;
+    color: var(--color-text-muted);
     font-size: 13px;
-    border-top: 1px solid var(--border-light);
-    margin-top: var(--space-lg);
-    opacity: 0.7;
-    transition: var(--transition);
+    border-top: 1px solid var(--color-border);
+    margin-top: 20px;
+    opacity: 0.6;
+    transition: color 0.3s, border-color 0.3s;
 }
 
 body.dark-mode footer {
-    border-top-color: var(--border-dark);
-    color: var(--text-muted-dark);
-}
-
-/* ============================================
-   GLASSMORPHISM
-   ============================================ */
-.glass {
-    background: rgba(255, 255, 255, 0.6);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
-    border: 1px solid rgba(255, 255, 255, 0.2);
-}
-
-body.dark-mode .glass {
-    background: rgba(21, 26, 36, 0.7);
-    border-color: rgba(255, 255, 255, 0.05);
+    border-top-color: var(--color-border-dark);
+    color: var(--color-text-muted-dark);
 }
 
 /* ============================================
@@ -643,19 +741,21 @@ body.dark-mode .glass {
    ============================================ */
 @media (max-width: 600px) {
     .header-content h1 {
-        font-size: 18px;
+        font-size: 17px;
     }
     
     .menu-lateral {
         width: 260px;
         left: -260px;
-        padding: var(--space-md);
+        padding: 16px 16px 20px;
     }
     
     .fechar-menu {
-        width: 32px;
-        height: 32px;
-        font-size: 16px;
+        top: 12px;
+        right: 12px;
+        width: 36px;
+        height: 36px;
+        font-size: 18px;
     }
     
     .menu-lateral ul {
@@ -663,7 +763,7 @@ body.dark-mode .glass {
     }
     
     section {
-        padding: var(--space-md);
+        padding: 16px;
         border-radius: 12px;
     }
     
@@ -676,7 +776,7 @@ body.dark-mode .glass {
     }
     
     .btn-principal, .btn-secundario {
-        padding: var(--space-sm) var(--space-md);
+        padding: 10px 18px;
         font-size: 14px;
         width: 100%;
         justify-content: center;
@@ -686,11 +786,11 @@ body.dark-mode .glass {
 @media (min-width: 1024px) {
     main {
         max-width: 1000px;
-        padding: 0 var(--space-lg);
+        padding: 0 24px;
     }
     
     section {
-        padding: var(--space-xl);
+        padding: 32px;
     }
 }
 
@@ -704,12 +804,12 @@ body.dark-mode .glass {
 
 #toggle-dark:checked + span,
 #toggle-notificacoes:checked + span {
-    background: var(--accent) !important;
+    background: var(--color-accent) !important;
 }
 
 body.dark-mode #toggle-dark:checked + span,
 body.dark-mode #toggle-notificacoes:checked + span {
-    background: var(--accent-dark) !important;
+    background: var(--color-accent-dark) !important;
 }
 
 #toggle-dark + span,
