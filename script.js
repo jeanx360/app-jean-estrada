@@ -66,7 +66,7 @@ window.buscarVideosRSS = async function() {
 // ============================================
 
 async function fetchFeedWithProxy(feedUrl) {
-    // ⭐ MÉTODO 1: rss2json (mais confiável, já funciona para os vídeos)
+    // ⭐ MÉTODO 1: rss2json (mais confiável)
     try {
         console.log(`🔄 Tentando rss2json...`);
         const rss2jsonUrl = `https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(feedUrl)}`;
@@ -83,7 +83,7 @@ async function fetchFeedWithProxy(feedUrl) {
         console.log(`⚠️ rss2json falhou: ${e.message}`);
     }
 
-    // ⭐ MÉTODO 2: AllOrigins (get) - retorna JSON com o conteúdo em base64
+    // ⭐ MÉTODO 2: AllOrigins (get) - fallback
     try {
         console.log(`🔄 Tentando AllOrigins (get)...`);
         const allOriginsUrl = `https://api.allorigins.win/get?url=${encodeURIComponent(feedUrl)}`;
@@ -109,9 +109,26 @@ async function fetchFeedWithProxy(feedUrl) {
 }
 
 // ============================================
-// FUNÇÃO PARA EXTRAIR IMAGEM DO ITEM RSS
+// FUNÇÃO PARA EXTRAIR IMAGEM DO ITEM RSS (TANTO XML QUANTO RSS2JSON)
 // ============================================
 function extrairImagem(item) {
+    // Para dados vindos do rss2json
+    if (item.enclosure && item.enclosure.link) {
+        return item.enclosure.link;
+    }
+    if (item.thumbnail) {
+        return item.thumbnail;
+    }
+    if (item.content && item.content.match(/<img[^>]+src="([^">]+)"/)) {
+        const match = item.content.match(/<img[^>]+src="([^">]+)"/);
+        if (match) return match[1];
+    }
+    if (item.description && item.description.match(/<img[^>]+src="([^">]+)"/)) {
+        const match = item.description.match(/<img[^>]+src="([^">]+)"/);
+        if (match) return match[1];
+    }
+    
+    // Para dados vindos do XML (elemento DOM)
     const enclosure = item.querySelector('enclosure');
     if (enclosure) {
         const url = enclosure.getAttribute('url');
@@ -201,13 +218,29 @@ window.buscarNoticiasRSS = async function() {
                 if (result.source === 'rss2json') {
                     const dados = result.data;
                     if (dados.items && dados.items.length > 0) {
-                        items = dados.items.map(item => ({
-                            titulo: item.title,
-                            link: item.link,
-                            pubDate: item.pubDate,
-                            descricao: item.description ? item.description.replace(/<[^>]*>/g, '').substring(0, 200) : 'Sem descrição',
-                            imagem: item.thumbnail || ''
-                        }));
+                        items = dados.items.map(item => {
+                            // ⭐ EXTRAI A IMAGEM DO ITEM RSS2JSON
+                            let imagem = '';
+                            if (item.enclosure && item.enclosure.link) {
+                                imagem = item.enclosure.link;
+                            } else if (item.thumbnail) {
+                                imagem = item.thumbnail;
+                            } else if (item.content && item.content.match(/<img[^>]+src="([^">]+)"/)) {
+                                const match = item.content.match(/<img[^>]+src="([^">]+)"/);
+                                if (match) imagem = match[1];
+                            } else if (item.description && item.description.match(/<img[^>]+src="([^">]+)"/)) {
+                                const match = item.description.match(/<img[^>]+src="([^">]+)"/);
+                                if (match) imagem = match[1];
+                            }
+                            
+                            return {
+                                titulo: item.title,
+                                link: item.link,
+                                pubDate: item.pubDate,
+                                descricao: item.description ? item.description.replace(/<[^>]*>/g, '').substring(0, 200) : 'Sem descrição',
+                                imagem: imagem
+                            };
+                        });
                         console.log(`📡 ${feed.nome} (rss2json): ${items.length} itens`);
                     } else {
                         console.log(`⚠️ ${feed.nome} não retornou itens via rss2json`);
