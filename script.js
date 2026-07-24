@@ -62,107 +62,50 @@ window.buscarVideosRSS = async function() {
 };
 
 // ============================================
-// PROXY CORS COM FALLBACK (ATUALIZADO - MAIS PROXIES)
+// PROXY CORS COM FALLBACK (APENAS MÉTODOS CONFIÁVEIS)
 // ============================================
 
-const PROXY_LIST = [
-    // 1. AllOrigins (mais confiável, mas pode ser lento)
-    {
-        name: 'AllOrigins (Raw)',
-        fetch: async (url) => {
-            const response = await fetch(`https://api.allorigins.win/raw?url=${encodeURIComponent(url)}`, {
-                signal: AbortSignal.timeout(10000) // 10 segundos
-            });
-            if (!response.ok) throw new Error(`HTTP ${response.status}`);
-            return await response.text();
-        }
-    },
-    // 2. CORSProxy.io (alternativa)
-    {
-        name: 'CORSProxy.io',
-        fetch: async (url) => {
-            const response = await fetch(`https://corsproxy.io/?${encodeURIComponent(url)}`, {
-                signal: AbortSignal.timeout(5000)
-            });
-            if (!response.ok) throw new Error(`HTTP ${response.status}`);
-            return await response.text();
-        }
-    },
-    // 3. Proxy.cors.sh (com chave pública temporária)
-    {
-        name: 'Proxy.cors.sh',
-        fetch: async (url) => {
-            const response = await fetch(`https://proxy.cors.sh/${encodeURIComponent(url)}`, {
-                headers: {
-                    'x-cors-api-key': 'temp_7a8b9c0d1e2f3g4h5i6j'
-                },
-                signal: AbortSignal.timeout(5000)
-            });
-            if (!response.ok) throw new Error(`HTTP ${response.status}`);
-            return await response.text();
-        }
-    },
-    // 4. CORS.io (alternativa)
-    {
-        name: 'CORS.io',
-        fetch: async (url) => {
-            const response = await fetch(`https://cors.io/?${encodeURIComponent(url)}`, {
-                signal: AbortSignal.timeout(5000)
-            });
-            if (!response.ok) throw new Error(`HTTP ${response.status}`);
-            return await response.text();
-        }
-    },
-    // 5. CORS Anywhere (Heroku, público)
-    {
-        name: 'CORS Anywhere',
-        fetch: async (url) => {
-            const response = await fetch(`https://cors-anywhere.herokuapp.com/${encodeURIComponent(url)}`, {
-                signal: AbortSignal.timeout(5000)
-            });
-            if (!response.ok) throw new Error(`HTTP ${response.status}`);
-            return await response.text();
-        }
-    },
-    // 6. CORS Proxy (eu.org)
-    {
-        name: 'CORS Proxy (eu.org)',
-        fetch: async (url) => {
-            const response = await fetch(`https://corsproxy.eu.org/${encodeURIComponent(url)}`, {
-                signal: AbortSignal.timeout(5000)
-            });
-            if (!response.ok) throw new Error(`HTTP ${response.status}`);
-            return await response.text();
-        }
-    }
-];
-
 async function fetchFeedWithProxy(feedUrl) {
-    let lastError = null;
-    for (const proxy of PROXY_LIST) {
-        try {
-            console.log(`🔄 Tentando proxy: ${proxy.name}`);
-            const result = await proxy.fetch(feedUrl);
-            // Verifica se o resultado parece XML
-            const trimmed = result.trim();
-            if (trimmed.startsWith('<?xml') || trimmed.startsWith('<rss') || trimmed.startsWith('<feed')) {
-                console.log(`✅ Proxy ${proxy.name} funcionou!`);
-                return result;
-            } else {
-                console.log(`⚠️ Proxy ${proxy.name} retornou conteúdo inválido.`);
-                // Se não for XML, tenta o próximo
-                continue;
-            }
-        } catch (e) {
-            console.log(`❌ Proxy ${proxy.name} falhou: ${e.message}`);
-            lastError = e;
-            // Se for 403 ou 404, não espera o timeout, vai para o próximo
-            if (e.message.includes('403') || e.message.includes('404')) {
-                continue;
-            }
+    // ⭐ MÉTODO 1: rss2json (mais confiável, já funciona para os vídeos)
+    try {
+        console.log(`🔄 Tentando rss2json...`);
+        const rss2jsonUrl = `https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(feedUrl)}`;
+        const response = await fetch(rss2jsonUrl, { signal: AbortSignal.timeout(10000) });
+        if (!response.ok) throw new Error(`HTTP ${response.status}`);
+        const data = await response.json();
+        if (data.status === 'ok' && data.items && data.items.length > 0) {
+            console.log(`✅ rss2json funcionou!`);
+            return { source: 'rss2json', data: data };
+        } else {
+            throw new Error('rss2json retornou dados vazios');
         }
+    } catch (e) {
+        console.log(`⚠️ rss2json falhou: ${e.message}`);
     }
-    throw new Error(`Todos os proxies falharam. Último erro: ${lastError ? lastError.message : 'Desconhecido'}`);
+
+    // ⭐ MÉTODO 2: AllOrigins (get) - retorna JSON com o conteúdo em base64
+    try {
+        console.log(`🔄 Tentando AllOrigins (get)...`);
+        const allOriginsUrl = `https://api.allorigins.win/get?url=${encodeURIComponent(feedUrl)}`;
+        const response = await fetch(allOriginsUrl, { signal: AbortSignal.timeout(15000) });
+        if (!response.ok) throw new Error(`HTTP ${response.status}`);
+        const data = await response.json();
+        if (data.contents) {
+            const contents = data.contents;
+            if (contents.trim().startsWith('<?xml') || contents.trim().startsWith('<rss') || contents.trim().startsWith('<feed')) {
+                console.log(`✅ AllOrigins (get) funcionou!`);
+                return { source: 'xml', data: contents };
+            } else {
+                throw new Error('Conteúdo não é XML');
+            }
+        } else {
+            throw new Error('Resposta vazia');
+        }
+    } catch (e) {
+        console.log(`⚠️ AllOrigins (get) falhou: ${e.message}`);
+    }
+
+    throw new Error('Todos os métodos falharam.');
 }
 
 // ============================================
@@ -226,7 +169,7 @@ function filtrarNoticia(titulo, descricao) {
 }
 
 // ============================================
-// FUNÇÃO PARA BUSCAR NOTÍCIAS (COM PROXY CORRIGIDO)
+// FUNÇÃO PARA BUSCAR NOTÍCIAS (VERSÃO OTIMIZADA)
 // ============================================
 window.buscarNoticiasRSS = async function() {
     const lista = document.getElementById('lista-noticias');
@@ -250,72 +193,101 @@ window.buscarNoticiasRSS = async function() {
                 console.log(`📡 Buscando ${feed.nome}...`);
                 lista.innerHTML = `<div style="text-align:center;padding:30px;"><p>🔄 Carregando ${feed.nome}...</p></div>`;
                 
-                const xmlText = await fetchFeedWithProxy(feed.url);
+                const result = await fetchFeedWithProxy(feed.url);
                 
-                // Força a codificação UTF-8
-                const blob = new Blob([xmlText], { type: 'text/xml;charset=UTF-8' });
-                const urlBlob = URL.createObjectURL(blob);
-                const respostaBlob = await fetch(urlBlob);
-                const textoCorrigido = await respostaBlob.text();
-                URL.revokeObjectURL(urlBlob);
-                
-                const parser = new DOMParser();
-                const xml = parser.parseFromString(textoCorrigido, 'text/xml');
-                
-                const parseError = xml.querySelector('parsererror');
-                if (parseError) {
-                    console.log(`⚠️ Erro ao parsear ${feed.nome}`);
-                    continue;
-                }
-                
-                let items = xml.querySelectorAll('item');
-                if (items.length === 0) {
-                    items = xml.querySelectorAll('entry');
-                }
-                
-                console.log(`📡 ${feed.nome}: ${items.length} itens encontrados`);
-                
-                let itensFiltrados = 0;
-                const itensLimitados = Array.from(items).slice(0, 15);
-                
-                for (const item of itensLimitados) {
-                    let title = item.querySelector('title')?.textContent || 'Sem título';
-                    let link = item.querySelector('link')?.getAttribute('href') || 
-                              item.querySelector('link')?.textContent || '#';
-                    let pubDate = item.querySelector('pubDate')?.textContent || 
-                                 item.querySelector('published')?.textContent || 
-                                 new Date().toUTCString();
-                    let description = item.querySelector('description')?.textContent || 
-                                     item.querySelector('summary')?.textContent || 
-                                     'Sem descrição';
-                    
-                    if (!filtrarNoticia(title, description)) {
+                let items = [];
+
+                // Se veio do rss2json, já temos os dados em JSON
+                if (result.source === 'rss2json') {
+                    const dados = result.data;
+                    if (dados.items && dados.items.length > 0) {
+                        items = dados.items.map(item => ({
+                            titulo: item.title,
+                            link: item.link,
+                            pubDate: item.pubDate,
+                            descricao: item.description ? item.description.replace(/<[^>]*>/g, '').substring(0, 200) : 'Sem descrição',
+                            imagem: item.thumbnail || ''
+                        }));
+                        console.log(`📡 ${feed.nome} (rss2json): ${items.length} itens`);
+                    } else {
+                        console.log(`⚠️ ${feed.nome} não retornou itens via rss2json`);
                         continue;
                     }
-                    itensFiltrados++;
+                } else {
+                    // Veio como XML via AllOrigins
+                    const xmlText = result.data;
+                    const blob = new Blob([xmlText], { type: 'text/xml;charset=UTF-8' });
+                    const urlBlob = URL.createObjectURL(blob);
+                    const respostaBlob = await fetch(urlBlob);
+                    const textoCorrigido = await respostaBlob.text();
+                    URL.revokeObjectURL(urlBlob);
                     
-                    let imagem = extrairImagem(item);
+                    const parser = new DOMParser();
+                    const xml = parser.parseFromString(textoCorrigido, 'text/xml');
                     
-                    const descricaoLimpa = description
-                        .replace(/<[^>]*>/g, '')
-                        .replace(/&nbsp;/g, ' ')
-                        .replace(/&amp;/g, '&')
-                        .replace(/&lt;/g, '<')
-                        .replace(/&gt;/g, '>')
-                        .replace(/&quot;/g, '"')
-                        .replace(/&#39;/g, "'")
-                        .replace(/&#(\d+);/g, (match, dec) => String.fromCharCode(dec))
-                        .trim()
-                        .substring(0, 200);
+                    const parseError = xml.querySelector('parsererror');
+                    if (parseError) {
+                        console.log(`⚠️ Erro ao parsear ${feed.nome}`);
+                        continue;
+                    }
                     
-                    todasNoticias.push({
-                        titulo: title.trim(),
-                        link: link,
-                        pubDate: pubDate,
-                        descricao: descricaoLimpa,
-                        imagem: imagem,
-                        fonte: feed.nome
-                    });
+                    let xmlItems = xml.querySelectorAll('item');
+                    if (xmlItems.length === 0) {
+                        xmlItems = xml.querySelectorAll('entry');
+                    }
+                    
+                    console.log(`📡 ${feed.nome} (XML): ${xmlItems.length} itens`);
+                    
+                    const itensLimitados = Array.from(xmlItems).slice(0, 15);
+                    for (const item of itensLimitados) {
+                        let title = item.querySelector('title')?.textContent || 'Sem título';
+                        let link = item.querySelector('link')?.getAttribute('href') || 
+                                  item.querySelector('link')?.textContent || '#';
+                        let pubDate = item.querySelector('pubDate')?.textContent || 
+                                     item.querySelector('published')?.textContent || 
+                                     new Date().toUTCString();
+                        let description = item.querySelector('description')?.textContent || 
+                                         item.querySelector('summary')?.textContent || 
+                                         'Sem descrição';
+                        
+                        let imagem = extrairImagem(item);
+                        
+                        const descricaoLimpa = description
+                            .replace(/<[^>]*>/g, '')
+                            .replace(/&nbsp;/g, ' ')
+                            .replace(/&amp;/g, '&')
+                            .replace(/&lt;/g, '<')
+                            .replace(/&gt;/g, '>')
+                            .replace(/&quot;/g, '"')
+                            .replace(/&#39;/g, "'")
+                            .replace(/&#(\d+);/g, (match, dec) => String.fromCharCode(dec))
+                            .trim()
+                            .substring(0, 200);
+                        
+                        items.push({
+                            titulo: title.trim(),
+                            link: link,
+                            pubDate: pubDate,
+                            descricao: descricaoLimpa,
+                            imagem: imagem
+                        });
+                    }
+                }
+
+                // Aplica o filtro por palavras-chave
+                let itensFiltrados = 0;
+                for (const item of items) {
+                    if (filtrarNoticia(item.titulo, item.descricao)) {
+                        todasNoticias.push({
+                            titulo: item.titulo,
+                            link: item.link,
+                            pubDate: item.pubDate,
+                            descricao: item.descricao,
+                            imagem: item.imagem,
+                            fonte: feed.nome
+                        });
+                        itensFiltrados++;
+                    }
                 }
                 
                 console.log(`📡 ${feed.nome}: ${itensFiltrados} itens relevantes encontrados`);
