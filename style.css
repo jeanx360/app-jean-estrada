@@ -921,7 +921,7 @@ section .section-header .see-all:hover {
 }
 
 /* ============================================
-   TEMA PICKER (CIRCULOS)
+   TEMA PICKER (CIRCULOS) - CORRIGIDO
    ============================================ */
 .theme-picker {
     display: flex;
@@ -953,6 +953,36 @@ section .section-header .see-all:hover {
 .theme-picker .theme-option .check {
     font-size: 12px;
     color: white;
+}
+
+/* ⭐ REGRAS PARA OS CIRCULOS GERADOS PELO JAVASCRIPT ⭐ */
+.theme-dot {
+    width: 32px !important;
+    height: 32px !important;
+    border-radius: 50% !important;
+    border: 2px solid var(--t-border) !important;
+    cursor: pointer !important;
+    transition: all 0.25s ease !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    flex-shrink: 0 !important;
+}
+
+.theme-dot:hover {
+    transform: scale(1.08) !important;
+    border-color: var(--t-accent) !important;
+}
+
+.theme-dot.active {
+    border-color: var(--t-accent) !important;
+    box-shadow: 0 0 0 3px var(--t-accent-dim) !important;
+}
+
+.theme-dot .check {
+    font-size: 14px;
+    color: var(--t-accent-fg);
+    text-shadow: 0 1px 4px rgba(0, 0, 0, 0.3);
 }
 
 /* ============================================
