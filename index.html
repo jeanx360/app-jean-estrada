@@ -532,26 +532,33 @@ OneSignalDeferred.push(async function (OneSignal) {
 // ============================================
 // TOGGLE NOTIFICAÇÕES (ONE SIGNAL)
 // ============================================
-<script src="https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js" defer></script>
-<script>
-window.OneSignalDeferred = window.OneSignalDeferred || [];
-OneSignalDeferred.push(async function (OneSignal) {
-    await OneSignal.init({
-        appId: "3fa220d7-df93-4004-83bf-809a8ff59a0e",
-        serviceWorkerPath: "/OneSignalSDKWorker.js",
-        serviceWorkerParam: { scope: "/" }
-    });
-    console.log("✅ OneSignal inicializado!");
-});
-</script>
-
-    <!-- SERVICE WORKER (PRINCIPAL) -->
-    <script>
-        if ('serviceWorker' in navigator) {
-            navigator.serviceWorker.register('sw.js')
-                .then(() => console.log('✅ Service Worker registrado!'))
-                .catch(err => console.log('❌ Erro no Service Worker:', err));
+document.getElementById('toggle-notificacoes')?.addEventListener('change', async function(e) {
+    const ativar = e.target.checked;
+    localStorage.setItem('notificacoes', ativar);
+    
+    if (ativar) {
+        if (typeof OneSignal !== 'undefined') {
+            const permission = await OneSignal.Notifications.requestPermission({
+                modalOptions: {
+                    title: "🔔 Jean na Estrada",
+                    message: "Receba notificações sobre novas notícias e vídeos!",
+                    acceptButtonText: "📰 Quero receber",
+                    cancelButtonText: "❌ Não, obrigado"
+                }
+            });
+            if (permission) {
+                alert('✅ Notificações ativadas!');
+            } else {
+                alert('❌ Você negou as notificações.');
+                e.target.checked = false;
+                localStorage.setItem('notificacoes', 'false');
+            }
+        } else {
+            alert('❌ Serviço de notificações não disponível.');
+            e.target.checked = false;
+            localStorage.setItem('notificacoes', 'false');
         }
-    </script>
-</body>
-</html>
+    } else {
+        alert('🔕 Notificações desativadas.');
+    }
+});
