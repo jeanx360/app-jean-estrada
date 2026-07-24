@@ -529,15 +529,40 @@ OneSignalDeferred.push(async function (OneSignal) {
             document.body.classList.toggle('dark-mode', e.target.checked);
         });
 
-        // ============================================
-        // TOGGLE NOTIFICAÇÕES
-        // ============================================
-        document.getElementById('toggle-notificacoes')?.addEventListener('change', function(e) {
-            localStorage.setItem('notificacoes', e.target.checked);
-            if (e.target.checked) {
-                solicitarPermissaoPush();
+// ============================================
+// TOGGLE NOTIFICAÇÕES (ONE SIGNAL)
+// ============================================
+document.getElementById('toggle-notificacoes')?.addEventListener('change', async function(e) {
+    const ativar = e.target.checked;
+    localStorage.setItem('notificacoes', ativar);
+    
+    if (ativar) {
+        if (typeof OneSignal !== 'undefined') {
+            const permission = await OneSignal.Notifications.requestPermission({
+                modalOptions: {
+                    title: "🔔 Jean na Estrada",
+                    message: "Receba notificações sobre novas notícias e vídeos!",
+                    acceptButtonText: "📰 Quero receber",
+                    cancelButtonText: "❌ Não, obrigado"
+                }
+            });
+            if (permission) {
+                alert('✅ Notificações ativadas!');
+            } else {
+                alert('❌ Você negou as notificações.');
+                e.target.checked = false;
+                localStorage.setItem('notificacoes', 'false');
             }
-        });
+        } else {
+            alert('❌ Serviço de notificações não disponível.');
+            e.target.checked = false;
+            localStorage.setItem('notificacoes', 'false');
+        }
+    } else {
+        alert('🔕 Notificações desativadas.');
+    }
+});
+        
     </script>
 
     <!-- SERVICE WORKER (PRINCIPAL) -->
