@@ -409,6 +409,9 @@ function aplicarTema(temaId) {
     
     // Atualiza os círculos (se existirem)
     atualizarSeletorTema(temaId);
+    
+    // ⭐ Sincroniza o toggle "Modo Escuro" com o tema
+    atualizarToggleDark(temaId);
 }
 
 // Função para atualizar o seletor de temas (círculos)
@@ -420,23 +423,23 @@ function atualizarSeletorTema(temaAtivo) {
     
     TEMAS.forEach(tema => {
         const botao = document.createElement('button');
-        botao.className = 'theme-dot';
+        botao.className = 'theme-dot' + (tema.id === temaAtivo ? ' active' : '');
         botao.dataset.tema = tema.id;
         botao.style.width = '32px';
         botao.style.height = '32px';
         botao.style.borderRadius = '50%';
-        botao.style.border = tema.id === temaAtivo ? '2px solid #00B8FF' : '2px solid rgba(255,255,255,0.15)';
+        botao.style.border = tema.id === temaAtivo ? '2px solid var(--t-accent)' : '2px solid var(--t-border)';
         botao.style.background = tema.cor;
         botao.style.cursor = 'pointer';
         botao.style.transition = 'all 0.2s';
         botao.style.display = 'flex';
         botao.style.alignItems = 'center';
         botao.style.justifyContent = 'center';
-        botao.style.boxShadow = tema.id === temaAtivo ? '0 0 0 3px rgba(0,184,255,0.2)' : 'none';
+        botao.style.boxShadow = tema.id === temaAtivo ? '0 0 0 3px var(--t-accent-dim)' : 'none';
         
         // Se for o tema ativo, mostra um check
         if (tema.id === temaAtivo) {
-            botao.innerHTML = '<span style="font-size:14px;color:white;">✓</span>';
+            botao.innerHTML = '<span style="font-size:14px;color:var(--t-accent-fg);">✓</span>';
         }
         
         // Hover
@@ -455,6 +458,32 @@ function atualizarSeletorTema(temaAtivo) {
         container.appendChild(botao);
     });
 }
+
+// ============================================
+// SINCRONIZA TOGGLE "MODO ESCURO" COM OS TEMAS
+// ============================================
+
+// Função para atualizar o toggle baseado no tema
+function atualizarToggleDark(temaId) {
+    const toggle = document.getElementById('toggle-dark');
+    if (toggle) {
+        toggle.checked = (temaId === 'dark');
+    }
+}
+
+// Evento do toggle para mudar o tema
+document.addEventListener('DOMContentLoaded', function() {
+    const toggleDark = document.getElementById('toggle-dark');
+    if (toggleDark) {
+        toggleDark.addEventListener('change', function(e) {
+            if (e.target.checked) {
+                aplicarTema('dark');
+            } else {
+                aplicarTema('light');
+            }
+        });
+    }
+});
 
 // ============================================
 // CARREGAR O TEMA SALVO AO INICIAR
