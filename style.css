@@ -551,25 +551,25 @@ footer {
 }
 
 /* ============================================
-   TOGGLES - MODO ESCURO E NOTIFICAÇÕES
+   TOGGLES - MODO ESCURO E NOTIFICAÇÕES (FORÇADO)
    ============================================ */
 #toggle-dark:checked + span + span,
 #toggle-notificacoes:checked + span + span {
-    left: 25px;
+    left: 25px !important;
 }
 
 #toggle-dark:checked + span,
 #toggle-notificacoes:checked + span {
-    background: var(--color-blue-primary);
+    background: #00B8FF !important;
 }
 
-/* Ajuste para garantir que o toggle funcione corretamente */
-#toggle-dark:checked + span + span,
-#toggle-notificacoes:checked + span + span {
-    transition: var(--transition-smooth);
-}
-
+/* Garante que o toggle funcione mesmo com estilos inline */
 #toggle-dark + span,
 #toggle-notificacoes + span {
-    transition: var(--transition-smooth);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+}
+
+#toggle-dark + span + span,
+#toggle-notificacoes + span + span {
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
 }
