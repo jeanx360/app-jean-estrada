@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
     <title>Jean na Estrada - App Oficial</title>
 
-    <!-- ⭐ ONE SIGNAL - NOTIFICAÇÕES PUSH (CORRIGIDO) ⭐ -->
+    <!-- ⭐ ONE SIGNAL - NOTIFICAÇÕES PUSH ⭐ -->
     <script src="https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js" defer></script>
     <script>
         window.OneSignalDeferred = window.OneSignalDeferred || [];
@@ -50,8 +50,19 @@
                 <span></span>
                 <span></span>
             </button>
-            <h1>🚐 Jean na Estrada</h1>
-            <span class="header-placeholder"></span>
+            <div class="logo">
+                <img src="imagens/logo_definitivo_do_canal.png" alt="Jean na Estrada" class="logo-img">
+                <span class="brand">Jean na Estrada</span>
+                <span class="tagline">Tecnologia, carros elétricos e liberdade</span>
+            </div>
+            <div class="header-actions">
+                <div class="theme-dots" id="header-theme-dots">
+                    <!-- Os círculos de tema serão gerados pelo JavaScript -->
+                </div>
+                <a href="https://www.youtube.com/@jeannaestrada" target="_blank" class="social-btn" title="YouTube">▶️</a>
+                <a href="https://www.instagram.com/jeannaestradaoficial/" target="_blank" class="social-btn" title="Instagram">📸</a>
+                <a href="https://www.tiktok.com/@jeannaestrada" target="_blank" class="social-btn" title="TikTok">🎵</a>
+            </div>
         </div>
     </header>
 
@@ -59,7 +70,10 @@
     <!-- MENU LATERAL -->
     <!-- ============================================ -->
     <nav id="menu-lateral" class="menu-lateral">
-        <button id="fechar-menu" class="fechar-menu" aria-label="Fechar menu">✕</button>
+        <div class="menu-header">
+            <span class="nav-section-title">Navegação</span>
+            <button id="fechar-menu" class="close-btn" aria-label="Fechar menu">✕</button>
+        </div>
         <ul>
             <li><a href="?secao=inicio" class="ativo">🏠 Início</a></li>
             <li><a href="?secao=noticias">📰 Notícias</a></li>
@@ -81,202 +95,301 @@
     <!-- CONTEÚDO PRINCIPAL -->
     <!-- ============================================ -->
     <main>
-        <!-- SEÇÃO: INÍCIO -->
+        <!-- ========================================== -->
+        <!-- SEÇÃO: INÍCIO (VÍDEOS DO CANAL) -->
+        <!-- ========================================== -->
         <section id="inicio-section">
-            <h2>🎬 Últimos Vídeos</h2>
-            <div id="lista-videos">
-                <div style="text-align:center;padding:30px;">
-                    <p style="font-size:18px;">🔄 Carregando vídeos...</p>
-                </div>
+            <div class="section-header">
+                <h2>🎬 Últimos Vídeos</h2>
+                <a href="https://www.youtube.com/@jeannaestrada" target="_blank" class="see-all">Ver canal →</a>
+            </div>
+            <div id="lista-videos" class="video-grid">
+                <!-- Os vídeos serão carregados aqui automaticamente -->
             </div>
         </section>
 
-        <!-- SEÇÃO: NOTÍCIAS -->
+        <!-- ========================================== -->
+        <!-- SEÇÃO: NOTÍCIAS (RSS) -->
+        <!-- ========================================== -->
         <section id="noticias-section" style="display: none;">
-            <h2>📰 Notícias</h2>
-            <p style="color: #94A3B8; margin-bottom: 15px;">As últimas notícias sobre carros elétricos e tecnologia:</p>
+            <div class="section-header">
+                <h2>📰 Notícias</h2>
+                <span class="badge">EV & Tecnologia</span>
+            </div>
             <div id="lista-noticias">
-                <div style="text-align:center;padding:30px;">
-                    <p style="font-size:18px;">🔄 Carregando notícias...</p>
-                </div>
+                <!-- As notícias serão carregadas aqui via JavaScript -->
             </div>
         </section>
 
+        <!-- ========================================== -->
         <!-- SEÇÃO: TUTORIAIS -->
+        <!-- ========================================== -->
         <section id="tutoriais-section" style="display: none;">
-            <h2>📖 Tutoriais</h2>
-            <p style="color: #94A3B8; margin-bottom: 15px;">Tutoriais e desbloqueios de multimídia automotiva:</p>
-            <ul id="lista-tutoriais" style="list-style: none; padding: 0;">
-                <li style="background: rgba(17,24,39,0.4); padding: 14px 18px; border-radius: 16px; margin-bottom: 10px; border-left: 3px solid #00B8FF;">
-                    <a href="#" style="color: #94A3B8; text-decoration: none; font-weight: 500;">🔓 Como desbloquear a multimídia do BYD</a>
-                </li>
-                <li style="background: rgba(17,24,39,0.4); padding: 14px 18px; border-radius: 16px; margin-bottom: 10px; border-left: 3px solid #00B8FF;">
-                    <a href="#" style="color: #94A3B8; text-decoration: none; font-weight: 500;">🔓 Passo a passo: Desbloqueio de Geely EX2</a>
-                </li>
-                <li style="background: rgba(17,24,39,0.4); padding: 14px 18px; border-radius: 16px; margin-bottom: 10px; border-left: 3px solid #00B8FF;">
-                    <a href="#" style="color: #94A3B8; text-decoration: none; font-weight: 500;">📖 Guia completo para carros elétricos</a>
-                </li>
-                <li style="background: rgba(17,24,39,0.4); padding: 14px 18px; border-radius: 16px; margin-bottom: 10px; border-left: 3px solid #00B8FF;">
-                    <a href="#" style="color: #94A3B8; text-decoration: none; font-weight: 500;">🔓 Desbloqueio de multimídia VW</a>
-                </li>
-            </ul>
-        </section>
-
-        <!-- SEÇÃO: PRODUTOS -->
-        <section id="produtos-section" style="display: none;">
-            <h2>🛒 Produtos Recomendados</h2>
-            <p style="color: #94A3B8; margin-bottom: 15px;">Produtos que eu testei e recomendo:</p>
-            <ul id="lista-produtos" style="list-style: none; padding: 0;">
-                <li style="background: rgba(17,24,39,0.4); padding: 14px 18px; border-radius: 16px; margin-bottom: 10px; border-left: 3px solid #00B8FF;">
-                    <a href="#" target="_blank" style="color: #94A3B8; text-decoration: none; font-weight: 500;">🔌 Carregador para carros elétricos</a>
-                </li>
-                <li style="background: rgba(17,24,39,0.4); padding: 14px 18px; border-radius: 16px; margin-bottom: 10px; border-left: 3px solid #00B8FF;">
-                    <a href="#" target="_blank" style="color: #94A3B8; text-decoration: none; font-weight: 500;">📱 Suporte para celular veicular</a>
-                </li>
-                <li style="background: rgba(17,24,39,0.4); padding: 14px 18px; border-radius: 16px; margin-bottom: 10px; border-left: 3px solid #00B8FF;">
-                    <a href="#" target="_blank" style="color: #94A3B8; text-decoration: none; font-weight: 500;">🛠️ Kit de ferramentas para multimídia</a>
-                </li>
-                <li style="background: rgba(17,24,39,0.4); padding: 14px 18px; border-radius: 16px; margin-bottom: 10px; border-left: 3px solid #00B8FF;">
-                    <a href="#" target="_blank" style="color: #94A3B8; text-decoration: none; font-weight: 500;">🔋 Acessórios para BYD Dolphin</a>
-                </li>
-            </ul>
-        </section>
-
-        <!-- SEÇÃO: GUIA DO INICIANTE -->
-        <section id="guia-section" style="display: none;">
-            <h2>📘 Guia do Iniciante em Carros Elétricos</h2>
-            <p style="color: #94A3B8; margin-bottom: 15px;">Tudo o que você precisa saber para começar no mundo dos veículos elétricos.</p>
-            <div style="display: flex; flex-direction: column; gap: 15px;">
-                <div style="background: rgba(17,24,39,0.4); padding: 16px; border-radius: 16px; border-left: 3px solid #00B8FF;">
-                    <h3 style="color: #00B8FF; margin-bottom: 5px;">🔋 Como funciona um carro elétrico?</h3>
-                    <p style="color: #94A3B8; font-size: 14px;">Diferente dos carros a combustão, o EV usa um motor elétrico alimentado por baterias. Sem troca de óleo, sem emissões e com muito torque desde a saída.</p>
-                </div>
-                <div style="background: rgba(17,24,39,0.4); padding: 16px; border-radius: 16px; border-left: 3px solid #00B8FF;">
-                    <h3 style="color: #00B8FF; margin-bottom: 5px;">⚡ Tipos de carregamento</h3>
-                    <p style="color: #94A3B8; font-size: 14px;">Carregador portátil (tomada comum): 8-12h · Wallbox (220V): 4-6h · Carregador rápido (DC): 30-60min · Ultra-rápido (350kW): 10-20min.</p>
-                </div>
-                <div style="background: rgba(17,24,39,0.4); padding: 16px; border-radius: 16px; border-left: 3px solid #00B8FF;">
-                    <h3 style="color: #00B8FF; margin-bottom: 5px;">💰 Quanto custa recarregar?</h3>
-                    <p style="color: #94A3B8; font-size: 14px;">Em casa (tarifa branca): R$ 0,50/kWh → R$ 25-35 para 400km. Em eletroposto rápido: R$ 2,00-3,00/kWh → R$ 100-150 para 400km.</p>
-                </div>
-                <div style="background: rgba(17,24,39,0.4); padding: 16px; border-radius: 16px; border-left: 3px solid #00B8FF;">
-                    <h3 style="color: #00B8FF; margin-bottom: 5px;">🛠️ Manutenção</h3>
-                    <p style="color: #94A3B8; font-size: 14px;">Sem correia dentada, sem óleo de motor, sem filtros de ar/óleo, sem embreagem. Manutenção anual básica: R$ 300-500 vs R$ 1.500-2.500 de um carro a combustão.</p>
-                </div>
+            <div class="section-header">
+                <h2>📖 Tutoriais</h2>
+                <span class="badge">Guias Completos</span>
             </div>
-        </section>
-
-        <!-- SEÇÃO: CALCULADORA DE ECONOMIA -->
-        <section id="calculadora-section" style="display: none;">
-            <h2>🧮 Calculadora de Economia (EV vs Combustão)</h2>
-            <p style="color: #94A3B8; margin-bottom: 15px;">Descubra quanto você economizaria trocando seu carro a combustão por um elétrico.</p>
-            <div style="background: rgba(17,24,39,0.4); padding: 20px; border-radius: 16px;">
-                <div style="margin-bottom: 15px;">
-                    <label style="display: block; color: #94A3B8; margin-bottom: 5px;">📏 Km rodados por mês</label>
-                    <input type="number" id="km-mes" value="1500" style="width:100%; padding:12px; border-radius:10px; border:1px solid rgba(0,184,255,0.2); background:rgba(17,24,39,0.6); color:white; font-size:16px;">
-                </div>
-                <div style="margin-bottom: 15px;">
-                    <label style="display: block; color: #94A3B8; margin-bottom: 5px;">⛽ Preço da gasolina (R$/L)</label>
-                    <input type="number" id="preco-gasolina" value="6.50" step="0.01" style="width:100%; padding:12px; border-radius:10px; border:1px solid rgba(0,184,255,0.2); background:rgba(17,24,39,0.6); color:white; font-size:16px;">
-                </div>
-                <div style="margin-bottom: 15px;">
-                    <label style="display: block; color: #94A3B8; margin-bottom: 5px;">🔋 Preço da energia (R$/kWh)</label>
-                    <input type="number" id="preco-energia" value="0.80" step="0.01" style="width:100%; padding:12px; border-radius:10px; border:1px solid rgba(0,184,255,0.2); background:rgba(17,24,39,0.6); color:white; font-size:16px;">
-                </div>
-                <button onclick="calcularEconomia()" class="btn-principal" style="width:100%; justify-content:center;">🧮 Calcular Economia</button>
-            </div>
-            <div id="resultado-economia" style="margin-top: 20px; background: rgba(0,184,255,0.08); padding: 20px; border-radius: 16px; border: 1px solid rgba(0,184,255,0.15); display: none;">
-                <h3 style="color: #00B8FF;">📊 Resultado</h3>
-                <div id="detalhes-economia"></div>
-            </div>
-        </section>
-
-        <!-- SEÇÃO: PARCEIROS -->
-        <section id="parceiros-section" style="display: none;">
-            <h2>🤝 Parceiros Oficiais</h2>
-            <p style="color: #94A3B8; margin-bottom: 15px;">Conheça os parceiros que apoiam o canal Jean na Estrada.</p>
-            <div style="text-align: center; padding: 40px 20px; background: rgba(17,24,39,0.4); border-radius: 16px; border: 1px dashed rgba(0,184,255,0.2);">
-                <p style="font-size: 48px; margin-bottom: 15px;">🚧</p>
-                <p style="font-size: 20px; font-weight: 700; font-family: 'Raleway', sans-serif;">Em breve!</p>
-                <p style="color: #94A3B8; margin-top: 10px;">Estamos selecionando parceiros oficiais para trazer ainda mais valor para você.</p>
-                <p style="color: #94A3B8; margin-top: 5px;">Mecânicas, eletropostos, lojas e muito mais.</p>
-            </div>
-        </section>
-
-        <!-- SEÇÃO: CONTATO -->
-        <section id="contato-section" style="display: none;">
-            <h2>💬 Fale Comigo</h2>
-            <p style="color: #94A3B8; margin-bottom: 15px;">Entre em contato ou me siga nas redes sociais:</p>
-            <div style="background: rgba(17,24,39,0.4); padding: 14px 18px; border-radius: 16px; margin-bottom: 12px; border-left: 3px solid #00B8FF; display: flex; align-items: center; gap: 12px;">
-                <span style="font-size: 20px;">📧</span>
-                <a href="mailto:contato.jeannaestrada@gmail.com" style="color: #94A3B8; text-decoration: none; font-weight: 500;">contato.jeannaestrada@gmail.com</a>
-            </div>
-            <div style="display: flex; flex-direction: column; gap: 10px; margin-top: 15px;">
-                <a href="https://www.youtube.com/@jeannaestrada" target="_blank" style="display: flex; align-items: center; gap: 12px; background: rgba(17,24,39,0.4); padding: 14px 18px; border-radius: 16px; text-decoration: none; border-left: 3px solid #FF0000;">
-                    <span style="font-size: 20px;">▶️</span>
-                    <span style="color: #94A3B8; font-weight: 500;">YouTube</span>
-                    <span style="margin-left: auto; color: #FF0000;">@jeannaestrada</span>
-                </a>
-                <a href="https://www.tiktok.com/@jeannaestrada" target="_blank" style="display: flex; align-items: center; gap: 12px; background: rgba(17,24,39,0.4); padding: 14px 18px; border-radius: 16px; text-decoration: none; border-left: 3px solid #00f2ea;">
-                    <span style="font-size: 20px;">🎵</span>
-                    <span style="color: #94A3B8; font-weight: 500;">TikTok</span>
-                    <span style="margin-left: auto; color: #00f2ea;">@jeannaestrada</span>
-                </a>
-                <a href="https://www.instagram.com/jeannaestradaoficial/" target="_blank" style="display: flex; align-items: center; gap: 12px; background: rgba(17,24,39,0.4); padding: 14px 18px; border-radius: 16px; text-decoration: none; border-left: 3px solid #E4405F;">
-                    <span style="font-size: 20px;">📸</span>
-                    <span style="color: #94A3B8; font-weight: 500;">Instagram</span>
-                    <span style="margin-left: auto; color: #E4405F;">@jeannaestradaoficial</span>
-                </a>
-            </div>
-        </section>
-
-        <!-- SEÇÃO: CONFIGURAÇÕES -->
-        <section id="configuracoes-section" style="display: none;">
-            <h2>⚙️ Configurações do App</h2>
-            <p style="color: #94A3B8; margin-bottom: 15px;">Personalize sua experiência.</p>
-            <div style="display: flex; flex-direction: column; gap: 15px;">
-                <!-- Modo Escuro -->
-                <div style="display: flex; align-items: center; justify-content: space-between; background: rgba(17,24,39,0.4); padding: 16px 20px; border-radius: 16px; border: 1px solid rgba(0,184,255,0.08);">
-                    <div>
-                        <span style="font-size: 16px; font-weight: 600;">🌙 Modo Escuro</span>
-                        <p style="font-size: 13px; color: #94A3B8;">Ativar modo escuro manualmente</p>
+            <div id="lista-tutoriais" class="item-list">
+                <div class="item">
+                    <span class="icon">🔓</span>
+                    <div class="info">
+                        <div class="title">Como desbloquear a multimídia do BYD</div>
+                        <div class="desc">Passo a passo completo para liberar todas as funções bloqueadas.</div>
+                        <div class="meta">Intermediário · 25 min</div>
                     </div>
-                    <label style="position: relative; display: inline-block; width: 50px; height: 28px; cursor: pointer;">
-                        <input type="checkbox" id="toggle-dark" style="opacity:0; width:0; height:0;">
-                        <span style="position: absolute; top:0; left:0; right:0; bottom:0; background: #444; border-radius: 28px; transition: 0.3s;"></span>
-                        <span style="position: absolute; top:3px; left:3px; width:22px; height:22px; background: white; border-radius: 50%; transition: 0.3s;"></span>
+                    <a href="#" class="action">▶</a>
+                </div>
+                <div class="item">
+                    <span class="icon">🔓</span>
+                    <div class="info">
+                        <div class="title">Passo a passo: Desbloqueio de Geely EX2</div>
+                        <div class="desc">Tutorial detalhado com todas as etapas para desbloqueio da central.</div>
+                        <div class="meta">Intermediário · 30 min</div>
+                    </div>
+                    <a href="#" class="action">▶</a>
+                </div>
+                <div class="item">
+                    <span class="icon">📖</span>
+                    <div class="info">
+                        <div class="title">Guia completo para carros elétricos</div>
+                        <div class="desc">Tudo que você precisa saber antes de comprar seu primeiro EV.</div>
+                        <div class="meta">Iniciante · 1h 10min</div>
+                    </div>
+                    <a href="#" class="action">▶</a>
+                </div>
+                <div class="item">
+                    <span class="icon">🔓</span>
+                    <div class="info">
+                        <div class="title">Desbloqueio de multimídia VW</div>
+                        <div class="desc">Como desbloquear recursos ocultos na central da Volkswagen.</div>
+                        <div class="meta">Intermediário · 20 min</div>
+                    </div>
+                    <a href="#" class="action">▶</a>
+                </div>
+            </div>
+        </section>
+
+        <!-- ========================================== -->
+        <!-- SEÇÃO: PRODUTOS -->
+        <!-- ========================================== -->
+        <section id="produtos-section" style="display: none;">
+            <div class="section-header">
+                <h2>🛒 Produtos Recomendados</h2>
+                <span class="badge">Jean Usa</span>
+            </div>
+            <div id="lista-produtos" class="item-list">
+                <div class="item">
+                    <span class="icon">🔌</span>
+                    <div class="info">
+                        <div class="title">Carregador para carros elétricos</div>
+                        <div class="desc">Carregador portátil 32A com entrada universal.</div>
+                        <div class="meta">R$ 890 · ⭐ 4.8</div>
+                    </div>
+                    <a href="#" class="action">Comprar</a>
+                </div>
+                <div class="item">
+                    <span class="icon">📱</span>
+                    <div class="info">
+                        <div class="title">Suporte para celular veicular</div>
+                        <div class="desc">Fixação robusta com carregamento integrado.</div>
+                        <div class="meta">R$ 89 · ⭐ 4.6</div>
+                    </div>
+                    <a href="#" class="action">Comprar</a>
+                </div>
+                <div class="item">
+                    <span class="icon">🛠️</span>
+                    <div class="info">
+                        <div class="title">Kit de ferramentas para multimídia</div>
+                        <div class="desc">Conjunto completo para desbloqueio e instalação.</div>
+                        <div class="meta">R$ 340 · ⭐ 4.7</div>
+                    </div>
+                    <a href="#" class="action">Comprar</a>
+                </div>
+                <div class="item">
+                    <span class="icon">🔋</span>
+                    <div class="info">
+                        <div class="title">Acessórios para BYD Dolphin</div>
+                        <div class="desc">Tapetes, películas, carregadores e muito mais.</div>
+                        <div class="meta">R$ 220 · ⭐ 4.5</div>
+                    </div>
+                    <a href="#" class="action">Comprar</a>
+                </div>
+            </div>
+        </section>
+
+        <!-- ========================================== -->
+        <!-- SEÇÃO: GUIA DO INICIANTE -->
+        <!-- ========================================== -->
+        <section id="guia-section" style="display: none;">
+            <div class="section-header">
+                <h2>📘 Guia do Iniciante</h2>
+                <span class="badge">Essencial</span>
+            </div>
+            <p style="color: var(--t-text-muted); margin-bottom: 16px;">Tudo o que você precisa saber para começar no mundo dos veículos elétricos.</p>
+            <div class="item-list">
+                <div class="item">
+                    <span class="icon">⚡</span>
+                    <div class="info">
+                        <div class="title">Como funciona um carro elétrico?</div>
+                        <div class="desc">Motor elétrico, bateria de alta tensão, inversor e regeneração. Entenda os fundamentos.</div>
+                    </div>
+                </div>
+                <div class="item">
+                    <span class="icon">🔋</span>
+                    <div class="info">
+                        <div class="title">Tipos de carregamento</div>
+                        <div class="desc">Portátil (3,7kW), Wallbox (7–22kW), Rápido DC (50–150kW) e Ultra-rápido (250kW+).</div>
+                    </div>
+                </div>
+                <div class="item">
+                    <span class="icon">💰</span>
+                    <div class="info">
+                        <div class="title">Custo de recarga</div>
+                        <div class="desc">Em casa: R$ 0,80/kWh. Um BYD Dolphin consome ~15kWh/100km — menos de R$ 12 por 100km.</div>
+                    </div>
+                </div>
+                <div class="item">
+                    <span class="icon">🔧</span>
+                    <div class="info">
+                        <div class="title">Economia na manutenção</div>
+                        <div class="desc">Sem troca de óleo, filtros ou embreagem. Manutenção até 70% menor que um carro a combustão.</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ========================================== -->
+        <!-- SEÇÃO: CALCULADORA DE ECONOMIA -->
+        <!-- ========================================== -->
+        <section id="calculadora-section" style="display: none;">
+            <div class="section-header">
+                <h2>🧮 Calculadora de Economia</h2>
+                <span class="badge">EV vs Combustão</span>
+            </div>
+            <p style="color: var(--t-text-muted); margin-bottom: 16px;">Descubra quanto você economizaria trocando para um elétrico.</p>
+            <div class="calculadora-grid" style="margin-bottom: 16px;">
+                <div class="input-group">
+                    <label for="km-mes">📏 Km rodados por mês</label>
+                    <input type="number" id="km-mes" value="1500">
+                </div>
+                <div class="input-group">
+                    <label for="preco-gasolina">⛽ Gasolina (R$/L)</label>
+                    <input type="number" id="preco-gasolina" value="6.50" step="0.01">
+                </div>
+                <div class="input-group">
+                    <label for="preco-energia">🔋 Energia (R$/kWh)</label>
+                    <input type="number" id="preco-energia" value="0.80" step="0.01">
+                </div>
+            </div>
+            <button onclick="calcularEconomia()" class="btn-principal" style="width:100%; justify-content:center; margin-bottom: 16px;">🧮 Calcular Economia</button>
+            <div id="resultado-economia" class="resultados-grid" style="display: none;">
+                <!-- Os resultados serão preenchidos pelo JavaScript -->
+            </div>
+        </section>
+
+        <!-- ========================================== -->
+        <!-- SEÇÃO: PARCEIROS -->
+        <!-- ========================================== -->
+        <section id="parceiros-section" style="display: none;">
+            <div class="section-header">
+                <h2>🤝 Parceiros Oficiais</h2>
+                <span class="badge">Em breve</span>
+            </div>
+            <div style="text-align: center; padding: 40px 20px;">
+                <p style="font-size: 48px; margin-bottom: 15px;">🚧</p>
+                <p style="font-size: 20px; font-weight: 700;">Em breve!</p>
+                <p style="color: var(--t-text-muted); margin-top: 10px;">Estamos selecionando parceiros oficiais para trazer ainda mais valor para você.</p>
+                <p style="color: var(--t-text-muted); margin-top: 5px;">Mecânicas, eletropostos, lojas e muito mais.</p>
+            </div>
+        </section>
+
+        <!-- ========================================== -->
+        <!-- SEÇÃO: CONTATO -->
+        <!-- ========================================== -->
+        <section id="contato-section" style="display: none;">
+            <div class="section-header">
+                <h2>💬 Fale Comigo</h2>
+                <span class="badge">Redes</span>
+            </div>
+            <p style="color: var(--t-text-muted); margin-bottom: 16px;">Entre em contato ou me siga nas redes sociais:</p>
+            <div class="item-list">
+                <a href="mailto:contato.jeannaestrada@gmail.com" class="item" style="text-decoration: none;">
+                    <span class="icon">📧</span>
+                    <div class="info">
+                        <div class="title">E-mail</div>
+                        <div class="desc">contato.jeannaestrada@gmail.com</div>
+                    </div>
+                </a>
+                <a href="https://www.youtube.com/@jeannaestrada" target="_blank" class="item" style="text-decoration: none;">
+                    <span class="icon">▶️</span>
+                    <div class="info">
+                        <div class="title">YouTube</div>
+                        <div class="desc">@jeannaestrada</div>
+                    </div>
+                </a>
+                <a href="https://www.tiktok.com/@jeannaestrada" target="_blank" class="item" style="text-decoration: none;">
+                    <span class="icon">🎵</span>
+                    <div class="info">
+                        <div class="title">TikTok</div>
+                        <div class="desc">@jeannaestrada</div>
+                    </div>
+                </a>
+                <a href="https://www.instagram.com/jeannaestradaoficial/" target="_blank" class="item" style="text-decoration: none;">
+                    <span class="icon">📸</span>
+                    <div class="info">
+                        <div class="title">Instagram</div>
+                        <div class="desc">@jeannaestradaoficial</div>
+                    </div>
+                </a>
+            </div>
+        </section>
+
+        <!-- ========================================== -->
+        <!-- SEÇÃO: CONFIGURAÇÕES -->
+        <!-- ========================================== -->
+        <section id="configuracoes-section" style="display: none;">
+            <h2>⚙️ Configurações</h2>
+            <div style="display: flex; flex-direction: column; gap: 16px;">
+                <!-- Seletor de Temas -->
+                <div class="config-item" style="flex-wrap: wrap; gap: 12px;">
+                    <div class="info">
+                        <div class="title">🎨 Tema</div>
+                        <div class="desc">Escolha o visual do app</div>
+                    </div>
+                    <div id="theme-picker" class="theme-picker">
+                        <!-- Os círculos serão gerados pelo JavaScript -->
+                    </div>
+                </div>
+
+                <!-- Modo Escuro (toggle) -->
+                <div class="config-item">
+                    <div class="info">
+                        <div class="title">🌙 Modo Escuro</div>
+                        <div class="desc">Ativar modo escuro manualmente</div>
+                    </div>
+                    <label class="toggle-switch">
+                        <input type="checkbox" id="toggle-dark">
+                        <span class="slider"></span>
                     </label>
                 </div>
-                <!-- Seletor de Temas -->
-<div style="background: rgba(17,24,39,0.4); padding: 16px 20px; border-radius: 16px; border: 1px solid rgba(0,184,255,0.08); margin-bottom: 16px;">
-    <div style="display: flex; align-items: center; justify-content: space-between;">
-        <div>
-            <span style="font-size: 16px; font-weight: 600;">🎨 Tema</span>
-            <p style="font-size: 13px; color: #94A3B8;">Escolha o visual do app</p>
-        </div>
-        <div id="theme-picker" style="display: flex; gap: 8px;">
-            <!-- Os círculos serão gerados pelo JavaScript -->
-        </div>
-    </div>
-</div>
-                
-        <!-- Notificações -->
-<div style="display: flex; align-items: center; justify-content: space-between; background: rgba(17,24,39,0.4); ...">
-    <div>
-        <span style="font-size: 16px; font-weight: 600;">🔔 Notificações</span>
-        <p style="font-size: 13px; color: #94A3B8;">Receber alertas sobre novas notícias e vídeos</p>
-    </div>
-    <label style="position: relative; display: inline-block; width: 50px; height: 28px; cursor: pointer;">
-        <input type="checkbox" id="toggle-notificacoes" style="opacity:0; width:0; height:0;">
-        <span style="position: absolute; top:0; left:0; right:0; bottom:0; background: #444; border-radius: 28px; transition: 0.3s;"></span>
-        <span style="position: absolute; top:3px; left:3px; width:22px; height:22px; background: white; border-radius: 50%; transition: 0.3s;"></span>
-    </label>
-</div>
+
+                <!-- Notificações -->
+                <div class="config-item">
+                    <div class="info">
+                        <div class="title">🔔 Notificações</div>
+                        <div class="desc">Receber alertas sobre novos vídeos</div>
+                    </div>
+                    <label class="toggle-switch">
+                        <input type="checkbox" id="toggle-notificacoes">
+                        <span class="slider"></span>
+                    </label>
+                </div>
+
                 <!-- Limpar Cache -->
-                <div style="display: flex; align-items: center; justify-content: space-between; background: rgba(17,24,39,0.4); padding: 16px 20px; border-radius: 16px; border: 1px solid rgba(0,184,255,0.08);">
-                    <div>
-                        <span style="font-size: 16px; font-weight: 600;">🗑️ Limpar Cache</span>
-                        <p style="font-size: 13px; color: #94A3B8;">Remover dados temporários do app</p>
+                <div class="config-item" style="border-bottom: none;">
+                    <div class="info">
+                        <div class="title">🗑️ Limpar Cache</div>
+                        <div class="desc">Remover dados temporários do app</div>
                     </div>
                     <button onclick="limparCache()" class="btn-secundario" style="padding: 8px 16px; font-size: 13px;">Limpar</button>
                 </div>
@@ -289,7 +402,7 @@
     <!-- ============================================ -->
     <footer>
         <p>🚐 Jean na Estrada - Todos os direitos reservados</p>
-        <p style="font-size: 12px; margin-top: 5px;">App atualizado automaticamente com os últimos vídeos</p>
+        <p style="font-size: 12px; margin-top: 4px;">App atualizado automaticamente com os últimos vídeos</p>
     </footer>
 
     <!-- ============================================ -->
@@ -302,82 +415,72 @@
     <!-- FUNÇÕES DO MENU E NAVEGAÇÃO -->
     <!-- ============================================ -->
     <script>
-        // ============================================
-        // VERSÃO DO APP
-        // ============================================
-        window.versaoApp = '20260726-final';
-        console.log('🚀 App iniciado! Versão:', window.versaoApp);
-        
-        // ============================================
-        // FUNÇÕES DO MENU
-        // ============================================
-        function fecharMenu() {
-            const menu = document.getElementById('menu-lateral');
-            const toggle = document.getElementById('menu-toggle');
-            if (menu) menu.classList.remove('aberto');
-            if (toggle) toggle.classList.remove('ativo');
-        }
-        
-        function abrirMenu() {
-            const menu = document.getElementById('menu-lateral');
-            const toggle = document.getElementById('menu-toggle');
-            if (menu) menu.classList.add('aberto');
-            if (toggle) toggle.classList.add('ativo');
-        }
-        
-        function trocarSecao(secaoId) {
-            console.log('🔄 Trocando para:', secaoId);
-            window.location.href = window.location.pathname + '?secao=' + secaoId;
-        }
-        
         document.addEventListener('DOMContentLoaded', function() {
-            console.log('✅ DOM carregado!');
+            // ============================================
+            // VERSÃO DO APP
+            // ============================================
+            window.versaoApp = '20260726-final';
+            console.log('🚀 App iniciado! Versão:', window.versaoApp);
             
-            const toggle = document.getElementById('menu-toggle');
-            if (toggle) {
-                toggle.addEventListener('click', function(e) {
+            // ============================================
+            // FUNÇÕES DO MENU
+            // ============================================
+            const menu = document.getElementById('menu-lateral');
+            const toggleBtn = document.getElementById('menu-toggle');
+            const fecharBtn = document.getElementById('fechar-menu');
+            const main = document.querySelector('main');
+
+            function fecharMenu() {
+                if (menu) menu.classList.remove('aberto');
+                if (toggleBtn) toggleBtn.classList.remove('ativo');
+            }
+
+            function abrirMenu() {
+                if (menu) menu.classList.add('aberto');
+                if (toggleBtn) toggleBtn.classList.add('ativo');
+            }
+
+            if (toggleBtn) {
+                toggleBtn.addEventListener('click', function(e) {
                     e.stopPropagation();
-                    const menu = document.getElementById('menu-lateral');
-                    if (menu && menu.classList.contains('aberto')) {
+                    if (menu.classList.contains('aberto')) {
                         fecharMenu();
                     } else {
                         abrirMenu();
                     }
                 });
             }
-            
-            const fecharBtn = document.getElementById('fechar-menu');
+
             if (fecharBtn) {
                 fecharBtn.addEventListener('click', function(e) {
                     e.stopPropagation();
                     fecharMenu();
                 });
             }
-            
-            const main = document.querySelector('main');
+
             if (main) {
                 main.addEventListener('click', function() {
                     fecharMenu();
                 });
             }
-            
+
+            // Navegação do menu (links com data-secao)
             document.querySelectorAll('#menu-lateral a[data-secao]').forEach(link => {
                 link.addEventListener('click', function(e) {
                     e.preventDefault();
                     const secaoId = this.dataset.secao;
                     console.log('🔗 Menu clicado:', secaoId);
-                    trocarSecao(secaoId);
+                    window.location.href = window.location.pathname + '?secao=' + secaoId;
                 });
             });
-            
-            if (typeof lucide !== 'undefined') {
-                lucide.createIcons();
-            }
-            
+
+            // ============================================
+            // CARREGAR SEÇÃO ATUAL
+            // ============================================
             const urlParams = new URLSearchParams(window.location.search);
             const secao = urlParams.get('secao') || 'inicio';
             console.log('📌 Seção atual:', secao);
-            
+
             const secoes = ['inicio', 'noticias', 'tutoriais', 'produtos', 'guia', 'calculadora', 'parceiros', 'contato', 'configuracoes'];
             secoes.forEach(id => {
                 const secaoEl = document.getElementById(id + '-section');
@@ -385,27 +488,41 @@
                     secaoEl.style.display = (id === secao) ? 'block' : 'none';
                 }
             });
-            
+
             document.querySelectorAll('#menu-lateral a[data-secao]').forEach(link => {
                 link.classList.toggle('ativo', link.dataset.secao === secao);
             });
-            
-            if (secao === 'inicio') {
-                if (typeof window.buscarVideosRSS === 'function') {
-                    console.log('📺 Carregando vídeos...');
-                    window.buscarVideosRSS();
-                }
-            } else if (secao === 'noticias') {
-                if (typeof window.buscarNoticiasRSS === 'function') {
-                    console.log('📰 Carregando notícias...');
-                    window.buscarNoticiasRSS();
-                }
+
+            // ============================================
+            // CARREGAR CONTEÚDO DA SEÇÃO
+            // ============================================
+            if (secao === 'inicio' && typeof window.buscarVideosRSS === 'function') {
+                console.log('📺 Carregando vídeos...');
+                window.buscarVideosRSS();
+            } else if (secao === 'noticias' && typeof window.buscarNoticiasRSS === 'function') {
+                console.log('📰 Carregando notícias...');
+                window.buscarNoticiasRSS();
+            }
+
+            // ============================================
+            // ÍCONES LUCIDE
+            // ============================================
+            if (typeof lucide !== 'undefined') {
+                lucide.createIcons();
+            }
+
+            // ============================================
+            // TEMA INICIAL
+            // ============================================
+            const temaSalvo = localStorage.getItem('tema') || 'dark';
+            if (temaSalvo !== 'dark') {
+                document.documentElement.classList.add(temaSalvo + '-mode');
             }
         });
     </script>
 
     <!-- ============================================ -->
-    <!-- FUNÇÕES DA CALCULADORA DE ECONOMIA -->
+    <!-- FUNÇÕES DA CALCULADORA -->
     <!-- ============================================ -->
     <script>
         function calcularEconomia() {
@@ -413,8 +530,8 @@
             const precoGasolina = parseFloat(document.getElementById('preco-gasolina').value) || 0;
             const precoEnergia = parseFloat(document.getElementById('preco-energia').value) || 0;
             
-            const consumoGasolina = 10;
-            const consumoEV = 6;
+            const consumoGasolina = 12; // km/L (média)
+            const consumoEV = 6.67;     // km/kWh (média ~15kWh/100km)
             
             const gastoGasolina = (kmMes / consumoGasolina) * precoGasolina;
             const gastoEV = (kmMes / consumoEV) * precoEnergia;
@@ -422,28 +539,31 @@
             const economiaAnual = economia * 12;
             
             const resultado = document.getElementById('resultado-economia');
-            const detalhes = document.getElementById('detalhes-economia');
-            resultado.style.display = 'block';
+            resultado.style.display = 'grid';
             
-            detalhes.innerHTML = `
-                <p style="color: #94A3B8; font-size: 14px; margin: 5px 0;">
-                    ⛽ Gasto com gasolina: <strong style="color: #FF2D55;">R$ ${gastoGasolina.toFixed(2)}</strong>/mês
-                </p>
-                <p style="color: #94A3B8; font-size: 14px; margin: 5px 0;">
-                    🔋 Gasto com energia: <strong style="color: #00B8FF;">R$ ${gastoEV.toFixed(2)}</strong>/mês
-                </p>
-                <p style="color: #94A3B8; font-size: 14px; margin: 5px 0;">
-                    💰 <strong style="color: #FFA500; font-size: 18px;">Economia: R$ ${economia.toFixed(2)}/mês</strong>
-                </p>
-                <p style="color: #94A3B8; font-size: 14px; margin: 5px 0;">
-                    📅 <strong style="color: #FFA500; font-size: 18px;">R$ ${economiaAnual.toFixed(2)}/ano</strong>
-                </p>
+            resultado.innerHTML = `
+                <div class="stat">
+                    <div class="label">⛽ Gasolina/mês</div>
+                    <div class="value negative">R$ ${gastoGasolina.toFixed(0)}</div>
+                </div>
+                <div class="stat">
+                    <div class="label">🔋 Elétrico/mês</div>
+                    <div class="value">R$ ${gastoEV.toFixed(0)}</div>
+                </div>
+                <div class="stat">
+                    <div class="label">💰 Economia/mês</div>
+                    <div class="value positive">R$ ${economia.toFixed(0)}</div>
+                </div>
+                <div class="stat">
+                    <div class="label">📅 Economia/ano</div>
+                    <div class="value positive">R$ ${economiaAnual.toFixed(0)}</div>
+                </div>
             `;
         }
     </script>
 
     <!-- ============================================ -->
-    <!-- FUNÇÕES DE CONFIGURAÇÕES (CORRIGIDAS) -->
+    <!-- FUNÇÕES DE CONFIGURAÇÕES -->
     <!-- ============================================ -->
     <script>
         // ============================================
@@ -461,75 +581,84 @@
         }
 
         // ============================================
-        // CARREGAR PREFERÊNCIAS DO USUÁRIO
+        // CARREGAR PREFERÊNCIAS
         // ============================================
         document.addEventListener('DOMContentLoaded', function() {
             const darkMode = localStorage.getItem('dark-mode') === 'true';
             const notificacoes = localStorage.getItem('notificacoes') === 'true';
             
             const toggleDark = document.getElementById('toggle-dark');
-            const toggleNotificacoes = document.getElementById('toggle-notificacoes');
+            const toggleNotif = document.getElementById('toggle-notificacoes');
             
             if (toggleDark) toggleDark.checked = darkMode;
-            if (toggleNotificacoes) toggleNotificacoes.checked = notificacoes;
-            
-            if (darkMode) {
-                document.body.classList.add('dark-mode');
+            if (toggleNotif) toggleNotif.checked = notificacoes;
+        });
+
+        // ============================================
+        // TOGGLE DARK MODE (sincronizado com o sistema de temas)
+        // ============================================
+        document.getElementById('toggle-dark')?.addEventListener('change', function(e) {
+            const tema = e.target.checked ? 'dark' : 'light';
+            // A função aplicarTema existe no script.js
+            if (typeof aplicarTema === 'function') {
+                aplicarTema(tema);
+            } else {
+                // Fallback: aplicar classe manualmente
+                const html = document.documentElement;
+                html.classList.remove('dark-mode', 'light-mode');
+                if (tema === 'dark') {
+                    html.classList.remove('light-mode');
+                } else {
+                    html.classList.add('light-mode');
+                }
+                localStorage.setItem('dark-mode', e.target.checked);
             }
         });
 
         // ============================================
-        // TOGGLE DARK MODE
+        // TOGGLE NOTIFICAÇÕES
         // ============================================
-        document.getElementById('toggle-dark')?.addEventListener('change', function(e) {
-            localStorage.setItem('dark-mode', e.target.checked);
-            document.body.classList.toggle('dark-mode', e.target.checked);
-        });
-
-// ============================================
-// TOGGLE NOTIFICAÇÕES (ONE SIGNAL - CORRIGIDO)
-// ============================================
-document.getElementById('toggle-notificacoes')?.addEventListener('change', async function(e) {
-    const ativar = e.target.checked;
-    localStorage.setItem('notificacoes', ativar);
-    
-    if (ativar) {
-        console.log("📡 Ativando notificações...");
-        if (typeof OneSignal !== 'undefined' && OneSignal.Notifications) {
-            try {
-                const permission = await OneSignal.Notifications.requestPermission({
-                    modalOptions: {
-                        title: "🔔 Jean na Estrada",
-                        message: "Receba notificações sobre novas notícias e vídeos!",
-                        acceptButtonText: "📰 Quero receber",
-                        cancelButtonText: "❌ Não, obrigado"
+        document.getElementById('toggle-notificacoes')?.addEventListener('change', async function(e) {
+            const ativar = e.target.checked;
+            localStorage.setItem('notificacoes', ativar);
+            
+            if (ativar) {
+                console.log("📡 Ativando notificações...");
+                if (typeof OneSignal !== 'undefined' && OneSignal.Notifications) {
+                    try {
+                        const permission = await OneSignal.Notifications.requestPermission({
+                            modalOptions: {
+                                title: "🔔 Jean na Estrada",
+                                message: "Receba notificações sobre novas notícias e vídeos!",
+                                acceptButtonText: "📰 Quero receber",
+                                cancelButtonText: "❌ Não, obrigado"
+                            }
+                        });
+                        if (permission) {
+                            alert('✅ Notificações ativadas!');
+                            console.log("✅ Permissão concedida.");
+                        } else {
+                            alert('❌ Você negou as notificações.');
+                            e.target.checked = false;
+                            localStorage.setItem('notificacoes', 'false');
+                        }
+                    } catch (error) {
+                        console.error("❌ Erro ao solicitar permissão:", error);
+                        alert('❌ Erro ao ativar notificações. Tente novamente.');
+                        e.target.checked = false;
+                        localStorage.setItem('notificacoes', 'false');
                     }
-                });
-                if (permission) {
-                    alert('✅ Notificações ativadas!');
-                    console.log("✅ Permissão concedida.");
                 } else {
-                    alert('❌ Você negou as notificações.');
+                    console.error("❌ OneSignal não está disponível.");
+                    alert('❌ Serviço de notificações não disponível no momento.');
                     e.target.checked = false;
                     localStorage.setItem('notificacoes', 'false');
                 }
-            } catch (error) {
-                console.error("❌ Erro ao solicitar permissão:", error);
-                alert('❌ Erro ao ativar notificações. Tente novamente.');
-                e.target.checked = false;
-                localStorage.setItem('notificacoes', 'false');
+            } else {
+                console.log("🔕 Desativando notificações.");
+                alert('🔕 Notificações desativadas.');
             }
-        } else {
-            console.error("❌ OneSignal não está disponível.");
-            alert('❌ Serviço de notificações não disponível no momento.');
-            e.target.checked = false;
-            localStorage.setItem('notificacoes', 'false');
-        }
-    } else {
-        console.log("🔕 Desativando notificações.");
-        alert('🔕 Notificações desativadas.');
-    }
-});
+        });
     </script>
 
     <!-- SERVICE WORKER (PRINCIPAL) -->
