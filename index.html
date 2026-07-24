@@ -45,20 +45,21 @@
     <!-- ============================================ -->
     <header>
         <div class="header-content">
-            <button id="menu-toggle" class="menu-toggle" aria-label="Abrir menu">
+            <!-- ⭐ BOTÃO HAMBÚRGUER SEMPRE VISÍVEL ⭐ -->
+            <button id="menu-toggle" class="menu-toggle" aria-label="Abrir menu" style="display: flex !important;">
                 <span></span>
                 <span></span>
                 <span></span>
             </button>
             <div class="logo">
-                <!-- ⭐ LOGO DO CANAL (coloque o arquivo na pasta /imagens) ⭐ -->
+                <!-- ⭐ LOGO DO CANAL (substitua o nome do arquivo se necessário) ⭐ -->
                 <img src="imagens/logo_definitivo_do_canal.png" alt="Jean na Estrada" class="logo-img" onerror="this.style.display='none'">
                 <span class="brand">Jean na Estrada</span>
                 <span class="tagline">Tecnologia, carros elétricos e liberdade</span>
             </div>
             <div class="header-actions">
                 <div class="theme-dots" id="header-theme-dots">
-                    <!-- Os círculos de tema serão gerados pelo JavaScript -->
+                    <!-- Os círculos de tema serão gerados pelo JavaScript abaixo -->
                 </div>
                 <a href="https://www.youtube.com/@jeannaestrada" target="_blank" class="social-btn" title="YouTube">▶️</a>
                 <a href="https://www.instagram.com/jeannaestradaoficial/" target="_blank" class="social-btn" title="Instagram">📸</a>
@@ -68,9 +69,9 @@
     </header>
 
     <!-- ============================================ -->
-    <!-- MENU LATERAL -->
+    <!-- MENU LATERAL (INICIA FECHADO) -->
     <!-- ============================================ -->
-    <nav id="menu-lateral" class="menu-lateral aberto">
+    <nav id="menu-lateral" class="menu-lateral">
         <div class="menu-header">
             <span class="nav-section-title">Navegação</span>
             <button id="fechar-menu" class="close-btn" aria-label="Fechar menu">✕</button>
@@ -96,9 +97,7 @@
     <!-- CONTEÚDO PRINCIPAL -->
     <!-- ============================================ -->
     <main>
-        <!-- ========================================== -->
-        <!-- SEÇÃO: INÍCIO (VÍDEOS DO CANAL) -->
-        <!-- ========================================== -->
+        <!-- SEÇÃO: INÍCIO -->
         <section id="inicio-section">
             <div class="section-header">
                 <h2>🎬 Últimos Vídeos</h2>
@@ -109,9 +108,7 @@
             </div>
         </section>
 
-        <!-- ========================================== -->
-        <!-- SEÇÃO: NOTÍCIAS (RSS) -->
-        <!-- ========================================== -->
+        <!-- SEÇÃO: NOTÍCIAS -->
         <section id="noticias-section" style="display: none;">
             <div class="section-header">
                 <h2>📰 Notícias</h2>
@@ -122,9 +119,7 @@
             </div>
         </section>
 
-        <!-- ========================================== -->
         <!-- SEÇÃO: TUTORIAIS -->
-        <!-- ========================================== -->
         <section id="tutoriais-section" style="display: none;">
             <div class="section-header">
                 <h2>📖 Tutoriais</h2>
@@ -170,9 +165,7 @@
             </div>
         </section>
 
-        <!-- ========================================== -->
         <!-- SEÇÃO: PRODUTOS -->
-        <!-- ========================================== -->
         <section id="produtos-section" style="display: none;">
             <div class="section-header">
                 <h2>🛒 Produtos Recomendados</h2>
@@ -218,9 +211,7 @@
             </div>
         </section>
 
-        <!-- ========================================== -->
         <!-- SEÇÃO: GUIA DO INICIANTE -->
-        <!-- ========================================== -->
         <section id="guia-section" style="display: none;">
             <div class="section-header">
                 <h2>📘 Guia do Iniciante</h2>
@@ -259,9 +250,7 @@
             </div>
         </section>
 
-        <!-- ========================================== -->
         <!-- SEÇÃO: CALCULADORA DE ECONOMIA -->
-        <!-- ========================================== -->
         <section id="calculadora-section" style="display: none;">
             <div class="section-header">
                 <h2>🧮 Calculadora de Economia</h2>
@@ -288,9 +277,7 @@
             </div>
         </section>
 
-        <!-- ========================================== -->
         <!-- SEÇÃO: PARCEIROS -->
-        <!-- ========================================== -->
         <section id="parceiros-section" style="display: none;">
             <div class="section-header">
                 <h2>🤝 Parceiros Oficiais</h2>
@@ -304,9 +291,7 @@
             </div>
         </section>
 
-        <!-- ========================================== -->
         <!-- SEÇÃO: CONTATO -->
-        <!-- ========================================== -->
         <section id="contato-section" style="display: none;">
             <div class="section-header">
                 <h2>💬 Fale Comigo</h2>
@@ -345,9 +330,7 @@
             </div>
         </section>
 
-        <!-- ========================================== -->
         <!-- SEÇÃO: CONFIGURAÇÕES -->
-        <!-- ========================================== -->
         <section id="configuracoes-section" style="display: none;">
             <h2>⚙️ Configurações</h2>
             <div style="display: flex; flex-direction: column; gap: 16px;">
@@ -358,7 +341,7 @@
                         <div class="desc">Escolha o visual do app</div>
                     </div>
                     <div id="theme-picker" class="theme-picker">
-                        <!-- Os círculos serão gerados pelo JavaScript -->
+                        <!-- Os círculos serão gerados pelo script abaixo -->
                     </div>
                 </div>
 
@@ -413,7 +396,7 @@
     <script src="script.js?v=20260726-final"></script>
     
     <!-- ============================================ -->
-    <!-- FUNÇÕES DO MENU E NAVEGAÇÃO -->
+    <!-- FUNÇÕES DO MENU E NAVEGAÇÃO (INLINE) -->
     <!-- ============================================ -->
     <script>
         document.addEventListener('DOMContentLoaded', function() {
@@ -431,10 +414,8 @@
             const fecharBtn = document.getElementById('fechar-menu');
             const main = document.querySelector('main');
 
-            // ⭐ ABRIR MENU EM DESKTOP (tela > 768px)
-            if (window.innerWidth >= 768) {
-                menu.classList.add('aberto');
-            }
+            // ⭐ MENU INICIA FECHADO (EM TODAS AS TELAS)
+            menu.classList.remove('aberto');
 
             function fecharMenu() {
                 if (menu) menu.classList.remove('aberto');
@@ -525,15 +506,81 @@
                 document.documentElement.classList.add(temaSalvo + '-mode');
             }
         });
+    </script>
 
-        // ⭐ FECHAR MENU AO REDIMENSIONAR PARA MOBILE
-        window.addEventListener('resize', function() {
-            const menu = document.getElementById('menu-lateral');
-            if (window.innerWidth < 768) {
-                menu.classList.remove('aberto');
-            } else {
-                menu.classList.add('aberto');
-            }
+    <!-- ============================================ -->
+    <!-- SELETOR DE TEMAS (CÍRCULOS) - GERADO AQUI ⭐ -->
+    <!-- ============================================ -->
+    <script>
+        // Definição dos temas (mesmo do script.js)
+        const TEMAS_CORES = [
+            { id: 'dark', label: 'Dark', cor: '#1e293b' },
+            { id: 'light', label: 'Light', cor: '#f1f5f9' },
+            { id: 'red', label: 'Red', cor: '#7f1d1d' },
+            { id: 'green', label: 'Green', cor: '#14532d' },
+            { id: 'blue', label: 'Blue', cor: '#1e3a5f' },
+        ];
+
+        // Função para gerar os círculos
+        function gerarSeletorTemas(containerId) {
+            const container = document.getElementById(containerId);
+            if (!container) return;
+
+            const temaAtivo = localStorage.getItem('tema') || 'dark';
+
+            container.innerHTML = '';
+            TEMAS_CORES.forEach(tema => {
+                const btn = document.createElement('button');
+                btn.className = 'theme-dot' + (tema.id === temaAtivo ? ' active' : '');
+                btn.dataset.tema = tema.id;
+                btn.style.width = '32px';
+                btn.style.height = '32px';
+                btn.style.borderRadius = '50%';
+                btn.style.border = tema.id === temaAtivo ? '2px solid var(--t-accent)' : '2px solid var(--t-border)';
+                btn.style.background = tema.cor;
+                btn.style.cursor = 'pointer';
+                btn.style.transition = 'all 0.2s';
+                btn.style.display = 'flex';
+                btn.style.alignItems = 'center';
+                btn.style.justifyContent = 'center';
+                btn.style.flexShrink = '0';
+                btn.style.boxShadow = tema.id === temaAtivo ? '0 0 0 3px var(--t-accent-dim)' : 'none';
+
+                if (tema.id === temaAtivo) {
+                    btn.innerHTML = '<span style="font-size:14px;color:var(--t-accent-fg);">✓</span>';
+                }
+
+                btn.onmouseenter = () => { btn.style.transform = 'scale(1.08)'; };
+                btn.onmouseleave = () => { btn.style.transform = 'scale(1)'; };
+                btn.onclick = () => {
+                    // Aplicar tema (usar função do script.js se existir, senão aplicar manualmente)
+                    if (typeof aplicarTema === 'function') {
+                        aplicarTema(tema.id);
+                    } else {
+                        // Fallback manual
+                        const html = document.documentElement;
+                        html.classList.remove('dark-mode', 'light-mode', 'red-mode', 'green-mode', 'blue-mode');
+                        if (tema.id !== 'dark') {
+                            html.classList.add(tema.id + '-mode');
+                        }
+                        localStorage.setItem('tema', tema.id);
+                        // Atualizar toggle dark se existir
+                        const toggleDark = document.getElementById('toggle-dark');
+                        if (toggleDark) toggleDark.checked = (tema.id === 'dark');
+                        // Recarregar os círculos
+                        gerarSeletorTemas(containerId);
+                        gerarSeletorTemas('header-theme-dots');
+                    }
+                };
+
+                container.appendChild(btn);
+            });
+        }
+
+        // Gerar nos dois lugares
+        document.addEventListener('DOMContentLoaded', function() {
+            gerarSeletorTemas('theme-picker');
+            gerarSeletorTemas('header-theme-dots');
         });
     </script>
 
@@ -615,19 +662,20 @@
         // ============================================
         document.getElementById('toggle-dark')?.addEventListener('change', function(e) {
             const tema = e.target.checked ? 'dark' : 'light';
-            // A função aplicarTema existe no script.js
             if (typeof aplicarTema === 'function') {
                 aplicarTema(tema);
             } else {
-                // Fallback: aplicar classe manualmente
                 const html = document.documentElement;
-                html.classList.remove('dark-mode', 'light-mode');
+                html.classList.remove('dark-mode', 'light-mode', 'red-mode', 'green-mode', 'blue-mode');
                 if (tema === 'dark') {
                     html.classList.remove('light-mode');
                 } else {
                     html.classList.add('light-mode');
                 }
                 localStorage.setItem('dark-mode', e.target.checked);
+                // Atualizar círculos
+                gerarSeletorTemas('theme-picker');
+                gerarSeletorTemas('header-theme-dots');
             }
         });
 
