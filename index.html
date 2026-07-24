@@ -6,15 +6,20 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
     <title>Jean na Estrada - App Oficial</title>
 
-    <script src="https://cdn.onesignal.com/sdk/web/v16/OneSignalSDK.page.js" defer></script>
-<script>
-window.OneSignalDeferred = window.OneSignalDeferred || [];
-OneSignalDeferred.push(async function (OneSignal) {
-    await OneSignal.init({
-        appId: "3fa220d7-df93-4004-83bf-809a8ff59a0e",
-    });
-});
-</script>
+    <!-- ⭐ ONE SIGNAL - NOTIFICAÇÕES PUSH (CORRIGIDO) ⭐ -->
+    <script src="https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js" defer></script>
+    <script>
+        window.OneSignalDeferred = window.OneSignalDeferred || [];
+        OneSignalDeferred.push(async function (OneSignal) {
+            console.log("🔄 Inicializando OneSignal...");
+            await OneSignal.init({
+                appId: "3fa220d7-df93-4004-83bf-809a8ff59a0e",
+                serviceWorkerPath: "/OneSignalSDKWorker.js",
+                serviceWorkerParam: { scope: "/" }
+            });
+            console.log("✅ OneSignal inicializado!");
+        });
+    </script>
     
     <!-- ⭐ TAGS ANTI-CACHE ⭐ -->
     <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
@@ -51,7 +56,7 @@ OneSignalDeferred.push(async function (OneSignal) {
     </header>
 
     <!-- ============================================ -->
-    <!-- MENU LATERAL (ATUALIZADO) -->
+    <!-- MENU LATERAL -->
     <!-- ============================================ -->
     <nav id="menu-lateral" class="menu-lateral">
         <button id="fechar-menu" class="fechar-menu" aria-label="Fechar menu">✕</button>
@@ -76,9 +81,7 @@ OneSignalDeferred.push(async function (OneSignal) {
     <!-- CONTEÚDO PRINCIPAL -->
     <!-- ============================================ -->
     <main>
-        <!-- ========================================== -->
-        <!-- SEÇÃO: INÍCIO (VÍDEOS DO CANAL) -->
-        <!-- ========================================== -->
+        <!-- SEÇÃO: INÍCIO -->
         <section id="inicio-section">
             <h2>🎬 Últimos Vídeos</h2>
             <div id="lista-videos">
@@ -88,9 +91,7 @@ OneSignalDeferred.push(async function (OneSignal) {
             </div>
         </section>
 
-        <!-- ========================================== -->
-        <!-- SEÇÃO: NOTÍCIAS (RSS) -->
-        <!-- ========================================== -->
+        <!-- SEÇÃO: NOTÍCIAS -->
         <section id="noticias-section" style="display: none;">
             <h2>📰 Notícias</h2>
             <p style="color: #94A3B8; margin-bottom: 15px;">As últimas notícias sobre carros elétricos e tecnologia:</p>
@@ -101,9 +102,7 @@ OneSignalDeferred.push(async function (OneSignal) {
             </div>
         </section>
 
-        <!-- ========================================== -->
-        <!-- SEÇÃO: TUTORIAIS + DESBLOQUEIOS -->
-        <!-- ========================================== -->
+        <!-- SEÇÃO: TUTORIAIS -->
         <section id="tutoriais-section" style="display: none;">
             <h2>📖 Tutoriais</h2>
             <p style="color: #94A3B8; margin-bottom: 15px;">Tutoriais e desbloqueios de multimídia automotiva:</p>
@@ -123,9 +122,7 @@ OneSignalDeferred.push(async function (OneSignal) {
             </ul>
         </section>
 
-        <!-- ========================================== -->
-        <!-- SEÇÃO: PRODUTOS RECOMENDADOS -->
-        <!-- ========================================== -->
+        <!-- SEÇÃO: PRODUTOS -->
         <section id="produtos-section" style="display: none;">
             <h2>🛒 Produtos Recomendados</h2>
             <p style="color: #94A3B8; margin-bottom: 15px;">Produtos que eu testei e recomendo:</p>
@@ -145,13 +142,10 @@ OneSignalDeferred.push(async function (OneSignal) {
             </ul>
         </section>
 
-        <!-- ========================================== -->
         <!-- SEÇÃO: GUIA DO INICIANTE -->
-        <!-- ========================================== -->
         <section id="guia-section" style="display: none;">
             <h2>📘 Guia do Iniciante em Carros Elétricos</h2>
             <p style="color: #94A3B8; margin-bottom: 15px;">Tudo o que você precisa saber para começar no mundo dos veículos elétricos.</p>
-            
             <div style="display: flex; flex-direction: column; gap: 15px;">
                 <div style="background: rgba(17,24,39,0.4); padding: 16px; border-radius: 16px; border-left: 3px solid #00B8FF;">
                     <h3 style="color: #00B8FF; margin-bottom: 5px;">🔋 Como funciona um carro elétrico?</h3>
@@ -172,13 +166,10 @@ OneSignalDeferred.push(async function (OneSignal) {
             </div>
         </section>
 
-        <!-- ========================================== -->
         <!-- SEÇÃO: CALCULADORA DE ECONOMIA -->
-        <!-- ========================================== -->
         <section id="calculadora-section" style="display: none;">
             <h2>🧮 Calculadora de Economia (EV vs Combustão)</h2>
             <p style="color: #94A3B8; margin-bottom: 15px;">Descubra quanto você economizaria trocando seu carro a combustão por um elétrico.</p>
-            
             <div style="background: rgba(17,24,39,0.4); padding: 20px; border-radius: 16px;">
                 <div style="margin-bottom: 15px;">
                     <label style="display: block; color: #94A3B8; margin-bottom: 5px;">📏 Km rodados por mês</label>
@@ -192,24 +183,18 @@ OneSignalDeferred.push(async function (OneSignal) {
                     <label style="display: block; color: #94A3B8; margin-bottom: 5px;">🔋 Preço da energia (R$/kWh)</label>
                     <input type="number" id="preco-energia" value="0.80" step="0.01" style="width:100%; padding:12px; border-radius:10px; border:1px solid rgba(0,184,255,0.2); background:rgba(17,24,39,0.6); color:white; font-size:16px;">
                 </div>
-                <button onclick="calcularEconomia()" class="btn-principal" style="width:100%; justify-content:center;">
-                    🧮 Calcular Economia
-                </button>
+                <button onclick="calcularEconomia()" class="btn-principal" style="width:100%; justify-content:center;">🧮 Calcular Economia</button>
             </div>
-            
             <div id="resultado-economia" style="margin-top: 20px; background: rgba(0,184,255,0.08); padding: 20px; border-radius: 16px; border: 1px solid rgba(0,184,255,0.15); display: none;">
                 <h3 style="color: #00B8FF;">📊 Resultado</h3>
                 <div id="detalhes-economia"></div>
             </div>
         </section>
 
-        <!-- ========================================== -->
         <!-- SEÇÃO: PARCEIROS -->
-        <!-- ========================================== -->
         <section id="parceiros-section" style="display: none;">
             <h2>🤝 Parceiros Oficiais</h2>
             <p style="color: #94A3B8; margin-bottom: 15px;">Conheça os parceiros que apoiam o canal Jean na Estrada.</p>
-            
             <div style="text-align: center; padding: 40px 20px; background: rgba(17,24,39,0.4); border-radius: 16px; border: 1px dashed rgba(0,184,255,0.2);">
                 <p style="font-size: 48px; margin-bottom: 15px;">🚧</p>
                 <p style="font-size: 20px; font-weight: 700; font-family: 'Raleway', sans-serif;">Em breve!</p>
@@ -218,18 +203,14 @@ OneSignalDeferred.push(async function (OneSignal) {
             </div>
         </section>
 
-        <!-- ========================================== -->
         <!-- SEÇÃO: CONTATO -->
-        <!-- ========================================== -->
         <section id="contato-section" style="display: none;">
             <h2>💬 Fale Comigo</h2>
             <p style="color: #94A3B8; margin-bottom: 15px;">Entre em contato ou me siga nas redes sociais:</p>
-            
             <div style="background: rgba(17,24,39,0.4); padding: 14px 18px; border-radius: 16px; margin-bottom: 12px; border-left: 3px solid #00B8FF; display: flex; align-items: center; gap: 12px;">
                 <span style="font-size: 20px;">📧</span>
                 <a href="mailto:contato.jeannaestrada@gmail.com" style="color: #94A3B8; text-decoration: none; font-weight: 500;">contato.jeannaestrada@gmail.com</a>
             </div>
-            
             <div style="display: flex; flex-direction: column; gap: 10px; margin-top: 15px;">
                 <a href="https://www.youtube.com/@jeannaestrada" target="_blank" style="display: flex; align-items: center; gap: 12px; background: rgba(17,24,39,0.4); padding: 14px 18px; border-radius: 16px; text-decoration: none; border-left: 3px solid #FF0000;">
                     <span style="font-size: 20px;">▶️</span>
@@ -249,13 +230,10 @@ OneSignalDeferred.push(async function (OneSignal) {
             </div>
         </section>
 
-        <!-- ========================================== -->
         <!-- SEÇÃO: CONFIGURAÇÕES -->
-        <!-- ========================================== -->
         <section id="configuracoes-section" style="display: none;">
             <h2>⚙️ Configurações do App</h2>
             <p style="color: #94A3B8; margin-bottom: 15px;">Personalize sua experiência.</p>
-            
             <div style="display: flex; flex-direction: column; gap: 15px;">
                 <!-- Modo Escuro -->
                 <div style="display: flex; align-items: center; justify-content: space-between; background: rgba(17,24,39,0.4); padding: 16px 20px; border-radius: 16px; border: 1px solid rgba(0,184,255,0.08);">
@@ -424,9 +402,8 @@ OneSignalDeferred.push(async function (OneSignal) {
             const precoGasolina = parseFloat(document.getElementById('preco-gasolina').value) || 0;
             const precoEnergia = parseFloat(document.getElementById('preco-energia').value) || 0;
             
-            // Médias
-            const consumoGasolina = 10; // km/L
-            const consumoEV = 6; // km/kWh
+            const consumoGasolina = 10;
+            const consumoEV = 6;
             
             const gastoGasolina = (kmMes / consumoGasolina) * precoGasolina;
             const gastoEV = (kmMes / consumoEV) * precoEnergia;
@@ -455,40 +432,9 @@ OneSignalDeferred.push(async function (OneSignal) {
     </script>
 
     <!-- ============================================ -->
-    <!-- FUNÇÕES DE CONFIGURAÇÕES -->
+    <!-- FUNÇÕES DE CONFIGURAÇÕES (CORRIGIDAS) -->
     <!-- ============================================ -->
     <script>
-        // ============================================
-        // NOTIFICAÇÕES PUSH
-        // ============================================
-        async function solicitarPermissaoPush() {
-            if (!('Notification' in window)) {
-                alert('Este navegador não suporta notificações.');
-                return;
-            }
-            
-            if (Notification.permission === 'denied') {
-                alert('Você bloqueou as notificações. Ative nas configurações do navegador.');
-                return;
-            }
-            
-            if (Notification.permission === 'granted') {
-                alert('Notificações já estão ativas!');
-                return;
-            }
-            
-            const permissao = await Notification.requestPermission();
-            if (permissao === 'granted') {
-                alert('✅ Notificações ativadas! Você receberá alertas sobre novidades.');
-                if ('serviceWorker' in navigator) {
-                    const registration = await navigator.serviceWorker.register('sw-push.js');
-                    console.log('📡 Service Worker de Push registrado!');
-                }
-            } else {
-                alert('❌ Você negou as notificações. Pode ativar depois nas configurações.');
-            }
-        }
-
         // ============================================
         // LIMPAR CACHE
         // ============================================
@@ -529,36 +475,59 @@ OneSignalDeferred.push(async function (OneSignal) {
             document.body.classList.toggle('dark-mode', e.target.checked);
         });
 
-// ============================================
-// TOGGLE NOTIFICAÇÕES (ONE SIGNAL)
-// ============================================
-document.getElementById('toggle-notificacoes')?.addEventListener('change', async function(e) {
-    const ativar = e.target.checked;
-    localStorage.setItem('notificacoes', ativar);
-    
-    if (ativar) {
-        if (typeof OneSignal !== 'undefined') {
-            const permission = await OneSignal.Notifications.requestPermission({
-                modalOptions: {
-                    title: "🔔 Jean na Estrada",
-                    message: "Receba notificações sobre novas notícias e vídeos!",
-                    acceptButtonText: "📰 Quero receber",
-                    cancelButtonText: "❌ Não, obrigado"
+        // ============================================
+        // TOGGLE NOTIFICAÇÕES (ONE SIGNAL - CORRIGIDO)
+        // ============================================
+        document.getElementById('toggle-notificacoes')?.addEventListener('change', async function(e) {
+            const ativar = e.target.checked;
+            localStorage.setItem('notificacoes', ativar);
+            
+            if (ativar) {
+                console.log("📡 Ativando notificações...");
+                if (typeof OneSignal !== 'undefined' && OneSignal.Notifications) {
+                    try {
+                        const permission = await OneSignal.Notifications.requestPermission({
+                            modalOptions: {
+                                title: "🔔 Jean na Estrada",
+                                message: "Receba notificações sobre novas notícias e vídeos!",
+                                acceptButtonText: "📰 Quero receber",
+                                cancelButtonText: "❌ Não, obrigado"
+                            }
+                        });
+                        if (permission) {
+                            alert('✅ Notificações ativadas!');
+                            console.log("✅ Permissão concedida.");
+                        } else {
+                            alert('❌ Você negou as notificações.');
+                            e.target.checked = false;
+                            localStorage.setItem('notificacoes', 'false');
+                        }
+                    } catch (error) {
+                        console.error("❌ Erro ao solicitar permissão:", error);
+                        alert('❌ Erro ao ativar notificações. Tente novamente.');
+                        e.target.checked = false;
+                        localStorage.setItem('notificacoes', 'false');
+                    }
+                } else {
+                    console.error("❌ OneSignal não está disponível.");
+                    alert('❌ Serviço de notificações não disponível no momento.');
+                    e.target.checked = false;
+                    localStorage.setItem('notificacoes', 'false');
                 }
-            });
-            if (permission) {
-                alert('✅ Notificações ativadas!');
             } else {
-                alert('❌ Você negou as notificações.');
-                e.target.checked = false;
-                localStorage.setItem('notificacoes', 'false');
+                console.log("🔕 Desativando notificações.");
+                alert('🔕 Notificações desativadas.');
             }
-        } else {
-            alert('❌ Serviço de notificações não disponível.');
-            e.target.checked = false;
-            localStorage.setItem('notificacoes', 'false');
+        });
+    </script>
+
+    <!-- SERVICE WORKER (PRINCIPAL) -->
+    <script>
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('sw.js')
+                .then(() => console.log('✅ Service Worker registrado!'))
+                .catch(err => console.log('❌ Erro no Service Worker:', err));
         }
-    } else {
-        alert('🔕 Notificações desativadas.');
-    }
-});
+    </script>
+</body>
+</html>
