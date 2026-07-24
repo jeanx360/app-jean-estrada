@@ -377,3 +377,92 @@ window.buscarNoticiasRSS = async function() {
         console.log('❌ Erro ao buscar notícias:', erro);
     }
 };
+
+// ============================================
+// SISTEMA DE TEMAS (5 TEMAS)
+// ============================================
+
+// Definição dos temas disponíveis
+const TEMAS = [
+    { id: 'dark', label: 'Dark', cor: '#1e293b' },
+    { id: 'light', label: 'Light', cor: '#f1f5f9' },
+    { id: 'red', label: 'Red', cor: '#7f1d1d' },
+    { id: 'green', label: 'Green', cor: '#14532d' },
+    { id: 'blue', label: 'Blue', cor: '#1e3a5f' },
+];
+
+// Função para aplicar o tema
+function aplicarTema(temaId) {
+    const html = document.documentElement;
+    
+    // Remove todas as classes de tema
+    html.classList.remove('dark-mode', 'light-mode', 'red-mode', 'green-mode', 'blue-mode');
+    
+    // Adiciona a classe do tema selecionado (se não for o padrão)
+    // O padrão é 'dark' — não precisa de classe extra
+    if (temaId !== 'dark') {
+        html.classList.add(`${temaId}-mode`);
+    }
+    
+    // Salva no localStorage
+    localStorage.setItem('tema', temaId);
+    
+    // Atualiza os círculos (se existirem)
+    atualizarSeletorTema(temaId);
+}
+
+// Função para atualizar o seletor de temas (círculos)
+function atualizarSeletorTema(temaAtivo) {
+    const container = document.getElementById('theme-picker');
+    if (!container) return;
+    
+    container.innerHTML = '';
+    
+    TEMAS.forEach(tema => {
+        const botao = document.createElement('button');
+        botao.className = 'theme-dot';
+        botao.dataset.tema = tema.id;
+        botao.style.width = '32px';
+        botao.style.height = '32px';
+        botao.style.borderRadius = '50%';
+        botao.style.border = tema.id === temaAtivo ? '2px solid #00B8FF' : '2px solid rgba(255,255,255,0.15)';
+        botao.style.background = tema.cor;
+        botao.style.cursor = 'pointer';
+        botao.style.transition = 'all 0.2s';
+        botao.style.display = 'flex';
+        botao.style.alignItems = 'center';
+        botao.style.justifyContent = 'center';
+        botao.style.boxShadow = tema.id === temaAtivo ? '0 0 0 3px rgba(0,184,255,0.2)' : 'none';
+        
+        // Se for o tema ativo, mostra um check
+        if (tema.id === temaAtivo) {
+            botao.innerHTML = '<span style="font-size:14px;color:white;">✓</span>';
+        }
+        
+        // Hover
+        botao.onmouseenter = () => {
+            botao.style.transform = 'scale(1.05)';
+        };
+        botao.onmouseleave = () => {
+            botao.style.transform = 'scale(1)';
+        };
+        
+        // Clique
+        botao.onclick = () => {
+            aplicarTema(tema.id);
+        };
+        
+        container.appendChild(botao);
+    });
+}
+
+// ============================================
+// CARREGAR O TEMA SALVO AO INICIAR
+// ============================================
+function carregarTemaSalvo() {
+    const temaSalvo = localStorage.getItem('tema') || 'dark';
+    aplicarTema(temaSalvo);
+}
+
+// Chama a função no carregamento da página
+document.addEventListener('DOMContentLoaded', carregarTemaSalvo);
