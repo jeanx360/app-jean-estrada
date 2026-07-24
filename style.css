@@ -46,15 +46,16 @@
 }
 
 /* ============================================
-   CORPO DA PÁGINA
+   CORPO DA PÁGINA (MODO CLARO PADRÃO)
    ============================================ */
 body {
-    background-color: var(--color-bg-primary);
-    color: var(--color-text-primary);
+    background-color: #f5f5f5;
+    color: #333;
     font-family: var(--font-body);
     font-weight: 400;
     line-height: 1.6;
     min-height: 100vh;
+    transition: background-color 0.3s, color 0.3s;
 }
 
 /* ============================================
@@ -279,20 +280,13 @@ main {
    SEÇÕES (CARDS GLASSMORPHISM)
    ============================================ */
 section {
-    background: rgba(17, 24, 39, 0.85);
-    backdrop-filter: blur(8px);
-    -webkit-backdrop-filter: blur(8px);
-    border: 1px solid rgba(0, 184, 255, 0.08);
+    background: #ffffff;
+    border: 1px solid #e8e8e8;
     border-radius: var(--radius-card);
     padding: 24px;
     margin-bottom: 24px;
-    box-shadow: var(--shadow-card);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
     transition: var(--transition-smooth);
-}
-
-section:hover {
-    border-color: rgba(0, 184, 255, 0.15);
-    box-shadow: var(--shadow-glow);
 }
 
 section h2 {
@@ -304,15 +298,14 @@ section h2 {
     padding-bottom: 10px;
     border-bottom: 2px solid rgba(0, 184, 255, 0.15);
     letter-spacing: 0.5px;
-    text-shadow: 0 0 30px rgba(0, 184, 255, 0.1);
 }
 
 /* ============================================
    LISTA DE VÍDEOS (CARDS NEON)
    ============================================ */
 .video-item {
-    background: rgba(17, 24, 39, 0.6);
-    border: 1px solid rgba(0, 184, 255, 0.06);
+    background: #f9f9f9;
+    border: 1px solid #e8e8e8;
     border-radius: var(--radius-card);
     padding: 16px;
     margin-bottom: 20px;
@@ -321,22 +314,21 @@ section h2 {
 
 .video-item:hover {
     transform: translateY(-3px);
-    border-color: rgba(0, 184, 255, 0.2);
-    box-shadow: 0 8px 30px rgba(0, 184, 255, 0.05);
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.06);
 }
 
 .video-item h3 {
     font-family: var(--font-title);
     font-weight: 800;
     font-size: 17px;
-    color: var(--color-text-primary);
+    color: #333;
     margin-bottom: 4px;
     line-height: 1.4;
 }
 
 .video-item .data-publicacao {
     font-size: 13px;
-    color: var(--color-text-secondary);
+    color: #888;
     margin-bottom: 10px;
 }
 
@@ -349,7 +341,7 @@ section h2 {
     border-radius: 12px;
     background: #000;
     margin: 10px 0;
-    border: 1px solid rgba(0, 184, 255, 0.08);
+    border: 1px solid #ddd;
 }
 
 .video-item .player-wrapper iframe {
@@ -374,7 +366,6 @@ section h2 {
 
 .video-item .link-youtube:hover {
     color: var(--color-pink);
-    text-shadow: 0 0 20px rgba(255, 45, 85, 0.3);
 }
 
 /* ============================================
@@ -389,7 +380,7 @@ section h2 {
     display: flex;
     align-items: center;
     gap: 12px;
-    background: rgba(17, 24, 39, 0.4);
+    background: #f0f0f0;
     margin-bottom: 10px;
     padding: 14px 18px;
     border-radius: var(--radius-card);
@@ -398,9 +389,8 @@ section h2 {
 }
 
 #lista-arquivos li:hover {
-    background: rgba(0, 184, 255, 0.05);
+    background: #e8e8e8;
     transform: translateX(4px);
-    border-left-color: var(--color-pink);
 }
 
 #lista-arquivos li .arquivo-icon {
@@ -408,7 +398,7 @@ section h2 {
 }
 
 #lista-arquivos li a {
-    color: var(--color-text-secondary);
+    color: #333;
     text-decoration: none;
     font-weight: 500;
     flex: 1;
@@ -417,7 +407,7 @@ section h2 {
 }
 
 #lista-arquivos li a:hover {
-    color: var(--color-text-primary);
+    color: var(--color-blue-primary);
 }
 
 /* ============================================
@@ -459,13 +449,13 @@ section h2 {
     align-items: center;
     gap: 8px;
     background: transparent;
-    color: var(--color-text-secondary);
+    color: #333;
 }
 
 .btn-secundario:hover {
     background: rgba(0, 184, 255, 0.05);
     border-color: var(--color-blue-primary);
-    color: var(--color-text-primary);
+    color: #333;
     transform: translateY(-2px);
 }
 
@@ -475,9 +465,9 @@ section h2 {
 footer {
     text-align: center;
     padding: 30px 20px;
-    color: var(--color-text-secondary);
+    color: #888;
     font-size: 13px;
-    border-top: 1px solid rgba(0, 184, 255, 0.05);
+    border-top: 1px solid #ddd;
     margin-top: 20px;
     opacity: 0.7;
 }
@@ -486,7 +476,7 @@ footer {
    GLASSMORPHISM - CLASSE REUTILIZÁVEL
    ============================================ */
 .glass {
-    background: rgba(17, 24, 39, 0.8);
+    background: rgba(255, 255, 255, 0.8);
     backdrop-filter: blur(10px);
     -webkit-backdrop-filter: blur(10px);
     border: 1px solid rgba(0, 184, 255, 0.1);
@@ -551,7 +541,99 @@ footer {
 }
 
 /* ============================================
-   TOGGLES - MODO ESCURO E NOTIFICAÇÕES (FORÇADO)
+   MODO ESCURO (ATIVADO PELA CLASSE .dark-mode)
+   ============================================ */
+body.dark-mode {
+    background-color: var(--color-bg-primary);
+    color: var(--color-text-primary);
+}
+
+body.dark-mode section {
+    background: rgba(17, 24, 39, 0.85);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    border: 1px solid rgba(0, 184, 255, 0.08);
+    box-shadow: var(--shadow-card);
+}
+
+body.dark-mode section:hover {
+    border-color: rgba(0, 184, 255, 0.15);
+    box-shadow: var(--shadow-glow);
+}
+
+body.dark-mode section h2 {
+    border-bottom-color: rgba(0, 184, 255, 0.15);
+    text-shadow: 0 0 30px rgba(0, 184, 255, 0.1);
+}
+
+body.dark-mode .video-item {
+    background: rgba(17, 24, 39, 0.6);
+    border: 1px solid rgba(0, 184, 255, 0.06);
+}
+
+body.dark-mode .video-item h3 {
+    color: var(--color-text-primary);
+}
+
+body.dark-mode .video-item .data-publicacao {
+    color: var(--color-text-secondary);
+}
+
+body.dark-mode .video-item .player-wrapper {
+    border: 1px solid rgba(0, 184, 255, 0.08);
+}
+
+body.dark-mode .video-item .link-youtube {
+    color: var(--color-blue-primary);
+}
+
+body.dark-mode .video-item .link-youtube:hover {
+    color: var(--color-pink);
+    text-shadow: 0 0 20px rgba(255, 45, 85, 0.3);
+}
+
+body.dark-mode #lista-arquivos li {
+    background: rgba(17, 24, 39, 0.4);
+    border-left-color: var(--color-blue-primary);
+}
+
+body.dark-mode #lista-arquivos li a {
+    color: var(--color-text-secondary);
+}
+
+body.dark-mode #lista-arquivos li a:hover {
+    color: var(--color-text-primary);
+}
+
+body.dark-mode #lista-arquivos li:hover {
+    background: rgba(0, 184, 255, 0.05);
+}
+
+body.dark-mode .btn-secundario {
+    background: transparent;
+    color: var(--color-text-secondary);
+}
+
+body.dark-mode .btn-secundario:hover {
+    background: rgba(0, 184, 255, 0.05);
+    border-color: var(--color-blue-primary);
+    color: var(--color-text-primary);
+}
+
+body.dark-mode footer {
+    border-top-color: rgba(0, 184, 255, 0.05);
+    color: var(--color-text-secondary);
+}
+
+body.dark-mode .glass {
+    background: rgba(17, 24, 39, 0.8);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(0, 184, 255, 0.1);
+}
+
+/* ============================================
+   TOGGLES - MODO ESCURO E NOTIFICAÇÕES
    ============================================ */
 #toggle-dark:checked + span + span,
 #toggle-notificacoes:checked + span + span {
@@ -563,7 +645,6 @@ footer {
     background: #00B8FF !important;
 }
 
-/* Garante que o toggle funcione mesmo com estilos inline */
 #toggle-dark + span,
 #toggle-notificacoes + span {
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
