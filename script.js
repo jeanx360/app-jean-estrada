@@ -62,12 +62,12 @@ window.buscarVideosRSS = async function() {
 };
 
 // ============================================
-// PROXY CORS COM FALLBACK
+// PROXY CORS COM FALLBACK (ATUALIZADO)
 // ============================================
 
 const PROXY_LIST = [
     {
-        name: 'CORSProxy.io',
+        name: 'CORSProxy.io (Alt)',
         fetch: async (url) => {
             const response = await fetch(`https://corsproxy.io/?${encodeURIComponent(url)}`, {
                 signal: AbortSignal.timeout(5000)
@@ -80,6 +80,29 @@ const PROXY_LIST = [
         name: 'AllOrigins (Raw)',
         fetch: async (url) => {
             const response = await fetch(`https://api.allorigins.win/raw?url=${encodeURIComponent(url)}`, {
+                signal: AbortSignal.timeout(8000) // Aumentei o timeout
+            });
+            if (!response.ok) throw new Error(`HTTP ${response.status}`);
+            return await response.text();
+        }
+    },
+    {
+        name: 'Proxy.cors.sh (Novo)',
+        fetch: async (url) => {
+            const response = await fetch(`https://proxy.cors.sh/${encodeURIComponent(url)}`, {
+                headers: {
+                    'x-cors-api-key': 'temp_7a8b9c0d1e2f3g4h5i6j' // Chave pública temporária
+                },
+                signal: AbortSignal.timeout(5000)
+            });
+            if (!response.ok) throw new Error(`HTTP ${response.status}`);
+            return await response.text();
+        }
+    },
+    {
+        name: 'CORS.io (Alternativo)',
+        fetch: async (url) => {
+            const response = await fetch(`https://cors.io/?${encodeURIComponent(url)}`, {
                 signal: AbortSignal.timeout(5000)
             });
             if (!response.ok) throw new Error(`HTTP ${response.status}`);
@@ -87,23 +110,6 @@ const PROXY_LIST = [
         }
     }
 ];
-
-async function fetchFeedWithProxy(feedUrl) {
-    for (const proxy of PROXY_LIST) {
-        try {
-            console.log(`🔄 Tentando proxy: ${proxy.name}`);
-            const result = await proxy.fetch(feedUrl);
-            const trimmed = result.trim();
-            if (trimmed.startsWith('<?xml') || trimmed.startsWith('<rss') || trimmed.startsWith('<feed')) {
-                console.log(`✅ Proxy ${proxy.name} funcionou!`);
-                return result;
-            }
-        } catch (e) {
-            console.log(`❌ Proxy ${proxy.name} falhou: ${e.message}`);
-        }
-    }
-    throw new Error('Todos os proxies falharam.');
-}
 
 // ============================================
 // FUNÇÃO PARA EXTRAIR IMAGEM DO ITEM RSS
