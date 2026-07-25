@@ -495,3 +495,29 @@ function carregarTemaSalvo() {
 
 // Chama a função no carregamento da página
 document.addEventListener('DOMContentLoaded', carregarTemaSalvo);
+
+// ============================================
+// LIMPAR CONTEÚDO ANTES DE TROCAR DE SEÇÃO
+// ============================================
+
+function trocarSecao(secaoId) {
+    console.log('🔄 Trocando para:', secaoId);
+    limparConteudo(); // ⭐ LIMPA OS ELEMENTOS ANTES DE CARREGAR
+    window.location.href = window.location.pathname + '?secao=' + secaoId;
+}
+function limparConteudo() {
+    // Limpa a lista de vídeos
+    const listaVideos = document.getElementById('lista-videos');
+    if (listaVideos) {
+        listaVideos.innerHTML = '';
+        // Mostra mensagem de carregamento
+        listaVideos.innerHTML = `<div style="text-align:center;padding:30px;"><p>🔄 Carregando vídeos...</p></div>`;
+    }
+    
+    // Limpa a lista de notícias
+    const listaNoticias = document.getElementById('lista-noticias');
+    if (listaNoticias) {
+        listaNoticias.innerHTML = '';
+        listaNoticias.innerHTML = `<div style="text-align:center;padding:30px;"><p>🔄 Carregando notícias...</p></div>`;
+    }
+}
