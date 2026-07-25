@@ -24,7 +24,9 @@ window.buscarVideosRSS = async function() {
     if (!lista) return;
 
     // ⭐ LIMPEZA COMPLETA ANTES DE CARREGAR ⭐
-    lista.innerHTML = '';
+    while (lista.firstChild) {
+        lista.removeChild(lista.firstChild);
+    }
     lista.innerHTML = `<div style="text-align:center;padding:30px;"><p>🔄 Carregando vídeos...</p></div>`;
     
     try {
@@ -139,10 +141,8 @@ function extrairImagem(item) {
     const description = item.querySelector('description');
     if (description) {
         const html = description.textContent;
-        // Procura por imagens no HTML
         const imgMatch = html.match(/<img[^>]+src="([^">]+)"/);
         if (imgMatch && imgMatch[1].startsWith('http')) return imgMatch[1];
-        // Procura por URLs de imagem no texto
         const urlMatch = html.match(/https?:\/\/[^\s]+\.(jpg|jpeg|png|gif|webp)/i);
         if (urlMatch) return urlMatch[0];
     }
@@ -157,10 +157,10 @@ function extrairImagem(item) {
         if (urlMatch) return urlMatch[0];
     }
     
-    // 6. Fallback: imagem padrão (opcional)
-    // return 'https://via.placeholder.com/400x200/1a1a2e/00B8FF?text=Jean+na+Estrada';
+    // 6. Fallback: imagem padrão com o tema do app
     return '';
 }
+
 // ============================================
 // FILTRO POR PALAVRAS-CHAVE
 // ============================================
@@ -194,7 +194,9 @@ window.buscarNoticiasRSS = async function() {
     console.log('📰 Iniciando busca de notícias...');
     
     // ⭐ LIMPEZA COMPLETA ANTES DE CARREGAR ⭐
-    lista.innerHTML = '';
+    while (lista.firstChild) {
+        lista.removeChild(lista.firstChild);
+    }
     lista.innerHTML = `<div style="text-align:center;padding:30px;"><p>🔄 Carregando notícias especializadas...</p></div>`;
     
     try {
@@ -349,9 +351,12 @@ window.buscarNoticiasRSS = async function() {
                 year: 'numeric'
             });
             
+            // ⭐ ADICIONA TIMESTAMP PARA EVITAR CACHE DA IMAGEM ⭐
             let imagemHTML = '';
             if (item.imagem) {
-                imagemHTML = `<img src="${item.imagem}" alt="${item.titulo}" style="width:100%;border-radius:10px;margin:10px 0;max-height:300px;object-fit:cover;" loading="lazy" onerror="this.style.display='none'">`;
+                const timestamp = new Date().getTime();
+                const urlComCache = `${item.imagem}?t=${timestamp}`;
+                imagemHTML = `<img src="${urlComCache}" alt="${item.titulo}" style="width:100%;border-radius:10px;margin:10px 0;max-height:300px;object-fit:cover;" loading="lazy" onerror="this.style.display='none'">`;
             }
             
             div.innerHTML = `
@@ -458,13 +463,17 @@ function carregarTemaSalvo() {
 function limparConteudo() {
     const listaVideos = document.getElementById('lista-videos');
     if (listaVideos) {
-        listaVideos.innerHTML = '';
+        while (listaVideos.firstChild) {
+            listaVideos.removeChild(listaVideos.firstChild);
+        }
         listaVideos.innerHTML = `<div style="text-align:center;padding:30px;"><p>🔄 Carregando vídeos...</p></div>`;
     }
     
     const listaNoticias = document.getElementById('lista-noticias');
     if (listaNoticias) {
-        listaNoticias.innerHTML = '';
+        while (listaNoticias.firstChild) {
+            listaNoticias.removeChild(listaNoticias.firstChild);
+        }
         listaNoticias.innerHTML = `<div style="text-align:center;padding:30px;"><p>🔄 Carregando notícias...</p></div>`;
     }
 }
@@ -501,3 +510,67 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 });
+
+// ============================================
+// TOGGLE NOTIFICAÇÕES (ONE SIGNAL)
+// ============================================
+document.addEventListener('DOMContentLoaded', function() {
+    const toggleNotif = document.getElementById('toggle-notificacoes');
+    if (toggleNotif) {
+        toggleNotif.addEventListener('change', async function(e) {
+            const ativar = e.target.checked;
+            localStorage.setItem('notificacoes', ativar);
+            
+            if (ativar) {
+                console.log("📡 Ativando notificações...");
+                if (typeof OneSignal !== 'undefined' && OneSignal.Notifications) {
+                    try {
+                        const permission = await OneSignal.Notifications.requestPermission({
+                            modalOptions: {
+                                title: "🔔 Jean na Estrada",
+                                message: "Receba notificações sobre novas notícias e vídeos!",
+                                acceptButtonText: "📰 Quero receber",
+                                cancelButtonText: "❌ Não, obrigado"
+                            }
+                        });
+                        if (permission) {
+                            alert('✅ Notificações ativadas!');
+                            console.log("✅ Permissão concedida.");
+                        } else {
+                            alert('❌ Você negou as notificações.');
+                            e.target.checked = false;
+                            localStorage.setItem('notificacoes', 'false');
+                        }
+                    } catch (error) {
+                        console.error("❌ Erro ao solicitar permissão:", error);
+                        alert('❌ Erro ao ativar notificações. Tente novamente.');
+                        e.target.checked = false;
+                        localStorage.setItem('notificacoes', 'false');
+                    }
+                } else {
+                    console.error("❌ OneSignal não está disponível.");
+                    alert('❌ Serviço de notificações não disponível no momento.');
+                    e.target.checked = false;
+                    localStorage.setItem('notificacoes', 'false');
+                }
+            } else {
+                console.log("🔕 Desativando notificações.");
+                alert('🔕 Notificações desativadas.');
+            }
+        });
+    }
+});
+
+// ============================================
+// LIMPAR CACHE (FUNÇÃO GLOBAL)
+// ============================================
+function limparCache() {
+    if ('caches' in window) {
+        caches.keys().then(keys => {
+            keys.forEach(key => caches.delete(key));
+            alert('🗑️ Cache limpo com sucesso!');
+        });
+    } else {
+        alert('Seu navegador não suporta limpeza de cache.');
+    }
+}
