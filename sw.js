@@ -1,7 +1,26 @@
 // ============================================
 // SERVICE WORKER - JEAN NA ESTRADA
 // ============================================
+// ⭐ FORÇA A ATUALIZAÇÃO DO CACHE ⭐
+const CACHE_VERSION = 'v4.0.1'; // ⭐ MUDE SEMPRE QUE HOUVER ATUALIZAÇÃO IMPORTANTE
 
+// Na ativação, force a remoção de caches antigos
+self.addEventListener('activate', event => {
+    event.waitUntil(
+        caches.keys().then(cacheNames => {
+            return Promise.all(
+                cacheNames.map(cache => {
+                    if (cache !== CACHE_NAME) {
+                        console.log(`🗑️ Cache antigo removido: ${cache}`);
+                        return caches.delete(cache);
+                    }
+                })
+            );
+        }).then(() => {
+            return self.clients.claim(); // ⭐ TOMA CONTROLE IMEDIATO
+        })
+    );
+});
 // ⭐ TROQUE ESTE NÚMERO PARA FORÇAR ATUALIZAÇÃO ⭐
 const CACHE_VERSION = 'v4.0.0';
 const CACHE_NAME = `jean-estrada-${CACHE_VERSION}`;
