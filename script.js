@@ -574,3 +574,90 @@ function limparCache() {
         alert('Seu navegador não suporta limpeza de cache.');
     }
 }
+
+// ============================================
+// CALCULADORA DE DECISÃO EV x COMBUSTÃO
+// ============================================
+function calcularDecisao() {
+    // 1. PEGAR OS VALORES DOS INPUTS
+    const kmMes = parseFloat(document.getElementById('km-mes').value) || 0;
+    const anos = parseFloat(document.getElementById('anos-uso').value) || 5;
+    
+    const consumoGasolina = parseFloat(document.getElementById('consumo-gasolina').value) || 10;
+    const precoGasolina = parseFloat(document.getElementById('preco-gasolina').value) || 6.50;
+    const manutencaoGasolina = parseFloat(document.getElementById('manutencao-gasolina').value) || 2500;
+    
+    const consumoEV = parseFloat(document.getElementById('consumo-ev').value) || 6.5;
+    const precoEnergia = parseFloat(document.getElementById('preco-energia').value) || 0.85;
+    const manutencaoEV = parseFloat(document.getElementById('manutencao-ev').value) || 500;
+    
+    const precoCombustao = parseFloat(document.getElementById('preco-combustao').value) || 120000;
+    const precoEV = parseFloat(document.getElementById('preco-ev').value) || 150000;
+    
+    // 2. CALCULAR GASTOS MENSAIS
+    const gastoGasolina = (kmMes / consumoGasolina) * precoGasolina;
+    const gastoEV = (kmMes / consumoEV) * precoEnergia;
+    const economiaMensal = gastoGasolina - gastoEV;
+    const economiaAnual = economiaMensal * 12;
+    
+    // 3. CALCULAR MANUTENÇÃO EM 5 ANOS
+    const manutencaoGasolina5 = manutencaoGasolina * anos;
+    const manutencaoEV5 = manutencaoEV * anos;
+    const economiaManutencao = manutencaoGasolina5 - manutencaoEV5;
+    
+    // 4. CALCULAR ECONOMIA TOTAL EM 5 ANOS
+    const economiaTotal5 = (economiaAnual * anos) + economiaManutencao;
+    
+    // 5. CALCULAR ROI (tempo de retorno)
+    const diferencaPreco = precoEV - precoCombustao;
+    let roi = '—';
+    if (economiaMensal > 0) {
+        const meses = diferencaPreco / economiaMensal;
+        if (meses < 12) {
+            roi = `${Math.round(meses)} meses`;
+        } else if (meses < 60) {
+            roi = `${(meses / 12).toFixed(1)} anos`;
+        } else {
+            roi = `> ${Math.round(meses / 12)} anos (não compensa)`;
+        }
+    } else if (diferencaPreco <= 0) {
+        roi = 'Imediato (EV mais barato!)';
+    } else {
+        roi = 'Não compensa (EV mais caro e não economiza)';
+    }
+    
+    // 6. EXIBIR OS RESULTADOS
+    document.getElementById('result-gasto-gasolina').textContent = `R$ ${gastoGasolina.toFixed(0)}`;
+    document.getElementById('result-gasto-ev').textContent = `R$ ${gastoEV.toFixed(0)}`;
+    document.getElementById('result-economia-mensal').textContent = `R$ ${economiaMensal.toFixed(0)}`;
+    document.getElementById('result-economia-anual').textContent = `R$ ${economiaAnual.toFixed(0)}`;
+    document.getElementById('result-roi').textContent = roi;
+    document.getElementById('result-economia-5anos').textContent = `R$ ${economiaTotal5.toFixed(0)}`;
+    document.getElementById('result-manutencao-gasolina-5anos').textContent = `R$ ${manutencaoGasolina5.toFixed(0)}`;
+    document.getElementById('result-manutencao-ev-5anos').textContent = `R$ ${manutencaoEV5.toFixed(0)}`;
+    
+    // 7. VEREDITO FINAL
+    const veredito = document.getElementById('result-veredito');
+    if (economiaTotal5 > 0) {
+        veredito.style.background = 'rgba(16,185,129,0.1)';
+        veredito.style.border = '1px solid rgba(16,185,129,0.3)';
+        veredito.style.color = '#10b981';
+        veredito.innerHTML = `✅ Vale a pena! Você economizaria <strong>R$ ${economiaTotal5.toFixed(0)}</strong> em ${anos} anos. O tempo de retorno é de <strong>${roi}</strong>.`;
+    } else if (economiaTotal5 === 0) {
+        veredito.style.background = 'rgba(245,158,11,0.1)';
+        veredito.style.border = '1px solid rgba(245,158,11,0.3)';
+        veredito.style.color = '#f59e0b';
+        veredito.innerHTML = `⚖️ Os custos se equivalem. A decisão depende do seu perfil e preferência.`;
+    } else {
+        veredito.style.background = 'rgba(255,45,85,0.1)';
+        veredito.style.border = '1px solid rgba(255,45,85,0.3)';
+        veredito.style.color = '#FF2D55';
+        veredito.innerHTML = `❌ Neste cenário, o carro elétrico não compensa financeiramente. Você perderia <strong>R$ ${Math.abs(economiaTotal5).toFixed(0)}</strong> em ${anos} anos.`;
+    }
+    
+    // 8. MOSTRAR A SEÇÃO DE RESULTADOS
+    document.getElementById('resultado-decisao').style.display = 'block';
+    
+    // 9. ROLAR PARA OS RESULTADOS (mobile friendly)
+    document.getElementById('resultado-decisao').scrollIntoView({ behavior: 'smooth', block: 'center' });
+}
