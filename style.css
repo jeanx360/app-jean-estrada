@@ -1045,50 +1045,47 @@ footer {
 }
 
 /* ============================================
-   LOGO RESPONSIVA (CELULAR)
+   LOGO RESPONSIVA
    ============================================ */
-.header-content .logo img {
+.logo-img {
     height: 44px;
     width: auto;
+    max-width: 180px;
     object-fit: contain;
 }
 
 @media (max-width: 600px) {
-    .header-content .logo img {
-        height: 28px !important; /* ⭐ MENOR NO CELULAR */
-        max-width: 120px;
+    .logo-img {
+        height: 28px !important;
+        max-width: 100px !important;
     }
     
-    .header-content .logo .brand {
-        font-size: 13px !important;
+    .brand {
+        font-size: 14px !important;
     }
     
-    .header-content .tagline {
-        display: none !important; /* ⭐ ESCONDE O SUBTÍTULO NO CELULAR PARA ECONOMIZAR ESPAÇO */
-    }
-    
-    .header-content {
-        gap: 6px;
+    .tagline {
+        display: none !important;
     }
     
     .header-actions .social-btn {
-        width: 28px;
-        height: 28px;
-        font-size: 12px;
+        width: 28px !important;
+        height: 28px !important;
+        font-size: 12px !important;
     }
     
     .header-actions .theme-dots {
-        display: none; /* ⭐ ESCONDE OS CIRCULOS NO CELULAR (já tem na configuração) */
+        display: none !important;
     }
 }
 
 @media (max-width: 400px) {
-    .header-content .logo img {
+    .logo-img {
         height: 22px !important;
-        max-width: 80px;
+        max-width: 70px !important;
     }
     
-    .header-content .logo .brand {
-        font-size: 11px !important;
+    .brand {
+        font-size: 12px !important;
     }
 }
