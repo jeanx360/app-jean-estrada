@@ -1043,3 +1043,52 @@ footer {
         padding: 28px;
     }
 }
+
+/* ============================================
+   LOGO RESPONSIVA (CELULAR)
+   ============================================ */
+.header-content .logo img {
+    height: 44px;
+    width: auto;
+    object-fit: contain;
+}
+
+@media (max-width: 600px) {
+    .header-content .logo img {
+        height: 28px !important; /* ⭐ MENOR NO CELULAR */
+        max-width: 120px;
+    }
+    
+    .header-content .logo .brand {
+        font-size: 13px !important;
+    }
+    
+    .header-content .tagline {
+        display: none !important; /* ⭐ ESCONDE O SUBTÍTULO NO CELULAR PARA ECONOMIZAR ESPAÇO */
+    }
+    
+    .header-content {
+        gap: 6px;
+    }
+    
+    .header-actions .social-btn {
+        width: 28px;
+        height: 28px;
+        font-size: 12px;
+    }
+    
+    .header-actions .theme-dots {
+        display: none; /* ⭐ ESCONDE OS CIRCULOS NO CELULAR (já tem na configuração) */
+    }
+}
+
+@media (max-width: 400px) {
+    .header-content .logo img {
+        height: 22px !important;
+        max-width: 80px;
+    }
+    
+    .header-content .logo .brand {
+        font-size: 11px !important;
+    }
+}
