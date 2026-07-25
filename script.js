@@ -111,57 +111,56 @@ async function fetchFeedWithProxy(feedUrl) {
 }
 
 // ============================================
-// FUNÇÃO PARA EXTRAIR IMAGEM DO ITEM RSS
+// FUNÇÃO PARA EXTRAIR IMAGEM DO ITEM RSS (MELHORADA)
 // ============================================
 function extrairImagem(item) {
-    if (item.enclosure && item.enclosure.link) {
-        return item.enclosure.link;
-    }
-    if (item.thumbnail) {
-        return item.thumbnail;
-    }
-    if (item.content && item.content.match(/<img[^>]+src="([^">]+)"/)) {
-        const match = item.content.match(/<img[^>]+src="([^">]+)"/);
-        if (match) return match[1];
-    }
-    if (item.description && item.description.match(/<img[^>]+src="([^">]+)"/)) {
-        const match = item.description.match(/<img[^>]+src="([^">]+)"/);
-        if (match) return match[1];
-    }
-    
+    // 1. Tenta obter do <enclosure>
     const enclosure = item.querySelector('enclosure');
     if (enclosure) {
         const url = enclosure.getAttribute('url');
-        if (url) return url;
+        if (url && url.trim() !== '') return url;
     }
     
+    // 2. Tenta obter do <media:content>
     const mediaContent = item.querySelector('media\\:content, content');
     if (mediaContent) {
         const url = mediaContent.getAttribute('url');
-        if (url) return url;
+        if (url && url.trim() !== '') return url;
     }
     
+    // 3. Tenta obter do <media:thumbnail>
     const mediaThumb = item.querySelector('media\\:thumbnail, thumbnail');
     if (mediaThumb) {
         const url = mediaThumb.getAttribute('url');
-        if (url) return url;
+        if (url && url.trim() !== '') return url;
     }
     
+    // 4. Tenta extrair do HTML do <description>
     const description = item.querySelector('description');
     if (description) {
-        const match = description.textContent.match(/<img[^>]+src="([^">]+)"/);
-        if (match) return match[1];
+        const html = description.textContent;
+        // Procura por imagens no HTML
+        const imgMatch = html.match(/<img[^>]+src="([^">]+)"/);
+        if (imgMatch && imgMatch[1].startsWith('http')) return imgMatch[1];
+        // Procura por URLs de imagem no texto
+        const urlMatch = html.match(/https?:\/\/[^\s]+\.(jpg|jpeg|png|gif|webp)/i);
+        if (urlMatch) return urlMatch[0];
     }
     
+    // 5. Tenta extrair do <content:encoded>
     const encoded = item.querySelector('content\\:encoded, encoded');
     if (encoded) {
-        const match = encoded.textContent.match(/<img[^>]+src="([^">]+)"/);
-        if (match) return match[1];
+        const html = encoded.textContent;
+        const imgMatch = html.match(/<img[^>]+src="([^">]+)"/);
+        if (imgMatch && imgMatch[1].startsWith('http')) return imgMatch[1];
+        const urlMatch = html.match(/https?:\/\/[^\s]+\.(jpg|jpeg|png|gif|webp)/i);
+        if (urlMatch) return urlMatch[0];
     }
     
+    // 6. Fallback: imagem padrão (opcional)
+    // return 'https://via.placeholder.com/400x200/1a1a2e/00B8FF?text=Jean+na+Estrada';
     return '';
 }
-
 // ============================================
 // FILTRO POR PALAVRAS-CHAVE
 // ============================================
