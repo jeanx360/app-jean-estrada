@@ -17,12 +17,14 @@ const CHANNEL_ID = 'UCFwFlCooeFKHSLXxkRTA70g';
 const MAX_VIDEOS = 10;
 
 // ============================================
-// FUNÇÃO PARA BUSCAR VÍDEOS (YouTube)
+// FUNÇÃO PARA BUSCAR VÍDEOS (YouTube) - CORRIGIDA
 // ============================================
 window.buscarVideosRSS = async function() {
     const lista = document.getElementById('lista-videos');
     if (!lista) return;
 
+    // ⭐ LIMPEZA COMPLETA ANTES DE CARREGAR ⭐
+    lista.innerHTML = '';
     lista.innerHTML = `<div style="text-align:center;padding:30px;"><p>🔄 Carregando vídeos...</p></div>`;
     
     try {
@@ -62,11 +64,11 @@ window.buscarVideosRSS = async function() {
 };
 
 // ============================================
-// PROXY CORS COM FALLBACK (APENAS MÉTODOS CONFIÁVEIS)
+// PROXY CORS COM FALLBACK
 // ============================================
 
 async function fetchFeedWithProxy(feedUrl) {
-    // ⭐ MÉTODO 1: rss2json (mais confiável)
+    // ⭐ MÉTODO 1: rss2json
     try {
         console.log(`🔄 Tentando rss2json...`);
         const rss2jsonUrl = `https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(feedUrl)}`;
@@ -83,7 +85,7 @@ async function fetchFeedWithProxy(feedUrl) {
         console.log(`⚠️ rss2json falhou: ${e.message}`);
     }
 
-    // ⭐ MÉTODO 2: AllOrigins (get) - fallback
+    // ⭐ MÉTODO 2: AllOrigins (get)
     try {
         console.log(`🔄 Tentando AllOrigins (get)...`);
         const allOriginsUrl = `https://api.allorigins.win/get?url=${encodeURIComponent(feedUrl)}`;
@@ -109,10 +111,9 @@ async function fetchFeedWithProxy(feedUrl) {
 }
 
 // ============================================
-// FUNÇÃO PARA EXTRAIR IMAGEM DO ITEM RSS (TANTO XML QUANTO RSS2JSON)
+// FUNÇÃO PARA EXTRAIR IMAGEM DO ITEM RSS
 // ============================================
 function extrairImagem(item) {
-    // Para dados vindos do rss2json
     if (item.enclosure && item.enclosure.link) {
         return item.enclosure.link;
     }
@@ -128,7 +129,6 @@ function extrairImagem(item) {
         if (match) return match[1];
     }
     
-    // Para dados vindos do XML (elemento DOM)
     const enclosure = item.querySelector('enclosure');
     if (enclosure) {
         const url = enclosure.getAttribute('url');
@@ -163,7 +163,7 @@ function extrairImagem(item) {
 }
 
 // ============================================
-// FILTRO POR PALAVRAS-CHAVE (CARROS ELÉTRICOS E TECNOLOGIA)
+// FILTRO POR PALAVRAS-CHAVE
 // ============================================
 const PALAVRAS_CHAVE = [
     'byd', 'tesla', 'volvo', 'bmw', 'mercedes', 'audi', 'porsche', 'volkswagen', 'vw',
@@ -186,13 +186,16 @@ function filtrarNoticia(titulo, descricao) {
 }
 
 // ============================================
-// FUNÇÃO PARA BUSCAR NOTÍCIAS (VERSÃO OTIMIZADA)
+// FUNÇÃO PARA BUSCAR NOTÍCIAS - CORRIGIDA
 // ============================================
 window.buscarNoticiasRSS = async function() {
     const lista = document.getElementById('lista-noticias');
     if (!lista) return;
 
     console.log('📰 Iniciando busca de notícias...');
+    
+    // ⭐ LIMPEZA COMPLETA ANTES DE CARREGAR ⭐
+    lista.innerHTML = '';
     lista.innerHTML = `<div style="text-align:center;padding:30px;"><p>🔄 Carregando notícias especializadas...</p></div>`;
     
     try {
@@ -214,12 +217,10 @@ window.buscarNoticiasRSS = async function() {
                 
                 let items = [];
 
-                // Se veio do rss2json, já temos os dados em JSON
                 if (result.source === 'rss2json') {
                     const dados = result.data;
                     if (dados.items && dados.items.length > 0) {
                         items = dados.items.map(item => {
-                            // ⭐ EXTRAI A IMAGEM DO ITEM RSS2JSON
                             let imagem = '';
                             if (item.enclosure && item.enclosure.link) {
                                 imagem = item.enclosure.link;
@@ -247,7 +248,6 @@ window.buscarNoticiasRSS = async function() {
                         continue;
                     }
                 } else {
-                    // Veio como XML via AllOrigins
                     const xmlText = result.data;
                     const blob = new Blob([xmlText], { type: 'text/xml;charset=UTF-8' });
                     const urlBlob = URL.createObjectURL(blob);
@@ -307,7 +307,6 @@ window.buscarNoticiasRSS = async function() {
                     }
                 }
 
-                // Aplica o filtro por palavras-chave
                 let itensFiltrados = 0;
                 for (const item of items) {
                     if (filtrarNoticia(item.titulo, item.descricao)) {
@@ -382,7 +381,6 @@ window.buscarNoticiasRSS = async function() {
 // SISTEMA DE TEMAS (5 TEMAS)
 // ============================================
 
-// Definição dos temas disponíveis
 const TEMAS = [
     { id: 'dark', label: 'Dark', cor: '#1e293b' },
     { id: 'light', label: 'Light', cor: '#f1f5f9' },
@@ -391,32 +389,30 @@ const TEMAS = [
     { id: 'blue', label: 'Blue', cor: '#1e3a5f' },
 ];
 
-// Função para aplicar o tema
 function aplicarTema(temaId) {
     const html = document.documentElement;
     
-    // Remove todas as classes de tema
     html.classList.remove('dark-mode', 'light-mode', 'red-mode', 'green-mode', 'blue-mode');
     
-    // Adiciona a classe do tema selecionado (se não for o padrão)
-    // O padrão é 'dark' — não precisa de classe extra
     if (temaId !== 'dark') {
         html.classList.add(`${temaId}-mode`);
     }
     
-    // Salva no localStorage
     localStorage.setItem('tema', temaId);
     
-    // Atualiza os círculos (se existirem)
-    atualizarSeletorTema(temaId);
+    // ⭐ ATUALIZA OS CÍRCULOS EM AMBOS OS LUGARES ⭐
+    atualizarSeletorTema('theme-picker', temaId);
+    atualizarSeletorTema('header-theme-dots', temaId);
     
-    // ⭐ Sincroniza o toggle "Modo Escuro" com o tema
-    atualizarToggleDark(temaId);
+    // ⭐ SINCRONIZA O TOGGLE DARK ⭐
+    const toggleDark = document.getElementById('toggle-dark');
+    if (toggleDark) {
+        toggleDark.checked = (temaId === 'dark');
+    }
 }
 
-// Função para atualizar o seletor de temas (círculos)
-function atualizarSeletorTema(temaAtivo) {
-    const container = document.getElementById('theme-picker');
+function atualizarSeletorTema(containerId, temaAtivo) {
+    const container = document.getElementById(containerId);
     if (!container) return;
     
     container.innerHTML = '';
@@ -435,22 +431,15 @@ function atualizarSeletorTema(temaAtivo) {
         botao.style.display = 'flex';
         botao.style.alignItems = 'center';
         botao.style.justifyContent = 'center';
+        botao.style.flexShrink = '0';
         botao.style.boxShadow = tema.id === temaAtivo ? '0 0 0 3px var(--t-accent-dim)' : 'none';
         
-        // Se for o tema ativo, mostra um check
         if (tema.id === temaAtivo) {
             botao.innerHTML = '<span style="font-size:14px;color:var(--t-accent-fg);">✓</span>';
         }
         
-        // Hover
-        botao.onmouseenter = () => {
-            botao.style.transform = 'scale(1.05)';
-        };
-        botao.onmouseleave = () => {
-            botao.style.transform = 'scale(1)';
-        };
-        
-        // Clique
+        botao.onmouseenter = () => { botao.style.transform = 'scale(1.08)'; };
+        botao.onmouseleave = () => { botao.style.transform = 'scale(1)'; };
         botao.onclick = () => {
             aplicarTema(tema.id);
         };
@@ -459,65 +448,57 @@ function atualizarSeletorTema(temaAtivo) {
     });
 }
 
-// ============================================
-// SINCRONIZA TOGGLE "MODO ESCURO" COM OS TEMAS
-// ============================================
-
-// Função para atualizar o toggle baseado no tema
-function atualizarToggleDark(temaId) {
-    const toggle = document.getElementById('toggle-dark');
-    if (toggle) {
-        toggle.checked = (temaId === 'dark');
-    }
-}
-
-// Evento do toggle para mudar o tema
-document.addEventListener('DOMContentLoaded', function() {
-    const toggleDark = document.getElementById('toggle-dark');
-    if (toggleDark) {
-        toggleDark.addEventListener('change', function(e) {
-            if (e.target.checked) {
-                aplicarTema('dark');
-            } else {
-                aplicarTema('light');
-            }
-        });
-    }
-});
-
-// ============================================
-// CARREGAR O TEMA SALVO AO INICIAR
-// ============================================
 function carregarTemaSalvo() {
     const temaSalvo = localStorage.getItem('tema') || 'dark';
     aplicarTema(temaSalvo);
 }
 
-// Chama a função no carregamento da página
-document.addEventListener('DOMContentLoaded', carregarTemaSalvo);
-
 // ============================================
-// LIMPAR CONTEÚDO ANTES DE TROCAR DE SEÇÃO
+// FUNÇÃO PARA LIMPAR CONTEÚDO (EVITA MISTURA)
 // ============================================
-
-function trocarSecao(secaoId) {
-    console.log('🔄 Trocando para:', secaoId);
-    limparConteudo(); // ⭐ LIMPA OS ELEMENTOS ANTES DE CARREGAR
-    window.location.href = window.location.pathname + '?secao=' + secaoId;
-}
 function limparConteudo() {
-    // Limpa a lista de vídeos
     const listaVideos = document.getElementById('lista-videos');
     if (listaVideos) {
         listaVideos.innerHTML = '';
-        // Mostra mensagem de carregamento
         listaVideos.innerHTML = `<div style="text-align:center;padding:30px;"><p>🔄 Carregando vídeos...</p></div>`;
     }
     
-    // Limpa a lista de notícias
     const listaNoticias = document.getElementById('lista-noticias');
     if (listaNoticias) {
         listaNoticias.innerHTML = '';
         listaNoticias.innerHTML = `<div style="text-align:center;padding:30px;"><p>🔄 Carregando notícias...</p></div>`;
     }
 }
+
+// ============================================
+// INICIALIZAÇÃO - CARREGA O TEMA E OS VÍDEOS
+// ============================================
+document.addEventListener('DOMContentLoaded', function() {
+    // Carrega o tema salvo
+    carregarTemaSalvo();
+    
+    // Carrega os vídeos se estiver na seção "inicio"
+    const urlParams = new URLSearchParams(window.location.search);
+    const secao = urlParams.get('secao') || 'inicio';
+    
+    if (secao === 'inicio' && typeof window.buscarVideosRSS === 'function') {
+        console.log('📺 Carregando vídeos...');
+        window.buscarVideosRSS();
+    } else if (secao === 'noticias' && typeof window.buscarNoticiasRSS === 'function') {
+        console.log('📰 Carregando notícias...');
+        window.buscarNoticiasRSS();
+    }
+});
+
+// ============================================
+// TOGGLE DARK MODE (SINCRONIZADO)
+// ============================================
+document.addEventListener('DOMContentLoaded', function() {
+    const toggleDark = document.getElementById('toggle-dark');
+    if (toggleDark) {
+        toggleDark.addEventListener('change', function(e) {
+            const tema = e.target.checked ? 'dark' : 'light';
+            aplicarTema(tema);
+        });
+    }
+});
