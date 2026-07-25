@@ -1045,6 +1045,57 @@ footer {
 }
 
 /* ============================================
+   BANNERS DE CONTATO - RESPONSIVOS
+   ============================================ */
+#contato-section .banner-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+    width: 100%;
+}
+
+#contato-section .banner-link {
+    display: block;
+    width: 100%;
+    max-width: 800px;
+    transition: transform 0.3s, box-shadow 0.3s;
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
+}
+
+#contato-section .banner-link:hover {
+    transform: scale(1.02);
+}
+
+#contato-section .banner-link img {
+    width: 100%;
+    height: auto;
+    display: block;
+    border-radius: 16px;
+}
+
+/* 📱 Celular */
+@media (max-width: 600px) {
+    #contato-section .banner-link {
+        max-width: 100%;
+        border-radius: 12px;
+    }
+    
+    #contato-section .banner-link img {
+        border-radius: 12px;
+    }
+}
+
+/* 🖥️ Desktop grande */
+@media (min-width: 1200px) {
+    #contato-section .banner-link {
+        max-width: 900px;
+    }
+}
+
+/* ============================================
    LOGO RESPONSIVA
    ============================================ */
 .logo-img {
